@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eckhard Besuden — Maler</title>
+  <meta name="description" content="Eckhard Besuden bezeichnet sich nicht als Künstler, da Autodidakt, aber als Maler, weil er einfach malen muss — abstrakt wie konkret.">
+  <meta name="author" content="Eckhard Besuden">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Eckhard Besuden — Maler">
+  <meta property="og:description" content="Abstrakte und konkrete Malerei. Antideterminismus.">
+  <meta property="og:type" content="website">
+  <!-- og:image needs absolute URL for social sharing — update with domain when deployed -->
+  <meta property="og:image" content="assets/bilder/schluesselwerke/Bild4-2017LeningraderVariante.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="stylesheet" href="css/style.css">
+  <script>history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+</head>
+<body>
+
+  <a href="#main" class="skip-link" data-i18n="a11y_skip">Zum Inhalt springen</a>
+  <noscript><style>.crisp-header{display:none!important}.nav__logo,.nav__link,.nav__lang-btn,.nav__lang-sep,.hero__media,.hero__overlay,.hero__title,.hero__subtitle,.hero__contact-left,.hero__contact-right,.reveal,.text-reveal,.hero__scroll,.phil-reveal{opacity:1!important;transform:none!important;clip-path:none!important}</style></noscript>
+
+  <!-- ============ LOADER (from test-loader.html 1:1) ============ -->
+  <div class="crisp-header is--loading" id="loader">
+    <div class="crisp-loader">
+      <div class="crisp-loader__wrap">
+        <div class="crisp-loader__groups">
+          <div class="crisp-loader__group is--duplicate">
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+          </div>
+          <div class="crisp-loader__group is--relative">
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img is--scale-down"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img is--scale-down"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media is--scaling is--radius"><img loading="eager" alt="" class="crisp-loader__cover-img"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img is--scale-down"></div></div>
+            <div class="crisp-loader__single"><div class="crisp-loader__media"><img loading="eager" alt="" class="crisp-loader__cover-img is--scale-down"></div></div>
+          </div>
+        </div>
+        <div class="crisp-loader__fade"></div>
+        <div class="crisp-loader__fade is--duplicate"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- Navigation (starts under preloader, z-index handles reveal) -->
+  <nav class="nav" id="nav">
+    <a href="#hero" class="nav__logo">BESUDEN</a>
+
+    <div class="nav__links" id="navLinks">
+      <a href="#about" class="nav__link" data-i18n="nav_about">Über mich</a>
+      <a href="#philosophy" class="nav__link" data-i18n="nav_philosophy">Philosophie</a>
+      <a href="#works" class="nav__link" data-i18n="nav_works">Werke</a>
+    </div>
+    <div class="nav__right">
+      <div class="nav__lang">
+        <button class="nav__lang-btn active" data-lang="de">DE</button>
+        <span class="nav__lang-sep">|</span>
+        <button class="nav__lang-btn" data-lang="en">EN</button>
+      </div>
+      <button class="nav__hamburger" id="hamburger" aria-label="Menu">
+        <span class="nav__hamburger-line"></span>
+        <span class="nav__hamburger-line"></span>
+        <span class="nav__hamburger-line"></span>
+      </button>
+    </div>
+  </nav>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile Navigation">
+    <a href="#about" class="mobile-menu__link" data-i18n="nav_about">Über mich</a>
+    <a href="#philosophy" class="mobile-menu__link" data-i18n="nav_philosophy">Philosophie</a>
+    <a href="#works" class="mobile-menu__link" data-i18n="nav_works">Werke</a>
+    <div class="mobile-menu__lang">
+      <button class="nav__lang-btn active" data-lang="de">DE</button>
+      <span class="nav__lang-sep">|</span>
+      <button class="nav__lang-btn" data-lang="en">EN</button>
+    </div>
+  </nav>
+
+  <main id="main">
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <img class="hero__media" src="" alt="">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <h1 class="hero__title" id="heroName">Eckhard Besuden</h1>
+      <p class="hero__subtitle" data-i18n="hero_subtitle">Maler</p>
+    </div>
+    <div class="hero__contact-left">
+      <p>Kapplerbergstr. 14</p>
+      <p>D-78476 Allensbach</p>
+    </div>
+    <div class="hero__contact-right">
+      <p><a href="tel:+49753398779">+49 7533 98779</a></p>
+      <p><a href="#" id="emailLink"></a></p>
+    </div>
+    <div class="hero__scroll" aria-hidden="true">
+      <div class="hero__scroll-line"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span data-i18n="marquee_text">KEINE REGELN&ensp;&mdash;&ensp;KEINE TRICKS&ensp;&mdash;&ensp;KEINE GESCHICHTE&ensp;&mdash;&ensp;KEINE REGELN&ensp;&mdash;&ensp;KEINE TRICKS&ensp;&mdash;&ensp;KEINE GESCHICHTE&ensp;&mdash;&ensp;</span>
+      <span data-i18n="marquee_text">KEINE REGELN&ensp;&mdash;&ensp;KEINE TRICKS&ensp;&mdash;&ensp;KEINE GESCHICHTE&ensp;&mdash;&ensp;KEINE REGELN&ensp;&mdash;&ensp;KEINE TRICKS&ensp;&mdash;&ensp;KEINE GESCHICHTE&ensp;&mdash;&ensp;</span>
+    </div>
+  </div>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="section section--warm section--snap" id="about">
+    <div class="container">
+
+      <div class="editorial-grid">
+        <div class="editorial-grid__media reveal">
+          <div class="img-wrap">
+            <img src="assets/bilder/portrait/Eckhard20201210.jpg" alt="Eckhard Besuden" class="reveal-image">
+          </div>
+          <p class="caption about-born" data-i18n="about_born">geb. 27.01.1964, Allensbach am Bodensee</p>
+        </div>
+        <div class="editorial-grid__text reveal">
+          <h2 class="section__title text-reveal" data-i18n="about_title">Über mich</h2>
+          <p class="body-text text-reveal" data-i18n="about_text_1">Ich bin nur Autodidakt und deshalb wohl langsamer in meinen Bemühungen. Meine Ideen Künstler zu werden begannen, als ich Bilder von Peter Kuckei in Emden sah, sie endeten, als ich mich für die Hochschule der Künste in Berlin bewarb. Die HDK &mdash; aus meiner Sicht damals &bdquo;die einzig wahre&ldquo; Hochschule der Künste &mdash; schickte mir meine Mappe mit einer Ablehnung zurück.</p>
+          <p class="body-text text-reveal" data-i18n="about_text_2">Ich war damals offenkundig noch zu jung und nicht bescheiden genug, um eine Bewerbung einzureichen, die dem Anspruch Kunst zu sein, gerecht würde. Aus heutiger Sicht hatte die HDK Recht, ich bevorzugte mit meiner Eingabe die Sprezzatura und gab vor, künstlerisch tätig zu sein, mit dem Gegenteil von Mühe. Das wurde erkannt. Ich wurde verworfen. Wenige Dinge in meinem Leben waren mir peinlicher, ich habe mich nie wieder einer &bdquo;offiziellen&ldquo; Auswahl in Sachen Kunst gestellt. Für den Rest meines Lebens strenge ich mich mehr an.</p>
+          <p class="body-text body-text--highlight text-reveal" data-i18n="about_text_3">So wurde ich nur Maler und kein Künstler, aber malen muss ich eben.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========== PHILOSOPHY (single viewport, no scroll needed) ========== -->
+  <section class="section section--philosophy" id="philosophy">
+    <div class="philosophy-layout">
+      <div class="philosophy-layout__image">
+        <img src="assets/bilder/schluesselwerke/Bild2-2020Seehasgrossultramarinblau.jpg" alt="Seehas ultramarinblau, 2020" class="phil-reveal">
+        <div class="philosophy-layout__image-overlay"></div>
+      </div>
+      <div class="philosophy-layout__content">
+        <h2 class="philosophy-layout__title text-reveal" data-i18n="philosophy_title">Antideterminismus</h2>
+        <blockquote class="philosophy-layout__quote text-reveal">
+          <p data-i18n="philosophy_quote">Keine Regeln, keine Tricks, keine Geschichte, wir machen den Kopf frei</p>
+        </blockquote>
+        <div class="philosophy-layout__text">
+          <p class="text-reveal" data-i18n="philosophy_text_1">Antideterminismus soll dazu führen, dass sich der Betrachter nur auf die reine Kraft der Malerei konzentrieren kann und muss. Wir befreien den Malakt von 150 Jahre alten Qualitätsmerkmalen.</p>
+          <p class="text-reveal" data-i18n="philosophy_text_2">Wir malen nicht neu, wir malen nicht authentisch, wir malen nicht antidekorativ. Unsere Vita ist autodidakter Dilettantismus. Wir malen mit totaler Beliebigkeit der Sujets und der Malweise. Lediglich um das Merkmal perfekte Technik kommt niemand herum.</p>
+          <p class="text-reveal text-reveal--quote" data-i18n="philosophy_text_3">Das Wichtige an der Arbeit ist nur noch das Bild. Jedes Bild erzählt eine Geschichte.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- ========== WORKS ========== -->
+  <section class="section section--clean" id="works">
+    <div class="container">
+
+      <h2 class="section__title reveal" data-i18n="works_title">Werke</h2>
+
+      <div class="gallery-controls reveal">
+        <div class="gallery-filter" id="galleryFilter" role="group" aria-label="Bildkategorien" data-i18n-aria="a11y_filter">
+          <button class="filter-btn active" data-category="all" aria-pressed="true" data-i18n="filter_all">Alle</button>
+          <button class="filter-btn" data-category="abstrakt" aria-pressed="false" data-i18n="filter_abstract">Abstrakt</button>
+          <button class="filter-btn" data-category="blumen" aria-pressed="false" data-i18n="filter_flowers">Blumen</button>
+          <button class="filter-btn" data-category="frauen" aria-pressed="false" data-i18n="filter_women">Frauen</button>
+          <button class="filter-btn" data-category="seebilder" aria-pressed="false" data-i18n="filter_seascapes">Seebilder</button>
+          <button class="filter-btn" data-category="sonstige" aria-pressed="false" data-i18n="filter_misc">Sonstige</button>
+          <button class="filter-btn" data-category="tiere" aria-pressed="false" data-i18n="filter_animals">Tiere</button>
+        </div>
+        <div class="gallery-search">
+          <label for="gallerySearch" class="sr-only" data-i18n="search_placeholder">Werk suchen</label>
+          <input type="text" class="gallery-search__input" id="gallerySearch" placeholder="Werk suchen..." data-i18n-placeholder="search_placeholder" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="gallery" id="gallery" aria-label="Bildergalerie" data-i18n-aria="a11y_gallery">
+        <p class="gallery__loading" id="galleryLoading" data-i18n="works_loading">Laden...</p>
+      </div>
+
+      <div class="gallery-more" id="galleryMore">
+        <p class="gallery-count" id="galleryCount"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scroll to top of gallery -->
+  <button class="back-to-top" id="backToTop" aria-label="Zum Anfang der Werke" data-i18n-aria="a11y_back_to_works">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 14V2M2 8l6-6 6 6"/></svg>
+  </button>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__line section-divider"></div>
+      <div class="footer__content">
+        <p class="footer__copy" data-i18n="footer_copyright">&copy; 2006 &ndash; 2026 Eckhard Besuden</p>
+        <div class="footer__links">
+          <button class="footer__link" id="privacyBtn" data-i18n="footer_privacy">Datenschutz</button>
+          <span class="footer__sep">|</span>
+          <button class="footer__link" id="imprintBtn" data-i18n="footer_imprint">Impressum</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Datenschutz Modal -->
+  <div class="modal" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyModalTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Schließen" data-i18n-aria="a11y_close">&times;</button>
+      <h2 class="modal__title" id="privacyModalTitle" data-i18n="privacy_title">Datenschutzerklärung</h2>
+      <div class="modal__body" id="privacyModalBody">
+        <p>Diese Datenschutzerklärung klärt Sie über die Art, den Umfang und Zweck der Verarbeitung von personenbezogenen Daten innerhalb unseres Onlineangebotes auf.</p>
+        <h3>Verantwortlicher</h3>
+        <p>Eckhard Besuden<br>Kapplerbergstr. 14<br>D-78476 Allensbach<br>Deutschland<br>Tel.: 0049 / (0)7533 / 98779<br>E-Mail: eckhardbesuden@web.de</p>
+        <h3>Cookies</h3>
+        <p>Diese Website setzt nur technisch notwendige Cookies ein (Sprachauswahl, Cookie-Einwilligung). Es werden keine Tracking-Cookies oder Analyse-Tools verwendet.</p>
+        <h3>Hosting und Logfiles</h3>
+        <p>Logfile-Informationen werden aus Sicherheitsgründen für maximal 7 Tage gespeichert und danach gelöscht.</p>
+        <h3>Ihre Rechte</h3>
+        <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17) und Einschränkung der Verarbeitung (Art. 18). Beschwerde bei der Aufsichtsbehörde gem. Art. 77 DSGVO.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Impressum Modal -->
+  <div class="modal" id="imprintModal" role="dialog" aria-modal="true" aria-labelledby="imprintModalTitle">
+    <div class="modal__backdrop"></div>
+    <div class="modal__content">
+      <button class="modal__close" aria-label="Schließen" data-i18n-aria="a11y_close">&times;</button>
+      <h2 class="modal__title" id="imprintModalTitle" data-i18n="footer_imprint">Impressum</h2>
+      <div class="modal__body">
+        <p><strong>Eckhard Besuden</strong></p>
+        <p>Kapplerbergstr. 14<br>D-78476 Allensbach<br>Deutschland</p>
+        <p>Tel.: 0049 / (0)7533 / 98779<br>E-Mail: <a href="#" class="email-obf">EckhardBesuden [at] web.de</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-label="Werkdetails" data-i18n-aria="a11y_detail">
+    <div class="detail__backdrop"></div>
+    <button class="detail__close" aria-label="Schließen" data-i18n-aria="a11y_close">&times;</button>
+    <div class="detail__counter" id="detailCounter"></div>
+    <button class="detail__prev" aria-label="Vorheriges Bild" data-i18n-aria="a11y_prev">&#8592;</button>
+    <button class="detail__next" aria-label="Nächstes Bild" data-i18n-aria="a11y_next">&#8594;</button>
+    <div class="detail__layout">
+      <div class="detail__image-col">
+        <div class="detail__image-wrap" id="detailImageWrap">
+          <img class="detail__image" id="detailImage" src="" alt="">
+          <div class="detail__loupe" id="detailLoupe"></div>
+        </div>
+        <button class="detail__fullscreen-btn" id="detailFullscreenBtn" aria-label="Vollbild" data-i18n-aria="a11y_fullscreen">
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6V1h5M17 6V1h-5M1 12v5h5M17 12v5h-5"/></svg>
+          <span data-i18n="detail_fullscreen">Vollbild</span>
+        </button>
+      </div>
+      <div class="detail__info" id="detailInfo">
+        <h2 class="detail__title" id="detailTitle"></h2>
+        <div class="detail__meta">
+          <div class="detail__field"><span class="detail__label" data-i18n="detail_year">Jahr</span><p id="detailYear"></p></div>
+          <div class="detail__field"><span class="detail__label" data-i18n="detail_technique">Technik</span><p id="detailTechnique"></p></div>
+          <div class="detail__field"><span class="detail__label" data-i18n="detail_dimensions">Maße</span><p id="detailDimensions"></p></div>
+          <div class="detail__field"><span class="detail__label" data-i18n="detail_category">Kategorie</span><p id="detailCategory"></p></div>
+        </div>
+        <div class="detail__divider"></div>
+        <div class="detail__status" id="detailStatus"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Fullscreen Image Overlay -->
+  <div class="image-fullscreen" id="imageFullscreen" role="dialog" aria-modal="true" aria-label="Vollbild" data-i18n-aria="a11y_fullscreen">
+    <img id="fullscreenImage" src="" alt="">
+    <button class="image-fullscreen__close" aria-label="Schließen" data-i18n-aria="a11y_close">&times;</button>
+  </div>
+
+  <script src="js/vendor/gsap.min.js"></script>
+  <script src="js/vendor/ScrollTrigger.min.js"></script>
+  <script src="js/vendor/ScrollToPlugin.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/overlay.js"></script>
+  <script src="js/scroll.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>
