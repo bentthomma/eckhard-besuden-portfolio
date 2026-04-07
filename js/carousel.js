@@ -384,9 +384,11 @@
     if (!viewport) return;
     var maxH = 0;
     for (var i = 0; i < slides.length; i++) {
-      maxH = Math.max(maxH, slides[i].scrollHeight);
+      if (slides[i].classList.contains('is-active')) {
+        maxH = Math.max(maxH, slides[i].scrollHeight);
+      }
     }
-    if (maxH > 0) viewport.style.height = maxH + 'px';
+    if (maxH > 0) viewport.style.minHeight = maxH + 'px';
   }
 
   /* --------------------------------------------------------
