@@ -1,30 +1,37 @@
 # Script Load Order
 
-Scripts load synchronously at the bottom of `<body>`. Order is critical.
+```html
+<!-- Vendor (local, no CDN) -->
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/ScrollToPlugin.min.js"></script>
 
-## index.html
+<!-- Foundation -->
+<script src="js/helpers.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/overlay.js"></script>
 
+<!-- Systems -->
+<script src="js/bid.js"></script>
+<script src="js/scroll.js"></script>
+<script src="js/loader.js"></script>
+
+<!-- Features -->
+<script src="js/carousel.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/interactions.js"></script>
 ```
-motion-core.min.js      → window.gsap (GSAP 3.12 with ScrollTrigger + ScrollToPlugin)
-motion-aliases.js       → window.MotionEngine, window.ViewportDriver, window.AnchorDriver
-i18n.js                 → window.i18n
-overlay.js              → window.__overlay, window.__reduced
-artwork-overlay.js      → window.ArtworkOverlay (requires __overlay, MotionEngine)
-scroll.js               → window.Scroll (requires MotionEngine, ViewportDriver, AnchorDriver)
-intro-sequence.js       → (requires MotionEngine, __overlay, __reduced)
-nav.js                  → (requires __overlay, Scroll)
-interactions.js         → (requires MotionEngine, AnchorDriver, __reduced)
-home-carousel.js        → window.HomeCarousel (requires MotionEngine, ArtworkOverlay, Scroll)
-```
 
-## gallery.html
+## Dependencies
 
-Same as above minus: scroll.js, intro-sequence.js, home-carousel.js.
-Adds: gallery.js → window.Gallery (requires MotionEngine, ArtworkOverlay)
-
-## Rules
-
-- Runtime files must load first (GSAP before aliases before consumers)
-- overlay.js before any overlay consumer
-- scroll.js before home-carousel.js (carousel waits for scroll entry)
-- Never reorder without checking the dependency chain above
+- `helpers.js` → no dependencies
+- `i18n.js` → no dependencies  
+- `overlay.js` → gsap
+- `bid.js` → gsap, Helpers
+- `scroll.js` → gsap, ScrollTrigger, ScrollToPlugin
+- `loader.js` → gsap, overlay.js
+- `carousel.js` → gsap, Helpers, BidSystem, overlay.js
+- `gallery.js` → gsap, Helpers, BidSystem, overlay.js
+- `nav.js` → overlay.js, Scroll
+- `interactions.js` → gsap
