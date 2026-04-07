@@ -12,7 +12,7 @@
 
   /* ---- Magnetic Hover (Event Delegation) ---- */
   function initMagnetic() {
-    if (reduced || 'ontouchstart' in window) return;
+    if (reduced || (window.matchMedia && window.matchMedia('(hover: none)').matches)) return;
     var MAGNETIC = '.nav__link, .filter-btn, .cta, .footer__link, .detail__bid-btn';
     document.addEventListener('mousemove', function (e) {
       var el = e.target.closest(MAGNETIC);
@@ -52,7 +52,7 @@
     var wrap = document.getElementById('detailImageWrap');
     var loupe = document.getElementById('detailLoupe');
     var img = document.getElementById('detailImage');
-    if (!wrap || !loupe || !img || 'ontouchstart' in window) return;
+    if (!wrap || !loupe || !img || (window.matchMedia && window.matchMedia('(hover: none)').matches)) return;
 
     var ZOOM = 2.5, SIZE = 160, ready = false;
     new MutationObserver(function () {
@@ -87,7 +87,7 @@
     var src = document.getElementById('detailImage');
     if (!btn || !overlay || !fImg || !src) return;
 
-    var isMobile = 'ontouchstart' in window || window.innerWidth < 768;
+    var isMobile = (window.matchMedia && window.matchMedia('(hover: none)').matches) || window.innerWidth < 768;
     var activeClone = null;
 
     function openFullscreen() {

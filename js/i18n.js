@@ -394,8 +394,10 @@
     for (var j = 0; j < langBtns.length; j++) {
       if (langBtns[j].getAttribute('data-lang') === lang) {
         langBtns[j].classList.add('active');
+        langBtns[j].setAttribute('aria-pressed', 'true');
       } else {
         langBtns[j].classList.remove('active');
+        langBtns[j].setAttribute('aria-pressed', 'false');
       }
     }
 

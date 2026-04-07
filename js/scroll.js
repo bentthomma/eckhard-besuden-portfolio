@@ -133,7 +133,9 @@ var Scroll = (function () {
         cooldownUntil = Date.now() + COOLDOWN_MS;
       },
       onComplete: function () {
-        state = targetSec.type === 'free' ? 'free' : targetSec.id;
+        if (flying) {
+          state = targetSec.type === 'free' ? 'free' : targetSec.id;
+        }
         flying = false;
         cooldownUntil = Date.now() + COOLDOWN_MS;
 
@@ -421,6 +423,9 @@ var Scroll = (function () {
   function rebuildReveals() {
     sections.forEach(function (sec) {
       if (sec.type === 'reveal' && sec.el) {
+        if (sec.tl && sec.tl.isActive && sec.tl.isActive()) {
+          sec.tl.progress(1);
+        }
         sec.tl = buildRevealTimeline(sec.el);
         sec.progress = 0;
       }
