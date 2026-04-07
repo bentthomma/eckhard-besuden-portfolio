@@ -33,6 +33,10 @@
   var isTransitioning = false;
   var currentBidItem = null;
 
+  /* ========== LAZY-LOAD STATE ========== */
+  var galleryState = 'collapsed';
+  var expandBtn, collapsedEl, expandedEl;
+
   /* ========== DOM REFS ========== */
   var gallery, countEl, searchInput, filterBtns;
   var detail, detailImage, detailTitle, detailYear;
@@ -46,52 +50,14 @@
      SECTION: Helpers
      ========================================================== */
 
-  function getLang() {
-    return document.documentElement.lang || 'de';
-  }
-
-  function t(de, en) {
-    return getLang() === 'en' ? en : de;
-  }
-
-  function getTitle(item) {
-    if (!item) return '';
-    if (getLang() === 'en' && item.title_en) return item.title_en;
-    return item.title_de || '';
-  }
-
-  function getTechnique(item) {
-    if (!item) return '';
-    if (getLang() === 'en' && item.technique_en) return item.technique_en;
-    return item.technique_de || '';
-  }
-
-  function getCategoryLabel(item) {
-    if (!item) return '';
-    if (getLang() === 'en' && item.category_en) return item.category_en;
-    return item.category_de || '';
-  }
-
-  function getShortLabel(item) {
-    var title = getTitle(item);
-    var year = item.year ? item.year : '';
-    if (title && year) return title + ', ' + year;
-    return title || (year ? '' + year : '');
-  }
-
-  function parseDimensions(item) {
-    if (item.dimensions) return item.dimensions;
-    var match = item.file.match(/(\d{2,4})x(\d{2,4})/);
-    if (match) return match[1] + ' \u00d7 ' + match[2] + ' cm';
-    return '';
-  }
-
-  function isAvailable(item) {
-    if (!item) return true;
-    if (item.owner && item.owner !== '') return false;
-    if (typeof item.available !== 'undefined') return item.available;
-    return true;
-  }
+  function getLang() { return Helpers.getLang(); }
+  function t(de, en) { return getLang() === 'en' ? en : de; }
+  function getTitle(item) { return Helpers.getTitle(item); }
+  function getTechnique(item) { return Helpers.getTechnique(item); }
+  function getCategoryLabel(item) { return Helpers.getCategory(item); }
+  function getShortLabel(item) { return Helpers.getShortLabel(item); }
+  function parseDimensions(item) { return Helpers.getDimensions(item); }
+  function isAvailable(item) { return Helpers.isAvailable(item); }
 
 
   /* ==========================================================
@@ -973,30 +939,84 @@
 
   function init() {
     cacheDomRefs();
-    if (!gallery) return;
 
-    initRevealObserver();
+    expandBtn = document.getElementById('galleryExpandBtn');
+    collapsedEl = document.getElementById('galleryCollapsed');
+    expandedEl = document.getElementById('galleryExpanded');
 
+    if (expandBtn) {
+      expandBtn.addEventListener('click', function () { expand(); });
+    }
+
+    /* If no collapsed state exists (fallback), auto-expand */
+    if (!collapsedEl) {
+      if (!gallery) return;
+      initRevealObserver();
+      fetchAndExpand();
+      return;
+    }
+
+    initLanguageObserver();
+  }
+
+  function expand() {
+    if (galleryState !== 'collapsed') return;
+    galleryState = 'loading';
+    if (expandBtn) {
+      expandBtn.disabled = true;
+      expandBtn.textContent = Helpers.translate('works_loading', 'Laden...', 'Loading...');
+    }
+    fetchAndExpand();
+  }
+
+  function fetchAndExpand() {
     fetchImageData()
       .then(function () {
+        galleryState = 'expanded';
+        if (collapsedEl) collapsedEl.style.display = 'none';
+        if (expandedEl) expandedEl.style.display = '';
+        if (!gallery) gallery = document.getElementById('gallery');
+
+        initRevealObserver();
         renderBatch();
         updateCount();
-    
         bindFilterButtons();
         initSearch();
-
         if (detail) initDetail();
         initInlineBid();
-
-        initLanguageObserver();
         updateSearchPlaceholder();
+
+        if (typeof gsap !== 'undefined' && expandedEl) {
+          var controls = expandedEl.querySelector('.gallery-controls');
+          if (controls) {
+            gsap.fromTo(controls, { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+          }
+        }
       })
       .catch(function (err) {
         console.error('Gallery: Could not load image data.', err);
-        gallery.innerHTML = '<p style="text-align:center;opacity:0.4;padding:3rem 0;">' +
-          t('Galerie konnte nicht geladen werden.', 'Gallery could not be loaded.') + '</p>';
+        galleryState = 'collapsed';
+        if (expandBtn) {
+          expandBtn.disabled = false;
+          expandBtn.textContent = Helpers.translate('home_featured_error',
+            'Fehler — erneut versuchen', 'Error — try again');
+        }
       });
   }
+
+  /* ========== PUBLIC API ========== */
+  window.Gallery = {
+    expand: function () { expand(); },
+    isExpanded: function () { return galleryState === 'expanded'; },
+    openDetail: function (externalItems, index, sourceImg) {
+      if (galleryState !== 'expanded') expand();
+      if (externalItems && typeof index === 'number') {
+        filteredImages = externalItems;
+        flipOpenDetail(index, sourceImg);
+      }
+    }
+  };
 
   /* Start when DOM ready */
   if (document.readyState === 'loading') {
