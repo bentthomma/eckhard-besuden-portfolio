@@ -25,6 +25,12 @@
   background:
     linear-gradient(180deg, rgba(15, 7, 4, 0.3), rgba(15, 7, 4, 0.06) 26%, rgba(15, 7, 4, 0.28) 100%),
     url('../assets/gallery-bg.png') center 54% / cover no-repeat;
+  background:
+    linear-gradient(180deg, rgba(15, 7, 4, 0.3), rgba(15, 7, 4, 0.06) 26%, rgba(15, 7, 4, 0.28) 100%),
+    image-set(
+      url('../assets/gallery-bg.webp') type('image/webp'),
+      url('../assets/gallery-bg.png') type('image/png')
+    ) center 54% / cover no-repeat;
   opacity: 0.98;
 }
 
