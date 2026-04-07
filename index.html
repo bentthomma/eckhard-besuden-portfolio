@@ -163,6 +163,37 @@
 
   <div class="section-divider"></div>
 
+  <!-- ========== CAROUSEL (Featured Works) ========== -->
+  <section class="section section--carousel" id="carousel">
+    <div class="container">
+      <span class="section__label" data-i18n="home_featured_label">Auswahl</span>
+      <h2 class="section__title" data-i18n="home_featured_title">Ausgew&auml;hlte Werke</h2>
+      <p class="section__intro" data-i18n="home_featured_intro">Ein konzentrierter Blick auf zentrale Arbeiten. Die vollst&auml;ndige Auswahl liegt weiter unten.</p>
+    </div>
+
+    <div class="carousel" id="homeCarousel">
+      <div class="carousel__viewport" id="carouselViewport">
+        <div class="carousel__track" id="carouselTrack"
+             aria-label="Ausgew&auml;hlte Werke" data-i18n-aria="a11y_featured_carousel">
+        </div>
+      </div>
+      <button class="carousel__pause" id="carouselPause" type="button"
+              aria-label="Pause" data-i18n-aria="carousel_pause">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+          <rect x="1" y="1" width="4" height="12"/>
+          <rect x="9" y="1" width="4" height="12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="container container--cta">
+      <a href="#works" class="carousel__all-works" id="carouselAllWorks"
+         data-i18n="home_all_works">Zu allen Werken</a>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
   <!-- ========== WORKS ========== -->
   <section class="section section--clean" id="works">
     <div class="container">
@@ -317,10 +348,12 @@
   <script src="js/helpers.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/overlay.js"></script>
+  <script src="js/bid.js"></script>
   <script src="js/scroll.js"></script>
   <script src="js/loader.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/gallery.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/interactions.js"></script>
-  <script src="js/gallery.js"></script>
 </body>
 </html>

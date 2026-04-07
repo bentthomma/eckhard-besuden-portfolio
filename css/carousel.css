@@ -295,3 +295,14 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
+/* Pause button hidden until JS makes it visible */
+.carousel__pause {
+  display: none;
+}
+
+/* All-works link container */
+.section--carousel .container--cta {
+  text-align: center;
+  margin-top: 1.5rem;
+}
