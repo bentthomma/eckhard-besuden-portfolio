@@ -390,6 +390,47 @@
   }
 
   /* --------------------------------------------------------
+     MOBILE BID MODAL
+     -------------------------------------------------------- */
+  function openMobileBidModal(item) {
+    var existing = document.querySelector('.bid-popup');
+    if (existing) existing.remove();
+
+    var popup = document.createElement('div');
+    popup.className = 'bid-popup';
+    var backdrop = document.createElement('div');
+    backdrop.className = 'bid-popup__backdrop';
+    var card = document.createElement('div');
+    card.className = 'bid-popup__card';
+    popup.appendChild(backdrop);
+    popup.appendChild(card);
+    document.body.appendChild(popup);
+
+    var controller = BidSystem.create(card, item);
+
+    function closeModal() {
+      if (typeof gsap !== 'undefined') {
+        gsap.to(card, { opacity: 0, y: 20, duration: 0.25, ease: 'power2.in',
+          onComplete: function () { popup.remove(); startAutoplay(); }
+        });
+      } else {
+        popup.remove(); startAutoplay();
+      }
+    }
+
+    backdrop.addEventListener('click', closeModal);
+    if (controller && controller.closeBtn) {
+      controller.closeBtn.addEventListener('click', closeModal);
+    }
+
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo(card, { opacity: 0, y: 30, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out' });
+    }
+    clearAutoplay();
+  }
+
+  /* --------------------------------------------------------
      EVENT LISTENERS
      -------------------------------------------------------- */
   function initEventListeners() {
@@ -438,6 +479,42 @@
 
       if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentIndex + 1, 'next'); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentIndex - 1, 'prev'); }
+    });
+
+    /* Bid button click */
+    viewport.addEventListener('click', function (e) {
+      var bidBtn = e.target.closest('.bid-btn');
+      if (!bidBtn) return;
+      var slide = bidBtn.closest('.carousel__slide');
+      if (!slide) return;
+      var idx = parseInt(slide.getAttribute('data-index'), 10);
+      if (isNaN(idx) || idx >= items.length) return;
+
+      var item = items[idx];
+      var bidContainer = slide.querySelector('.carousel__plaque-bid');
+      var infoEls = slide.querySelector('.carousel__plaque-meta');
+      var actionsEl = slide.querySelector('.carousel__plaque-actions');
+
+      if (!bidContainer) return;
+
+      if (window.innerWidth < 768) {
+        openMobileBidModal(item);
+        return;
+      }
+
+      clearAutoplay();
+      var controller = BidSystem.create(bidContainer, item);
+      if (actionsEl) actionsEl.style.display = 'none';
+      BidSystem.show(bidContainer, infoEls, function () {
+        if (controller && controller.closeBtn) {
+          controller.closeBtn.addEventListener('click', function () {
+            BidSystem.hide(bidContainer, infoEls, function () {
+              if (actionsEl) actionsEl.style.display = '';
+              startAutoplay();
+            });
+          });
+        }
+      });
     });
 
     /* Image click → open detail overlay */
