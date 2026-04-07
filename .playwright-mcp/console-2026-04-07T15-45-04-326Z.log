@@ -1,0 +1,6 @@
+[   57129ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   91839ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[ 1006472ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)

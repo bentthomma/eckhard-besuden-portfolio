@@ -1,0 +1,421 @@
+- generic [active] [ref=e1]:
+  - link "Zum Inhalt springen" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - navigation [ref=e29]:
+    - link "BESUDEN" [ref=e30] [cursor=pointer]:
+      - /url: "#hero"
+    - generic [ref=e31]:
+      - link "Über mich" [ref=e32] [cursor=pointer]:
+        - /url: "#about"
+      - link "Philosophie" [ref=e33] [cursor=pointer]:
+        - /url: "#philosophy"
+      - link "Werke" [ref=e34] [cursor=pointer]:
+        - /url: "#works"
+    - generic [ref=e36]:
+      - button "DE" [pressed] [ref=e37] [cursor=pointer]
+      - generic [ref=e38]: "|"
+      - button "EN" [ref=e39] [cursor=pointer]
+  - navigation "Mobile Navigation":
+    - link "Über mich":
+      - /url: "#about"
+    - link "Philosophie":
+      - /url: "#philosophy"
+    - link "Werke":
+      - /url: "#works"
+    - generic:
+      - button "DE" [pressed]
+      - generic: "|"
+      - button "EN"
+  - main [ref=e40]:
+    - generic [ref=e41]:
+      - img "Eckhard Besuden — Malerei" [ref=e42]
+      - generic [ref=e43]:
+        - heading "Eckhard Besuden" [level=1] [ref=e44]
+        - paragraph [ref=e45]: Maler
+      - generic [ref=e46]:
+        - paragraph [ref=e47]: Kapplerbergstr. 14
+        - paragraph [ref=e48]: D-78476 Allensbach
+      - generic [ref=e49]:
+        - paragraph [ref=e50]:
+          - link "+49 7533 98779" [ref=e51] [cursor=pointer]:
+            - /url: tel:+49753398779
+        - paragraph [ref=e52]:
+          - link "EckhardBesuden@web.de" [ref=e53] [cursor=pointer]:
+            - /url: mailto:EckhardBesuden@web.de
+    - generic [ref=e57]:
+      - generic [ref=e58]: KEINE REGELN — KEINE TRICKS — KEINE GESCHICHTE — KEINE REGELN — KEINE TRICKS — KEINE GESCHICHTE —
+      - generic [ref=e59]: KEINE REGELN — KEINE TRICKS — KEINE GESCHICHTE — KEINE REGELN — KEINE TRICKS — KEINE GESCHICHTE —
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - img "Eckhard Besuden" [ref=e65]
+        - paragraph [ref=e66]: geb. 27.01.1964, Allensbach am Bodensee
+      - generic [ref=e67]:
+        - heading "Über mich" [level=2] [ref=e68]:
+          - generic [ref=e70]: Über
+          - generic [ref=e72]: mich
+        - paragraph [ref=e73]:
+          - generic [ref=e75]: Ich
+          - generic [ref=e77]: bin
+          - generic [ref=e79]: nur
+          - generic [ref=e81]: Autodidakt
+          - generic [ref=e83]: und
+          - generic [ref=e85]: deshalb
+          - generic [ref=e87]: wohl
+          - generic [ref=e89]: langsamer
+          - generic [ref=e91]: in
+          - generic [ref=e93]: meinen
+          - generic [ref=e95]: Bemühungen.
+          - generic [ref=e97]: Meine
+          - generic [ref=e99]: Ideen
+          - generic [ref=e101]: Künstler
+          - generic [ref=e103]: zu
+          - generic [ref=e105]: werden
+          - generic [ref=e107]: begannen,
+          - generic [ref=e109]: als
+          - generic [ref=e111]: ich
+          - generic [ref=e113]: Bilder
+          - generic [ref=e115]: von
+          - generic [ref=e117]: Peter
+          - generic [ref=e119]: Kuckei
+          - generic [ref=e121]: in
+          - generic [ref=e123]: Emden
+          - generic [ref=e125]: sah,
+          - generic [ref=e127]: sie
+          - generic [ref=e129]: endeten,
+          - generic [ref=e131]: als
+          - generic [ref=e133]: ich
+          - generic [ref=e135]: mich
+          - generic [ref=e137]: für
+          - generic [ref=e139]: die
+          - generic [ref=e141]: Hochschule
+          - generic [ref=e143]: der
+          - generic [ref=e145]: Künste
+          - generic [ref=e147]: in
+          - generic [ref=e149]: Berlin
+          - generic [ref=e151]: bewarb.
+          - generic [ref=e153]: Die
+          - generic [ref=e155]: HDK
+          - generic [ref=e157]: —
+          - generic [ref=e159]: aus
+          - generic [ref=e161]: meiner
+          - generic [ref=e163]: Sicht
+          - generic [ref=e165]: damals
+          - generic [ref=e167]: „die
+          - generic [ref=e169]: einzig
+          - generic [ref=e171]: wahre“
+          - generic [ref=e173]: Hochschule
+          - generic [ref=e175]: der
+          - generic [ref=e177]: Künste
+          - generic [ref=e179]: —
+          - generic [ref=e181]: schickte
+          - generic [ref=e183]: mir
+          - generic [ref=e185]: meine
+          - generic [ref=e187]: Mappe
+          - generic [ref=e189]: mit
+          - generic [ref=e191]: einer
+          - generic [ref=e193]: Ablehnung
+          - generic [ref=e195]: zurück.
+        - paragraph [ref=e196]:
+          - generic [ref=e198]: Ich
+          - generic [ref=e200]: war
+          - generic [ref=e202]: damals
+          - generic [ref=e204]: offenkundig
+          - generic [ref=e206]: noch
+          - generic [ref=e208]: zu
+          - generic [ref=e210]: jung
+          - generic [ref=e212]: und
+          - generic [ref=e214]: nicht
+          - generic [ref=e216]: bescheiden
+          - generic [ref=e218]: genug,
+          - generic [ref=e220]: um
+          - generic [ref=e222]: eine
+          - generic [ref=e224]: Bewerbung
+          - generic [ref=e226]: einzureichen,
+          - generic [ref=e228]: die
+          - generic [ref=e230]: dem
+          - generic [ref=e232]: Anspruch
+          - generic [ref=e234]: Kunst
+          - generic [ref=e236]: zu
+          - generic [ref=e238]: sein,
+          - generic [ref=e240]: gerecht
+          - generic [ref=e242]: würde.
+          - generic [ref=e244]: Aus
+          - generic [ref=e246]: heutiger
+          - generic [ref=e248]: Sicht
+          - generic [ref=e250]: hatte
+          - generic [ref=e252]: die
+          - generic [ref=e254]: HDK
+          - generic [ref=e256]: Recht,
+          - generic [ref=e258]: ich
+          - generic [ref=e260]: bevorzugte
+          - generic [ref=e262]: mit
+          - generic [ref=e264]: meiner
+          - generic [ref=e266]: Eingabe
+          - generic [ref=e268]: die
+          - generic [ref=e270]: Sprezzatura
+          - generic [ref=e272]: und
+          - generic [ref=e274]: gab
+          - generic [ref=e276]: vor,
+          - generic [ref=e278]: künstlerisch
+          - generic [ref=e280]: tätig
+          - generic [ref=e282]: zu
+          - generic [ref=e284]: sein,
+          - generic [ref=e286]: mit
+          - generic [ref=e288]: dem
+          - generic [ref=e290]: Gegenteil
+          - generic [ref=e292]: von
+          - generic [ref=e294]: Mühe.
+          - generic [ref=e296]: Das
+          - generic [ref=e298]: wurde
+          - generic [ref=e300]: erkannt.
+          - generic [ref=e302]: Ich
+          - generic [ref=e304]: wurde
+          - generic [ref=e306]: verworfen.
+          - generic [ref=e308]: Wenige
+          - generic [ref=e310]: Dinge
+          - generic [ref=e312]: in
+          - generic [ref=e314]: meinem
+          - generic [ref=e316]: Leben
+          - generic [ref=e318]: waren
+          - generic [ref=e320]: mir
+          - generic [ref=e322]: peinlicher,
+          - generic [ref=e324]: ich
+          - generic [ref=e326]: habe
+          - generic [ref=e328]: mich
+          - generic [ref=e330]: nie
+          - generic [ref=e332]: wieder
+          - generic [ref=e334]: einer
+          - generic [ref=e336]: „offiziellen“
+          - generic [ref=e338]: Auswahl
+          - generic [ref=e340]: in
+          - generic [ref=e342]: Sachen
+          - generic [ref=e344]: Kunst
+          - generic [ref=e346]: gestellt.
+          - generic [ref=e348]: Für
+          - generic [ref=e350]: den
+          - generic [ref=e352]: Rest
+          - generic [ref=e354]: meines
+          - generic [ref=e356]: Lebens
+          - generic [ref=e358]: strenge
+          - generic [ref=e360]: ich
+          - generic [ref=e362]: mich
+          - generic [ref=e364]: mehr
+          - generic [ref=e366]: an.
+        - paragraph [ref=e367]:
+          - generic [ref=e369]: So
+          - generic [ref=e371]: wurde
+          - generic [ref=e373]: ich
+          - generic [ref=e375]: nur
+          - generic [ref=e377]: Maler
+          - generic [ref=e379]: und
+          - generic [ref=e381]: kein
+          - generic [ref=e383]: Künstler,
+          - generic [ref=e385]: aber
+          - generic [ref=e387]: malen
+          - generic [ref=e389]: muss
+          - generic [ref=e391]: ich
+          - generic [ref=e393]: eben.
+    - generic [ref=e395]:
+      - img "Seehas ultramarinblau, 2020" [ref=e397]
+      - generic [ref=e398]:
+        - heading "Antideterminismus" [level=2] [ref=e399]:
+          - generic [ref=e401]: Antideterminismus
+        - blockquote [ref=e402]:
+          - generic [ref=e404]: Keine
+          - generic [ref=e406]: Regeln,
+          - generic [ref=e408]: keine
+          - generic [ref=e410]: Tricks,
+          - generic [ref=e412]: keine
+          - generic [ref=e414]: Geschichte,
+          - generic [ref=e416]: wir
+          - generic [ref=e418]: machen
+          - generic [ref=e420]: den
+          - generic [ref=e422]: Kopf
+          - generic [ref=e424]: frei
+        - generic [ref=e425]:
+          - paragraph [ref=e426]:
+            - generic [ref=e428]: Antideterminismus
+            - generic [ref=e430]: soll
+            - generic [ref=e432]: dazu
+            - generic [ref=e434]: führen,
+            - generic [ref=e436]: dass
+            - generic [ref=e438]: sich
+            - generic [ref=e440]: der
+            - generic [ref=e442]: Betrachter
+            - generic [ref=e444]: nur
+            - generic [ref=e446]: auf
+            - generic [ref=e448]: die
+            - generic [ref=e450]: reine
+            - generic [ref=e452]: Kraft
+            - generic [ref=e454]: der
+            - generic [ref=e456]: Malerei
+            - generic [ref=e458]: konzentrieren
+            - generic [ref=e460]: kann
+            - generic [ref=e462]: und
+            - generic [ref=e464]: muss.
+            - generic [ref=e466]: Wir
+            - generic [ref=e468]: befreien
+            - generic [ref=e470]: den
+            - generic [ref=e472]: Malakt
+            - generic [ref=e474]: von
+            - generic [ref=e476]: "150"
+            - generic [ref=e478]: Jahre
+            - generic [ref=e480]: alten
+            - generic [ref=e482]: Qualitätsmerkmalen.
+          - paragraph [ref=e483]:
+            - generic [ref=e485]: Wir
+            - generic [ref=e487]: malen
+            - generic [ref=e489]: nicht
+            - generic [ref=e491]: neu,
+            - generic [ref=e493]: wir
+            - generic [ref=e495]: malen
+            - generic [ref=e497]: nicht
+            - generic [ref=e499]: authentisch,
+            - generic [ref=e501]: wir
+            - generic [ref=e503]: malen
+            - generic [ref=e505]: nicht
+            - generic [ref=e507]: antidekorativ.
+            - generic [ref=e509]: Unsere
+            - generic [ref=e511]: Vita
+            - generic [ref=e513]: ist
+            - generic [ref=e515]: autodidakter
+            - generic [ref=e517]: Dilettantismus.
+            - generic [ref=e519]: Wir
+            - generic [ref=e521]: malen
+            - generic [ref=e523]: mit
+            - generic [ref=e525]: totaler
+            - generic [ref=e527]: Beliebigkeit
+            - generic [ref=e529]: der
+            - generic [ref=e531]: Sujets
+            - generic [ref=e533]: und
+            - generic [ref=e535]: der
+            - generic [ref=e537]: Malweise.
+            - generic [ref=e539]: Lediglich
+            - generic [ref=e541]: um
+            - generic [ref=e543]: das
+            - generic [ref=e545]: Merkmal
+            - generic [ref=e547]: perfekte
+            - generic [ref=e549]: Technik
+            - generic [ref=e551]: kommt
+            - generic [ref=e553]: niemand
+            - generic [ref=e555]: herum.
+          - paragraph [ref=e556]:
+            - generic [ref=e558]: Das
+            - generic [ref=e560]: Wichtige
+            - generic [ref=e562]: an
+            - generic [ref=e564]: der
+            - generic [ref=e566]: Arbeit
+            - generic [ref=e568]: ist
+            - generic [ref=e570]: nur
+            - generic [ref=e572]: noch
+            - generic [ref=e574]: das
+            - generic [ref=e576]: Bild.
+            - generic [ref=e578]: Jedes
+            - generic [ref=e580]: Bild
+            - generic [ref=e582]: erzählt
+            - generic [ref=e584]: eine
+            - generic [ref=e586]: Geschichte.
+    - generic [ref=e587]:
+      - generic [ref=e588]:
+        - generic "Ausgewählte Werke" [ref=e590]:
+          - article [ref=e591]:
+            - generic [ref=e592]:
+              - button "Leningradervariante" [ref=e595] [cursor=pointer]
+              - group "Leningradervariante" [ref=e596]:
+                - generic [ref=e597]:
+                  - paragraph [ref=e598]: Eckhard Besuden
+                  - heading "Leningradervariante" [level=3] [ref=e599]
+                - generic [ref=e600]:
+                  - generic [ref=e601]:
+                    - generic [ref=e602]: Jahr
+                    - paragraph [ref=e603]: "2017"
+                  - generic [ref=e604]:
+                    - generic [ref=e605]: Technik
+                    - paragraph [ref=e606]: —
+                  - generic [ref=e607]:
+                    - generic [ref=e608]: Maße
+                    - paragraph [ref=e609]: —
+                  - generic [ref=e610]:
+                    - generic [ref=e611]: Kategorie
+                    - paragraph [ref=e612]: Frauen
+                - button "bid_button" [ref=e614] [cursor=pointer]
+        - button "Pause":
+          - img
+      - link "Zu allen Werken" [ref=e616] [cursor=pointer]:
+        - /url: "#works"
+    - generic [ref=e618]:
+      - heading "Werke" [level=2] [ref=e619]
+      - generic [ref=e620]:
+        - button "Alle Werke anzeigen" [ref=e621] [cursor=pointer]
+        - paragraph [ref=e622]: "{count} Werke verfügbar"
+    - button "Zum Anfang der Werke":
+      - img
+  - contentinfo [ref=e623]:
+    - generic [ref=e625]:
+      - paragraph [ref=e626]: © 2006 – 2026 Eckhard Besuden
+      - generic [ref=e627]:
+        - button "Datenschutz" [ref=e628] [cursor=pointer]
+        - generic [ref=e629]: "|"
+        - button "Impressum" [ref=e630] [cursor=pointer]
+  - dialog "Datenschutzerklärung":
+    - generic:
+      - button "Schließen": ×
+      - heading "Datenschutzerklärung" [level=2]
+      - generic:
+        - paragraph: Diese Datenschutzerklärung klärt Sie über die Art, den Umfang und Zweck der Verarbeitung von personenbezogenen Daten innerhalb unseres Onlineangebotes auf.
+        - heading "Verantwortlicher" [level=3]
+        - paragraph:
+          - text: Eckhard Besuden
+          - text: Kapplerbergstr. 14
+          - text: D-78476 Allensbach
+          - text: Deutschland
+          - text: "Tel.: 0049 / (0)7533 / 98779"
+          - text: "E-Mail: eckhardbesuden@web.de"
+        - heading "Cookies" [level=3]
+        - paragraph: Diese Website setzt nur technisch notwendige Cookies ein (Sprachauswahl, Cookie-Einwilligung). Es werden keine Tracking-Cookies oder Analyse-Tools verwendet.
+        - heading "Hosting und Logfiles" [level=3]
+        - paragraph: Logfile-Informationen werden aus Sicherheitsgründen für maximal 7 Tage gespeichert und danach gelöscht.
+        - heading "Ihre Rechte" [level=3]
+        - paragraph: Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17) und Einschränkung der Verarbeitung (Art. 18). Beschwerde bei der Aufsichtsbehörde gem. Art. 77 DSGVO.
+  - dialog "Impressum":
+    - generic:
+      - button "Schließen": ×
+      - heading "Impressum" [level=2]
+      - generic:
+        - paragraph:
+          - strong: Eckhard Besuden
+        - paragraph:
+          - text: Kapplerbergstr. 14
+          - text: D-78476 Allensbach
+          - text: Deutschland
+        - paragraph:
+          - text: "Tel.: 0049 / (0)7533 / 98779"
+          - text: "E-Mail:"
+          - link "EckhardBesuden [at] web.de":
+            - /url: "#"
+  - dialog "Werkdetails":
+    - button "Schließen": ×
+    - button "Vorheriges Bild": ←
+    - button "Nächstes Bild": →
+    - generic:
+      - generic:
+        - button "Vollbild":
+          - img
+          - generic: Vollbild
+      - generic:
+        - heading [level=2]
+        - generic:
+          - generic:
+            - generic: Jahr
+            - paragraph
+          - generic:
+            - generic: Technik
+            - paragraph
+          - generic:
+            - generic: Maße
+            - paragraph
+          - generic:
+            - generic: Kategorie
+            - paragraph
+  - dialog "Vollbild":
+    - button "Schließen": ×

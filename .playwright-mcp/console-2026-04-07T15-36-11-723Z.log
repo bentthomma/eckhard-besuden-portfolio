@@ -1,0 +1,27 @@
+[     405ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8000/favicon.ico:0
+[    9038ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[    9405ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[    9434ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   17934ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   19218ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   33426ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   61535ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   70574ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   78029ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[   93796ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[  100934ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[  110894ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)
+[  119204ms] TypeError: e.target.closest is not a function
+    at HTMLDocument.<anonymous> (http://localhost:8000/js/interactions.js:24:25)

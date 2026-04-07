@@ -12,6 +12,8 @@ GSAP 3.x with ScrollTrigger and ScrollToPlugin (local vendor files, no CDN).
 
 States: `hero | about | philosophy | carousel | free`
 
+Desktop navigation stays visible in every committed state except `carousel`, where it is intentionally hidden to let the carousel read as an immersive stage.
+
 - hero → about → philosophy: wheel-driven text-reveal (progress 0→1)
 - philosophy → carousel: snap transition
 - carousel: snap section (no scroll, navigate via autoplay/swipe/keyboard)
