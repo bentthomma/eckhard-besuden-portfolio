@@ -1,112 +1,91 @@
-# Architektur — Eckhard Besuden
+# Architecture
 
-> Technische Übersicht für Entwickler die das Projekt übernehmen.
+This repo is a static two-page site with shared UI controllers.
 
-## Stack
+## Entry points
 
-- **Vanilla JS** — kein Framework, kein Build-System
-- **GSAP 3.12.7** — lokal in `js/vendor/` (kein CDN)
-- **Fonts** — lokal in `assets/fonts/` (kein Google Fonts API)
-- **Null externe Abhängigkeiten** — funktioniert komplett offline
+- `index.html`
+  Homepage with hero, biography, philosophy, and featured works carousel.
+- `gallery.html`
+  Dedicated archive page with filters, search, and the shared detail overlay.
 
-## Modul-Übersicht
+There is intentionally no SPA router anymore. Navigation between homepage and gallery is plain document navigation.
 
-```
-index.html
-  ├── css/style.css          Einziges Stylesheet
-  │
-  ├── js/vendor/gsap.min.js  Animation Engine
-  ├── js/vendor/ScrollTrigger.min.js
-  ├── js/vendor/ScrollToPlugin.min.js
-  │
-  ├── js/i18n.js             Sprachsystem (DE/EN)
-  ├── js/overlay.js          Scroll-Lock + Focus Trap
-  ├── js/scroll.js           Scroll State Machine
-  ├── js/loader.js           Osmo-Style Loader
-  ├── js/nav.js              Navigation + Modals
-  ├── js/interactions.js     Hover, Loupe, Fullscreen, etc.
-  └── js/gallery.js          Galerie + Detail + Bid
-```
+## Runtime layers
 
-## Script-Ladereihenfolge
+### 1. Vendor runtime
 
-Die Reihenfolge ist kritisch — jedes Modul hat Abhängigkeiten:
+Files in `js/runtime/` are the minimal vendored motion runtime used by the authored scripts:
 
-1. `gsap.min.js` — Basis
-2. `ScrollTrigger.min.js` — braucht GSAP
-3. `ScrollToPlugin.min.js` — braucht GSAP
-4. `i18n.js` — unabhängig, setzt `window.i18n`
-5. `overlay.js` — setzt `window.__overlay` + `window.__reduced`
-6. `scroll.js` — braucht GSAP + ScrollTrigger, setzt `window.Scroll`
-7. `loader.js` — braucht `window.__overlay`, `window.__reduced`
-8. `nav.js` — braucht `window.__overlay`, `window.Scroll`
-9. `interactions.js` — braucht GSAP, `window.__reduced`
-10. `gallery.js` — braucht GSAP, `window.__overlay`, `window.i18n`
+- `motion-core.min.js`
+- `motion-aliases.js`
 
-## Kommunikation zwischen Modulen
+These files are treated as repository-local runtime dependencies. The repo does not currently contain a rebuild pipeline for them, so updates should be done deliberately and verified manually.
 
-Kein Modul importiert ein anderes direkt. Kommunikation läuft über `window`:
+See `docs/RUNTIME-PROVENANCE.md` for the active version/provenance note, the exact authored contract, and the update checklist.
 
-| Symbol | Gesetzt von | Gelesen von |
-|--------|------------|-------------|
-| `window.__overlay` | overlay.js | loader.js, nav.js, gallery.js |
-| `window.__reduced` | overlay.js | loader.js, interactions.js |
-| `window.Scroll` | scroll.js | nav.js |
-| `window.i18n` | i18n.js | gallery.js |
+### 2. Authored controllers
 
-## Scroll-System (Desktop)
+- `js/i18n.js`
+  Translation state, HTML text replacement, and document meta updates.
+- `js/overlay.js`
+  Overlay stack, scroll lock, and focus trap.
+- `js/intro-sequence.js`
+  Homepage intro handoff into the hero.
+- `js/nav.js`
+  Mobile navigation and legal modals.
+- `js/scroll.js`
+  Native-scroll enhancements: reveal observers, nav state, scroll progress, and homepage carousel entry trigger.
+- `js/interactions.js`
+  Email obfuscation, loupe, fullscreen image mode, and back-to-top behavior.
+- `js/home-carousel.js`
+  Featured works stage on the homepage.
+- `js/gallery.js`
+  Gallery page data load, grid rendering, filter logic, and search.
+- `js/artwork-overlay.js`
+  Shared artwork detail overlay used by both the homepage carousel and the gallery grid.
 
-State Machine mit 4 Zuständen:
+## Global contracts
 
-```
-hero → about → philosophy → free (Gallery)
-  ↑       ↑         ↑          |
-  └───────┴─────────┴──────────┘ (Scroll-Up)
-```
+The authored scripts are still vanilla IIFEs, so a few globals remain by design:
 
-- `hero/about/philosophy`: `preventDefault` blockiert nativen Scroll. Wheel-Delta treibt Text-Reveal-Timeline.
-- `free` (Gallery): Normaler Browser-Scroll. Scroll-Up am Top fliegt zurück zu Philosophy.
-- `flyTo()` animiert Viewport-Wechsel per GSAP scrollTo.
+- `window.i18n`
+- `window.__overlay`
+- `window.__reduced`
+- `window.HomeCarousel`
+- `window.ArtworkOverlay`
+- `window.Scroll`
 
-## Scroll-System (Mobile)
+These are the intended public surfaces. New global contracts should not be added casually.
 
-Kein State Machine. Normaler Scroll + ScrollTrigger `scrub` für Text-Reveals.
+## Styling layers
 
-## Overlay-System
+The stylesheet is split into reviewable layers:
 
-Zentraler Stack in `overlay.js`:
+- `css/tokens.css`
+- `css/global.css`
+- `css/nav-hero.css`
+- `css/sections.css`
+- `css/carousel.css`
+- `css/gallery.css`
+- `css/overlays.css`
+- `css/responsive.css`
 
-```
-pushOverlay('loader')     → body.overflow = hidden
-pushOverlay('detail', el) → Focus Trap aktiviert
-popOverlay('detail')      → Focus released
-popOverlay('loader')      → body.overflow = '' (Stack leer)
-```
+`css/style.css` is only the import manifest.
 
-Mehrere Overlays können gleichzeitig offen sein. Scroll wird erst freigegeben wenn ALLE geschlossen sind.
+## Shared UI model
 
-## Galerie-Datenfluss
+- The homepage carousel and the gallery grid both resolve works from `bilder-metadaten.json`.
+- Both entry points open the same detail overlay controller.
+- Bid interactions are placeholder client-side flows only and write to `localStorage["besuden_bids"]`.
 
-```
-bilder-metadaten.json
-  → fetch()
-  → allImages[]
-  → applyFilters() → filteredImages[]
-  → renderBatch() → createGalleryItem()
-  → DOM: .gallery__item (role=button, tabindex=0)
-  → Click/Enter → flipOpenDetail() → FLIP Clone → Detail Panel
-  → Close → Reverse FLIP → finishClose()
-```
+## Change guidance
 
-## CSS-System
+Prefer changes in this order:
 
-3-Tier Museum-Farbarchitektur:
-- **Gallery Light** (`--gallery-bg: #F3F0EA`) — Seiten-Hintergrund
-- **Artwork Stage** (`--stage-bg: #E8DDC9`) — Gallery-Section
-- **Focus View** (`--focus-bg: #2B2925`) — Detail-Panel
+1. Update content or markup.
+2. Adjust the smallest relevant CSS layer.
+3. Touch only the owning JS controller.
+4. Run `python scripts/visual_smoke.py`.
 
-Spacing-Skala: `0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3` rem
-
-Transition-Skala: `0.3, 0.4, 0.5, 0.8, 1.2` Sekunden
-
-Responsive: Desktop-First mit Breakpoints bei 1024px, 768px, 480px + Landscape.
+If a change needs more than one JS controller, stop and check whether a hidden coupling should be simplified first.

@@ -1,108 +1,88 @@
-# Style Guide — Eckhard Besuden
+# Style Guide
 
-> Aktuelle Referenz: `css/style.css`. Bei Widerspruch gilt immer der Live-Code.
+This document describes the live styling system. If the code and this guide ever diverge, fix the code first and then update this file.
 
-## Farbsystem (3-Tier Museum Architecture)
+## Design direction
 
-| Tier | Variable | Hex | Verwendung |
-|------|----------|-----|------------|
-| Gallery Light | `--gallery-bg` | #F3F0EA | Seiten-Hintergrund, Navigation, About |
-| Artwork Stage | `--stage-bg` | #E8DDC9 | Gallery-Section (warmes Parchment) |
-| Focus View | `--focus-bg` | #2B2925 | Detail-Panel, Fullscreen |
+The site should feel like a quiet gallery space:
 
-### Text
+- warm neutral backgrounds instead of pure white
+- restrained dark text instead of pure black
+- editorial serif display type with sober sans-serif body copy
+- motion that supports focus, not spectacle
 
-| Variable | Hex | Kontrast auf --gallery-bg |
-|----------|-----|--------------------------|
-| `--text` | #1F1E1B | 16.1:1 (AAA) |
-| `--text-muted` | #635F5D | 5.2:1 (AA) |
+## Core tokens
 
-### Akzente
+Defined in `css/tokens.css`.
 
-| Variable | Hex | Verwendung |
-|----------|-----|------------|
-| `--silver` | #BFBAB8 | Subtile Borders, Separatoren |
-| `--charcoal` | #403E3D | Hover, Active States |
-| `--ink` | #0D0D0D | Starke Betonung (Skip-Link, Scroll-Progress) |
+### Color
 
-### Borders
+- `--gallery-bg`
+  Main page background.
+- `--gallery-bg-soft`
+  Soft top wash behind long-form sections.
+- `--stage-bg`
+  Warmer support tone for editorial sections.
+- `--focus-bg`
+  Dark overlay background for artwork inspection.
+- `--wood-bg`
+  Homepage carousel stage background.
+- `--text`
+  Primary copy color.
+- `--text-muted`
+  Secondary copy color.
+- `--text-soft`
+  Labels, metadata, and low-priority UI text.
 
-| Variable | Wert |
-|----------|------|
-| `--border` | rgba(31,30,27,0.08) |
-| `--border-strong` | rgba(31,30,27,0.15) |
+### Layout
 
-## Typografie
+- `--container-pad`
+  Global horizontal page padding.
+- `--section-space`
+  Default vertical section spacing.
+- `--section-space-tight`
+  Reduced spacing for denser sections.
+- `--nav-height`
+  Scroll padding anchor offset.
 
-| Element | Font | Size | Weight | Letter-Spacing |
-|---------|------|------|--------|----------------|
-| Hero-Titel | Cormorant Garamond | clamp(3rem, 7vw, 6rem) | 300 | 0.18em |
-| Section-Titel | Cormorant Garamond | clamp(2rem, 4vw, 3.5rem) | 300 | 0.06em |
-| Body | Inter | 1rem (16px) | 400 | 0.01em |
-| Nav-Links | Inter | 0.85rem | 400 | 0.15em |
-| Captions/Labels | Inter | 0.7rem | 400 | 0.1em |
-| Detail-Labels | Inter | 0.65rem | 400 | 0.12em |
+## Typography
 
-### Line-Heights
+- Display headings: `Cormorant Garamond`
+- Body and UI copy: `Inter`
 
-| Kontext | Wert |
-|---------|------|
-| Headings | 1.2 |
-| Body | 1.7 |
-| Captions | 1.5 |
+Rules:
+
+- Keep serif display sizes large and airy.
+- Do not use low opacity to hide readable body copy.
+- Labels may be subtle, but not faint.
+- Mobile text floors matter more than micro-elegance.
 
 ## Spacing
 
-Alle Abstande basieren auf einer 8er-Skala in rem:
-`0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3` rem
+Prefer consistent section rhythm over per-component patching.
 
-| Kontext | Wert |
-|---------|------|
-| Section-Padding | clamp(80px, 12vw, 160px) |
-| Container max-width | 1200px |
-| Container-Padding | clamp(24px, 5vw, 80px) |
-| Grid-Gap (Editorial) | clamp(40px, 6vw, 80px) |
-| Gallery-Gap | 0.5rem |
-| Button-Padding | 0.75rem 1.75rem |
+- Large sections should read as intentional blocks.
+- Dense controls should use smaller internal spacing without collapsing outer breathing room.
+- Avoid one-off `top: 93%` style placement logic. If a control needs that much coercion, the layout model is wrong.
 
 ## Motion
 
-| Kategorie | Duration | Verwendung |
-|-----------|----------|------------|
-| Fast | 0.3s | Hover-Feedback, kleine Transitions |
-| Standard | 0.4s | Button-Hovers, Filter |
-| Medium | 0.5s | Nav, Menu, Gallery-Reveals |
-| Slow | 0.8s | Detail-Panel, Section-Reveals |
-| Very Slow | 1.2s | Clip-Path Reveals, Divider-Draw |
+- Reveals are decorative only.
+- Scroll remains native on every device.
+- The intro may be cinematic, but it must not trap users for long.
+- Overlay motion should be smooth and quiet, not springy or playful.
 
-Easing: `ease` fuer Hover, `power2.out` fuer Reveals, `power3.inOut` fuer Fly-Transitions.
+## Responsive rules
 
-## Z-Index Hierarchie
+- Desktop and mobile should share the same hierarchy, not different improvisations.
+- Mobile controls must remain readable with thumb-safe spacing.
+- Large screens should not create dead voids that make sections feel unfinished.
 
-| Layer | z-index | Element |
-|-------|---------|---------|
-| Skip-Link | 10000 | Accessibility |
-| Loader | 9999 | Preloader-Overlay |
-| Scroll-Progress | 1002 | Top-Bar (ueber Nav) |
-| Grain | 50 | Textur-Overlay (unter allem UI) |
-| Fullscreen | 8000 | Bild-Vollansicht |
-| Bid-Modal | 7000 | Gebot-Dialog |
-| Flip-Clone | 6500 | FLIP-Animation |
-| Detail-Panel | 6000 | Werk-Details |
-| Modal | 5000 | Datenschutz/Impressum |
-| Hamburger | 1001 | Menu-Toggle |
-| Nav | 1000 | Navigation |
-| Mobile-Menu | 999 | Mobiles Menu |
-| Back-to-Top | 900 | Scroll-Button |
+## Review rules
 
-## Breakpoints (Desktop-First)
+When touching styles:
 
-| Breakpoint | Ziel |
-|------------|------|
-| Base | Desktop (1440px+) |
-| max-width: 1024px | Tablet |
-| max-width: 768px | Tablet Portrait / Landscape Phone |
-| max-width: 480px | Smartphone |
-| max-height: 500px + landscape | Landscape Mobile |
-| prefers-reduced-motion | Accessibility |
-| print | Druckversion |
+1. Edit the owning layer, not `responsive.css` first.
+2. Add a responsive override only if the base layout is already sound.
+3. Remove stale selectors instead of layering new overrides on top.
+4. Re-check homepage, gallery, detail overlay, and mobile menu before finishing.

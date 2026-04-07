@@ -1,74 +1,109 @@
-# Eckhard Besuden — Maler
+# Eckhard Besuden
 
-Portfolio-Website für den Maler Eckhard Besuden aus Allensbach am Bodensee.
-One-Pager mit Osmo-Style Loader, Section-Scroll, Gallery mit 758 Werken, Detail-Panel mit Gebotsfunktion.
+Static portfolio site for the painter Eckhard Besuden.
 
-## Quick Start
+The repo now runs as a simple two-page website:
+
+- `index.html` is the editorial homepage.
+- `gallery.html` is the dedicated works archive.
+
+There is no build step and no framework. The site is intentionally small, but it still has a clear runtime structure, a content contract, and a repeatable smoke-test flow.
+
+## Run locally
+
+Use a local HTTP server. Direct `file://` loading is not a supported workflow because the gallery reads `bilder-metadaten.json` via `fetch()`.
 
 ```bash
-npx serve .
-```
-Oder `index.html` direkt im Browser öffnen.
-
-## Architektur
-
-- **Vanilla JS** — kein Framework, kein Build-Prozess
-- **GSAP 3.12.7** — Loader, ScrollTo, Scroll-Reveals (lokal in js/vendor/)
-- **State Machine** — Section-Scroll (hero → about → philosophy → works)
-- **i18n** — Client-side DE/EN mit `data-i18n` Attributen
-- **Gallery** — CSS Grid (3/2 Spalten responsive), IntersectionObserver Reveals, FLIP Detail-Panel
-
-## Dateistruktur
-
-```
-eckhard besuden/
-├── index.html              Hauptseite
-├── bilder-metadaten.json   Katalog aller 758 Werke
-├── README.md
-├── css/
-│   └── style.css           Einziges Stylesheet (3-Tier Color System)
-├── js/
-│   ├── vendor/             GSAP 3.12.7 (lokal)
-│   ├── overlay.js          Scroll-Lock State Manager + Focus Trap
-│   ├── loader.js           Osmo-Style Loader Animation
-│   ├── scroll.js           Scroll State Machine + Text Reveal
-│   ├── nav.js              Navigation + Mobile Menu + Modals
-│   ├── interactions.js     Magnetic Hover, Loupe, Fullscreen, Email
-│   ├── gallery.js          Grid, Filter, Search, Detail, Bid-System
-│   └── i18n.js             Deutsch/Englisch Übersetzungen
-├── assets/
-│   ├── fonts/              Cormorant Garamond + Inter (lokal)
-│   └── bilder/
-│       ├── abstrakt/       409 Werke
-│       ├── tiere/          137 Werke
-│       ├── frauen/          65 Werke
-│       ├── seebilder/       59 Werke
-│       ├── blumen/          44 Werke
-│       ├── sonstige/        44 Werke
-│       ├── schluesselwerke/ 10 Werke (Loader + Hero)
-│       └── portrait/         5 Fotos
-├── docs/                   Planungsdokumente, Style Guide
-├── reference/              Osmo-Loader Referenz, Test-Dateien
-└── backup/                 Timestamped Backups
+python -m http.server 4173
 ```
 
-## Farbsystem (3-Tier Museum Architecture)
+Open:
 
-| Tier | Variable | Hex | Verwendung |
-|------|----------|-----|------------|
-| Gallery Light | `--gallery-bg` | #F3F0EA | Seiten-Hintergrund, Navigation |
-| Artwork Stage | `--stage-bg` | #E8DDC9 | Sections mit Bildern |
-| Focus View | `--focus-bg` | #2B2925 | Detail-Panel, Fullscreen |
+- `http://127.0.0.1:4173/index.html`
+- `http://127.0.0.1:4173/gallery.html`
 
-## Scroll-System
+## Smoke check
 
-State Machine mit 4 Zuständen: `hero` → `about` → `philosophy` → `free`
-- In `hero/about/philosophy`: `preventDefault` blockt nativen Scroll, `flyTo()` navigiert
-- In `about/philosophy`: Wheel-Delta treibt Text-Reveal-Timeline vorwärts (nie rückwärts)
-- In `free` (Werke): Normales Browser-Scrolling, Scroll-Up am Top fliegt zurück
+The fastest repo-native browser check is:
 
-## Deployment
+```bash
+python scripts/visual_smoke.py
+```
 
-1. `og:image` in index.html auf absolute URL mit Domain setzen
-2. Favicon in `assets/favicon/` anlegen und `<link>` Tags ergänzen
-3. Bilder optional zu WebP/AVIF konvertieren für Performance
+To also capture the current reference surfaces as screenshots:
+
+```bash
+python scripts/visual_smoke.py --screenshots
+```
+
+Manual spot checks are still useful before shipping changes:
+
+1. Homepage loads, intro clears, hero nav becomes usable.
+2. `#about`, `#philosophy`, and `#works` anchors land on readable content.
+3. Gallery title, filters, and search render cleanly on mobile and desktop.
+4. Gallery search and category filters still update the grid.
+5. Artwork detail overlay opens from both the homepage carousel and the gallery grid.
+6. Legal modals, mobile menu, fullscreen image mode, and language switch still work.
+7. Back-to-top is visible after the works section and returns to the hero.
+8. Console stays clean apart from expected local dev noise.
+
+## Project structure
+
+```text
+.
+|-- index.html
+|-- gallery.html
+|-- bilder-metadaten.json
+|-- css/
+|   |-- style.css
+|   |-- tokens.css
+|   |-- global.css
+|   |-- nav-hero.css
+|   |-- sections.css
+|   |-- carousel.css
+|   |-- gallery.css
+|   |-- overlays.css
+|   `-- responsive.css
+|-- js/
+|   |-- runtime/
+|   |-- i18n.js
+|   |-- overlay.js
+|   |-- intro-sequence.js
+|   |-- nav.js
+|   |-- scroll.js
+|   |-- interactions.js
+|   |-- home-carousel.js
+|   |-- gallery.js
+|   `-- artwork-overlay.js
+|-- assets/
+|-- scripts/
+|   `-- visual_smoke.py
+`-- docs/
+```
+
+## Architecture summary
+
+- `overlay.js` owns scroll locking and focus trapping for modal-like UI.
+- `scroll.js` keeps scroll native and only adds reveal, nav-state, progress, and carousel-entry behavior.
+- `home-carousel.js` owns the homepage featured-works stage.
+- `gallery.js` owns the standalone gallery page grid, filters, and search.
+- `artwork-overlay.js` is the shared work-detail controller used by both entry points.
+- `i18n.js` is the single translation source for visible UI copy.
+
+The files under `js/runtime/` are vendored motion runtime files used by the authored modules. They are treated as checked-in runtime dependencies. If they need to be updated, replace them deliberately and rerun the smoke checks above.
+
+`docs/RUNTIME-PROVENANCE.md` is the source of truth for the active runtime contract and the update procedure for `js/runtime/`.
+
+## Data and content
+
+`bilder-metadaten.json` is the canonical works dataset. See `docs/DATA-CONTRACT.md` for expected fields and update rules.
+
+## Quality tracking
+
+The current consolidated frontend improvement list lives in `WORLD_CLASS_BACKLOG.md`.
+
+## Known implementation choices
+
+- Bid actions are placeholder flows only. They currently store draft submissions in `localStorage["besuden_bids"]`.
+- The homepage carousel is intentionally separate from the gallery archive. The homepage shows a curated subset; the gallery page is the full browsing surface.
+- Styling is split into layered CSS files so layout, components, overlays, and responsive rules can be reviewed independently.
