@@ -141,7 +141,24 @@
       bid_submit: 'Gebot absenden',
       bid_success: 'Vielen Dank. Ihr Gebot wurde entgegengenommen.',
       bid_error_required: 'Bitte füllen Sie alle Pflichtfelder aus.',
-      bid_btn: 'Gebot abgeben'
+      bid_btn: 'Gebot abgeben',
+
+      // Carousel
+      carousel_pause: 'Pause',
+      carousel_play: 'Abspielen',
+      home_featured_label: 'Auswahl',
+      home_featured_title: 'Ausgew\u00e4hlte Werke',
+      home_featured_intro: 'Ein konzentrierter Blick auf zentrale Arbeiten. Die vollst\u00e4ndige Auswahl liegt weiter unten.',
+      home_featured_error: 'Vorschau konnte nicht geladen werden.',
+      home_all_works: 'Zu allen Werken',
+      a11y_featured_carousel: 'Ausgew\u00e4hlte Werke',
+
+      // Gallery lazy-load
+      gallery_show_all: 'Alle Werke anzeigen',
+      gallery_count_available: '{count} Werke verf\u00fcgbar',
+
+      // Bid extensions
+      bid_back: 'Zur\u00fcck'
     },
 
     en: {
@@ -276,7 +293,24 @@
       bid_submit: 'Submit bid',
       bid_success: 'Thank you. Your bid has been received.',
       bid_error_required: 'Please fill in all required fields.',
-      bid_btn: 'Place a bid'
+      bid_btn: 'Place a bid',
+
+      // Carousel
+      carousel_pause: 'Pause',
+      carousel_play: 'Play',
+      home_featured_label: 'Selection',
+      home_featured_title: 'Selected Works',
+      home_featured_intro: 'A focused look at key paintings. The full collection is below.',
+      home_featured_error: 'Preview could not be loaded.',
+      home_all_works: 'View all works',
+      a11y_featured_carousel: 'Selected works',
+
+      // Gallery lazy-load
+      gallery_show_all: 'Show all works',
+      gallery_count_available: '{count} works available',
+
+      // Bid extensions
+      bid_back: 'Back'
     }
   };
 
