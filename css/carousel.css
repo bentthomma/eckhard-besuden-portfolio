@@ -1,12 +1,21 @@
-/* ---------- Home carousel ---------- */
+/* ============================================
+   CAROUSEL.CSS — Museum-style painting carousel
+   ============================================ */
+
+/* ---------- 1. SECTION BACKGROUND ---------- */
 .section--carousel {
   position: relative;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 0;
-  color: var(--carousel-text);
-  background: var(--wood-bg);
+  overflow: hidden;
   overflow: clip;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: clamp(5rem, 10vh, 8rem) 0 clamp(3rem, 6vh, 5rem);
+  color: rgba(248, 238, 227, 0.92);
+  background: var(--wood-bg);
 }
 
 .section--carousel::before {
@@ -26,283 +35,275 @@
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.18)),
     linear-gradient(90deg, rgba(0, 0, 0, 0.22), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.22));
+  pointer-events: none;
 }
 
-.section--carousel .container,
-.home-carousel,
-.home-carousel__viewport,
-.home-carousel__track {
+/* ---------- 2. SECTION HEADER ---------- */
+.section--carousel .section__label {
   position: relative;
-  z-index: 2;
-  min-height: inherit;
-  height: 100%;
+  z-index: 1;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 0.75rem;
 }
 
-.home-carousel {
-  min-height: 100vh;
-  min-height: 100dvh;
+.section--carousel .section__title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: #fff;
+  text-align: center;
+  text-wrap: balance;
+  margin-bottom: 1rem;
 }
 
-.home-carousel__viewport {
+.section--carousel .section__intro {
+  position: relative;
+  z-index: 1;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 32rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+/* ---------- 3. CAROUSEL LAYOUT ---------- */
+.carousel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.carousel__viewport {
   overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  max-width: min(90vw, 72rem);
+  margin: 0 auto;
 }
 
-.home-carousel__track {
-  min-height: 100%;
+.carousel__track {
+  position: relative;
+  width: 100%;
 }
 
-.home-carousel__slide {
+/* ---------- 4. SLIDE STRUCTURE ---------- */
+.carousel__slide {
   position: absolute;
   inset: 0;
+  display: none;
   opacity: 0;
   pointer-events: none;
 }
 
-.home-carousel__slide.is-active {
+.carousel__slide.is-active {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem);
+  gap: clamp(2rem, 5vw, 5.5rem);
+  align-items: center;
+  padding: clamp(1rem, 3vw, 2.5rem);
   pointer-events: auto;
 }
 
-.home-carousel__scene {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem);
-  align-items: center;
-  gap: clamp(2rem, 5vw, 5.5rem);
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding:
-    clamp(6.5rem, 9vw, 8rem)
-    clamp(1.75rem, 5vw, 7rem)
-    clamp(8.5rem, 13vw, 10.5rem);
-}
-
-.home-carousel__artwork {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 0;
-}
-
-.home-carousel__frame,
-.home-carousel__frame-inner {
+.carousel__scene {
   display: contents;
 }
 
-.home-carousel__frame-inner img {
+/* ---------- 5. ARTWORK (PAINTING FRAME) ---------- */
+.carousel__artwork {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+}
+
+.carousel__frame {
+  position: relative;
+  box-shadow: var(--shadow-image);
+}
+
+.carousel__frame img {
   max-width: min(44vw, 40rem);
   max-height: 62vh;
   object-fit: contain;
-  box-shadow: var(--shadow-image);
+  display: block;
+  cursor: pointer;
   transform-origin: center center;
 }
 
-.home-carousel__frame-inner img.shadow--lifted {
+.carousel__frame img.shadow--lifted {
   box-shadow: none;
-  filter: drop-shadow(0 28px 80px rgba(0, 0, 0, 0.32));
+  filter: var(--shadow-lifted);
 }
 
-.home-carousel__frame-inner img.shadow--flying {
+.carousel__frame img.shadow--flying {
   box-shadow: none;
-  filter: drop-shadow(0 34px 100px rgba(0, 0, 0, 0.42));
+  filter: var(--shadow-flying);
 }
 
-.home-carousel__plaque {
+/* ---------- 6. PLAQUE (MUSEUM INFO CARD) ---------- */
+.carousel__plaque {
   align-self: center;
   width: min(26rem, 100%);
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 0.45s ease, transform 0.45s var(--ease-standard);
+  transition:
+    opacity 0.45s var(--ease-standard),
+    transform 0.45s var(--ease-standard);
+  pointer-events: none;
 }
 
-.home-carousel__plaque.is-visible {
+.carousel__plaque.is-visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
-.home-carousel__plaque-top {
-  margin-bottom: 1.35rem;
-}
-
-.home-carousel__plaque-artist {
+.carousel__plaque-artist {
   margin: 0 0 0.4rem;
-  font-size: 0.82rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.78);
-}
-
-.home-carousel__plaque-title {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.2rem, 3vw, 3.4rem);
-  font-weight: 300;
-  line-height: 1.04;
-  letter-spacing: 0.03em;
-  color: var(--carousel-text-bright);
-  text-wrap: balance;
-}
-
-.home-carousel__plaque-grid {
-  display: grid;
-  gap: 0.8rem;
-}
-
-.home-carousel__plaque-row {
-  display: grid;
-  grid-template-columns: minmax(6.5rem, 7rem) minmax(0, 1fr);
-  gap: 1rem;
-  align-items: baseline;
-}
-
-.home-carousel__plaque-label {
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.62);
+  color: rgba(248, 238, 227, 0.92);
 }
 
-.home-carousel__plaque-value {
+.carousel__plaque-title {
+  margin: 0 0 1.35rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3vw, 3.4rem);
+  line-height: 1.15;
+  letter-spacing: 0.03em;
+  color: rgba(248, 238, 227, 0.98);
+  text-wrap: balance;
+}
+
+.carousel__plaque-meta {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.carousel__plaque-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 0.18rem;
+  align-items: baseline;
+}
+
+.carousel__plaque-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(248, 238, 227, 0.6);
+}
+
+.carousel__plaque-value {
   margin: 0;
   font-size: 1.02rem;
-  color: rgba(255, 247, 238, 0.92);
+  color: rgba(248, 238, 227, 0.92);
 }
 
-.home-carousel__plaque-footer {
-  margin-top: 1.5rem;
+/* ---------- 7. PLAQUE ACTIONS & BID ---------- */
+.carousel__plaque-actions {
+  margin-top: 1.2rem;
 }
 
-.home-carousel__plaque-bid {
-  padding-top: 1.4rem;
-  margin-top: 1.4rem;
-  border-top: 1px solid rgba(255, 247, 238, 0.12);
-}
-
-.home-carousel__bid-form,
-.home-carousel__bid-field {
-  display: grid;
-  gap: 0.45rem;
-}
-
-.home-carousel__bid-form {
-  gap: 0.95rem;
-}
-
-.home-carousel__bid-field label {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.62);
-}
-
-.home-carousel__bid-field input {
-  width: 100%;
-  min-height: 2.9rem;
-  padding: 0 0 0.55rem;
-  border: 0;
-  border-bottom: 1px solid rgba(255, 247, 238, 0.22);
-  background: transparent;
-  color: var(--carousel-text-bright);
-}
-
-.home-carousel__bid-back,
-.home-carousel__bid-submit,
-.home-carousel__bid-btn,
-.home-carousel__all-works {
+.bid-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 3rem;
   padding: 0.85rem 1.45rem;
-  border: 1px solid currentColor;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  border: 1px solid rgba(248, 238, 227, 0.4);
+  background: transparent;
+  color: rgba(248, 238, 227, 0.92);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  cursor: pointer;
   transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    opacity 0.3s ease;
+    background 0.3s var(--ease-standard),
+    color 0.3s var(--ease-standard),
+    border-color 0.3s var(--ease-standard);
 }
 
-.home-carousel__bid-submit,
-.home-carousel__bid-btn {
-  color: var(--carousel-text-bright);
-  border-color: rgba(255, 247, 238, 0.28);
-}
-
-.home-carousel__bid-back {
-  margin-top: 0.85rem;
-  color: rgba(255, 247, 238, 0.78);
-  border-color: rgba(255, 247, 238, 0.18);
-}
-
-.home-carousel__bid-submit:hover,
-.home-carousel__bid-btn:hover,
-.home-carousel__all-works:hover {
-  background: rgba(255, 247, 238, 0.92);
+.bid-btn:hover {
+  background: rgba(248, 238, 227, 0.92);
   color: var(--wood-bg);
-  border-color: rgba(255, 247, 238, 0.92);
+  border-color: rgba(248, 238, 227, 0.92);
 }
 
-.home-carousel__bid-success p {
-  margin: 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.35rem;
-  color: var(--carousel-text-bright);
+.carousel__plaque-bid {
+  padding-top: 1.4rem;
+  margin-top: 1.4rem;
+  border-top: 1px solid rgba(248, 238, 227, 0.12);
 }
 
-.home-carousel__pause,
-.home-carousel__all-works {
+/* ---------- 8. FLOATING CONTROLS ---------- */
+.carousel__pause {
   position: absolute;
+  bottom: clamp(5.4rem, 7vh, 6.6rem);
   left: 50%;
-  z-index: 5;
   transform: translateX(-50%);
-}
-
-.home-carousel__pause {
-  bottom: clamp(5.4rem, 9vw, 6.6rem);
   width: 3rem;
   height: 3rem;
   min-height: 3rem;
   padding: 0;
-  border-radius: 999px;
-  color: rgba(255, 247, 238, 0.8);
-  border-color: rgba(255, 247, 238, 0.2);
-  background: var(--carousel-overlay);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.65);
+  z-index: 5;
+  cursor: pointer;
   opacity: 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: opacity 0.4s var(--ease-standard);
+  pointer-events: none;
 }
 
-.home-carousel__pause.is-visible {
+.carousel__pause.is-visible {
   opacity: 1;
+  pointer-events: auto;
 }
 
-.home-carousel__pause.is-playing svg {
+.carousel__pause.is-playing svg {
   display: none;
 }
 
-.home-carousel__pause.is-playing::before {
+.carousel__pause.is-playing::before {
   content: '\25b6';
-  margin-left: 0.12rem;
   font-size: 0.8rem;
+  margin-left: 0.12rem;
 }
 
-.home-carousel__all-works {
-  bottom: clamp(2rem, 4vw, 2.8rem);
-  color: rgba(255, 247, 238, 0.86);
-  border-color: rgba(255, 247, 238, 0.22);
-  background: rgba(34, 17, 12, 0.22);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.carousel__all-works {
+  display: inline-block;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(248, 238, 227, 0.6);
+  border: none;
+  border-bottom: 1px solid rgba(248, 238, 227, 0.2);
+  background: transparent;
+  padding-bottom: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    color 0.3s var(--ease-standard),
+    border-color 0.3s var(--ease-standard);
 }
 
-/* Pause button hidden until JS makes it visible */
-.carousel__pause {
-  display: none;
-}
-
-/* All-works link container */
-.section--carousel .container--cta {
-  text-align: center;
-  margin-top: 1.5rem;
+.carousel__all-works:hover {
+  color: rgba(248, 238, 227, 0.92);
+  border-color: rgba(248, 238, 227, 0.6);
+  opacity: 1;
 }
