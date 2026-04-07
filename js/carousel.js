@@ -560,8 +560,6 @@
     if (allWorksBtn) {
       allWorksBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        var worksSection = document.getElementById('works');
-        if (worksSection) worksSection.style.display = '';
         if (window.Gallery && window.Gallery.expand) window.Gallery.expand();
         if (window.Scroll && window.Scroll.navigateTo) window.Scroll.navigateTo('works');
       });
