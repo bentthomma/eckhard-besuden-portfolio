@@ -48,6 +48,7 @@ var Scroll = (function () {
       { id: 'hero',       type: 'snap' },
       { id: 'about',      type: 'reveal' },
       { id: 'philosophy', type: 'reveal' },
+      { id: 'carousel',   type: 'snap' },
       { id: 'works',      type: 'free' }
     ];
 
@@ -136,6 +137,9 @@ var Scroll = (function () {
         flying = false;
         cooldownUntil = Date.now() + COOLDOWN_MS;
 
+        if (targetSec.id === 'carousel' && window.HomeCarousel) {
+          window.HomeCarousel.enter();
+        }
 
         if (cb) cb();
       }
@@ -167,13 +171,19 @@ var Scroll = (function () {
         break;
 
       case 'philosophy':
-        handleRevealState('philosophy', 'about', 'works', down, e.deltaY);
+        handleRevealState('philosophy', 'about', 'carousel', down, e.deltaY);
+        break;
+
+      case 'carousel':
+        e.preventDefault();
+        if (down) flyTo('works');
+        else flyTo('philosophy');
         break;
 
       case 'free':
         if (!down && window.scrollY <= findSection('works').el.offsetTop + 5) {
           e.preventDefault();
-          flyTo('philosophy');
+          flyTo('carousel');
         }
         break;
     }
