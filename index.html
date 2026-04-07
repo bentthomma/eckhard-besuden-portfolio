@@ -169,28 +169,50 @@
 
       <h2 class="section__title reveal" data-i18n="works_title">Werke</h2>
 
-      <div class="gallery-controls reveal">
-        <div class="gallery-filter" id="galleryFilter" role="group" aria-label="Bildkategorien" data-i18n-aria="a11y_filter">
-          <button class="filter-btn active" data-category="all" aria-pressed="true" data-i18n="filter_all">Alle</button>
-          <button class="filter-btn" data-category="abstrakt" aria-pressed="false" data-i18n="filter_abstract">Abstrakt</button>
-          <button class="filter-btn" data-category="blumen" aria-pressed="false" data-i18n="filter_flowers">Blumen</button>
-          <button class="filter-btn" data-category="frauen" aria-pressed="false" data-i18n="filter_women">Frauen</button>
-          <button class="filter-btn" data-category="seebilder" aria-pressed="false" data-i18n="filter_seascapes">Seebilder</button>
-          <button class="filter-btn" data-category="sonstige" aria-pressed="false" data-i18n="filter_misc">Sonstige</button>
-          <button class="filter-btn" data-category="tiere" aria-pressed="false" data-i18n="filter_animals">Tiere</button>
-        </div>
-        <div class="gallery-search">
-          <label for="gallerySearch" class="sr-only" data-i18n="search_placeholder">Werk suchen</label>
-          <input type="text" class="gallery-search__input" id="gallerySearch" placeholder="Werk suchen..." data-i18n-placeholder="search_placeholder" autocomplete="off">
-        </div>
+      <!-- Collapsed state (initial) -->
+      <div class="gallery-collapsed" id="galleryCollapsed">
+        <button class="gallery-collapsed__btn" id="galleryExpandBtn" type="button"
+                data-i18n="gallery_show_all">Alle Werke anzeigen</button>
+        <p class="gallery-collapsed__count" id="galleryCollapsedCount"
+           data-i18n="gallery_count_available">758 Werke verf&uuml;gbar</p>
       </div>
 
-      <div class="gallery" id="gallery" aria-label="Bildergalerie" data-i18n-aria="a11y_gallery">
-        <p class="gallery__loading" id="galleryLoading" data-i18n="works_loading">Laden...</p>
-      </div>
+      <!-- Expanded state (hidden until expand) -->
+      <div class="gallery-expanded" id="galleryExpanded" style="display:none">
+        <div class="gallery-controls reveal">
+          <div class="gallery-filter" id="galleryFilter" role="group"
+               aria-label="Bildkategorien" data-i18n-aria="a11y_filter">
+            <button class="filter-btn active" data-category="all" type="button"
+                    aria-pressed="true" data-i18n="filter_all">Alle</button>
+            <button class="filter-btn" data-category="abstrakt" type="button"
+                    aria-pressed="false" data-i18n="filter_abstract">Abstrakt</button>
+            <button class="filter-btn" data-category="blumen" type="button"
+                    aria-pressed="false" data-i18n="filter_flowers">Blumen</button>
+            <button class="filter-btn" data-category="frauen" type="button"
+                    aria-pressed="false" data-i18n="filter_women">Frauen</button>
+            <button class="filter-btn" data-category="seebilder" type="button"
+                    aria-pressed="false" data-i18n="filter_seascapes">Seebilder</button>
+            <button class="filter-btn" data-category="sonstige" type="button"
+                    aria-pressed="false" data-i18n="filter_misc">Sonstige</button>
+            <button class="filter-btn" data-category="tiere" type="button"
+                    aria-pressed="false" data-i18n="filter_animals">Tiere</button>
+          </div>
+          <div class="gallery-search">
+            <label for="gallerySearch" class="sr-only"
+                   data-i18n="search_placeholder">Werk suchen</label>
+            <input type="text" class="gallery-search__input" id="gallerySearch"
+                   placeholder="Werk suchen..." data-i18n-placeholder="search_placeholder"
+                   autocomplete="off">
+          </div>
+        </div>
 
-      <div class="gallery-more" id="galleryMore">
-        <p class="gallery-count" id="galleryCount"></p>
+        <div class="gallery" id="gallery" aria-label="Bildergalerie"
+             data-i18n-aria="a11y_gallery">
+        </div>
+
+        <div class="gallery-more" id="galleryMore">
+          <p class="gallery-count" id="galleryCount"></p>
+        </div>
       </div>
     </div>
   </section>
