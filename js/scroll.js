@@ -31,6 +31,9 @@ var Scroll = (function () {
 
   /* -- Section registry -- */
   var sections = [];
+  var navEl = null;
+  var navWasScrolled = null;
+  var navWasCarouselHidden = null;
 
   /* --------------------------------------------------------
      SECTION SETUP
@@ -136,6 +139,7 @@ var Scroll = (function () {
         if (flying) {
           state = targetSec.type === 'free' ? 'free' : targetSec.id;
         }
+        syncNavState();
         flying = false;
         cooldownUntil = Date.now() + COOLDOWN_MS;
 
@@ -214,7 +218,6 @@ var Scroll = (function () {
       } else {
         sec.progress = Math.min(1, sec.progress + delta);
         sec.tl.progress(sec.progress);
-        updatePhilReveal(sec);
       }
     } else {
       if (sec.progress >= 1) {
@@ -224,7 +227,6 @@ var Scroll = (function () {
       } else {
         sec.progress = Math.max(0, sec.progress - delta);
         sec.tl.progress(sec.progress);
-        updatePhilReveal(sec);
       }
     }
   }
@@ -234,16 +236,30 @@ var Scroll = (function () {
      NAV SCROLL STATE
      -------------------------------------------------------- */
 
+  function syncNavState() {
+    if (!navEl) return;
+
+    var isScrolled = window.scrollY > NAV_THRESHOLD;
+    var isCarouselHidden = !isMobile && !reduced && state === 'carousel';
+
+    if (isScrolled !== navWasScrolled) {
+      navEl.classList.toggle('nav--scrolled', isScrolled);
+      navWasScrolled = isScrolled;
+    }
+
+    if (isCarouselHidden !== navWasCarouselHidden) {
+      navEl.classList.toggle('nav--carousel-hidden', isCarouselHidden);
+      navWasCarouselHidden = isCarouselHidden;
+    }
+  }
+
   function initNav() {
-    var nav = document.getElementById('nav');
-    if (!nav) return;
-    var wasScrolled = false;
+    navEl = document.getElementById('nav');
+    if (!navEl) return;
+
+    syncNavState();
     gsap.ticker.add(function () {
-      var isScrolled = window.scrollY > NAV_THRESHOLD;
-      if (isScrolled !== wasScrolled) {
-        nav.classList.toggle('nav--scrolled', isScrolled);
-        wasScrolled = isScrolled;
-      }
+      syncNavState();
     });
   }
 
@@ -336,20 +352,6 @@ var Scroll = (function () {
       });
     });
 
-    /* Philosophy image: scroll-driven via ScrollTrigger */
-    var philImg = document.querySelector('.phil-reveal');
-    if (philImg) {
-      gsap.set(philImg, { clipPath: 'inset(15%)', scale: 1.15 });
-      ScrollTrigger.create({
-        trigger: philImg,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        onUpdate: function (self) {
-          var p = self.progress;
-          gsap.set(philImg, { clipPath: 'inset(' + (15 * (1 - p)) + '%)', scale: 1.15 - (0.15 * p) });
-        }
-      });
-    }
   }
 
   /* --------------------------------------------------------
@@ -369,8 +371,6 @@ var Scroll = (function () {
       document.querySelectorAll('.text-reveal').forEach(function (el) {
         el.style.opacity = '1';
       });
-      var philImg = document.querySelector('.phil-reveal');
-      if (philImg) gsap.set(philImg, { clipPath: 'inset(0%)', scale: 1 });
       return;
     }
 
@@ -406,11 +406,6 @@ var Scroll = (function () {
       if (sec.tl) { sec.progress = 1; sec.tl.progress(1); }
       if (sec.id === targetId) break;
     }
-
-    /* Set philosophy image to fully revealed (instant, no animation) */
-    var philImg = targetSec.el.querySelector('.phil-reveal');
-    if (philImg) gsap.set(philImg, { clipPath: 'inset(0%)', scale: 1 });
-
     /* On mobile/reduced: simple scroll instead of state-machine flyTo */
     if (isMobile || reduced) {
       gsap.to(window, { scrollTo: { y: targetSec.el.offsetTop, autoKill: false }, duration: 1, ease: 'power3.inOut' });
