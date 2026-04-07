@@ -256,10 +256,10 @@
 
 /* ---------- 8. FLOATING CONTROLS ---------- */
 .carousel__pause {
-  position: absolute;
-  bottom: clamp(1.5rem, 3vh, 2.5rem);
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.5rem;
   width: 3rem;
   height: 3rem;
   min-height: 3rem;
