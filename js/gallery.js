@@ -537,14 +537,18 @@
   }
 
   function resetInlineBidView() {
-    if (detailBid) { detailBid.style.display = 'none'; detailBid.style.opacity = '0'; }
+    if (detailBid && detailBid.style.display !== 'none') {
+      detailBid.style.display = 'none';
+      detailBid.style.opacity = '0';
+    }
     if (detailInfo) {
       detailInfo.style.display = '';
       detailInfo.style.opacity = '1';
-      /* Reset children — showInlineBid animates them to opacity:0/y:-10 via GSAP */
-      Array.prototype.forEach.call(detailInfo.children, function (child) {
-        gsap.set(child, { opacity: 1, y: 0 });
-      });
+      if (typeof gsap !== 'undefined') {
+        Array.prototype.forEach.call(detailInfo.children, function (child) {
+          gsap.set(child, { opacity: 1, y: 0 });
+        });
+      }
     }
   }
 
@@ -685,142 +689,29 @@
 
   function showInlineBid(item) {
     if (!detailInfo || !detailBid) return;
-    currentBidItem = item;
-
-    if (bidForm) { bidForm.reset(); bidForm.style.display = ''; }
-    if (bidSuccess) bidSuccess.classList.add('hidden');
-    if (bidError) bidError.classList.add('hidden');
-
-    /* Info fields disappear one by one (reverse stagger) */
-    var infoChildren = detailInfo.children;
-    gsap.to(infoChildren, {
-      opacity: 0, y: -10, stagger: 0.08, duration: 0.3, ease: 'power2.in',
-      onComplete: function () {
-        detailInfo.style.display = 'none';
-        detailBid.style.display = '';
-        detailBid.style.opacity = '1';
-        detailBid.style.transform = 'none';
-        /* Bid fields appear one by one */
-        var bidChildren = detailBid.children;
-        gsap.fromTo(bidChildren,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: 'power2.out' }
-        );
+    var controller = BidSystem.create(detailBid, item);
+    BidSystem.show(detailBid, detailInfo, function () {
+      if (controller && controller.closeBtn) {
+        controller.closeBtn.addEventListener('click', function () {
+          BidSystem.hide(detailBid, detailInfo);
+        });
       }
     });
   }
 
-  function hideInlineBid() {
-    if (!detailInfo || !detailBid) return;
-
-    /* Bid fields disappear one by one */
-    var bidChildren = detailBid.children;
-    gsap.to(bidChildren, {
-      opacity: 0, y: -10, stagger: 0.08, duration: 0.3, ease: 'power2.in',
-      onComplete: function () {
-        detailBid.style.display = 'none';
-        detailInfo.style.display = '';
-        /* Info fields reappear one by one */
-        var infoChildren = detailInfo.children;
-        gsap.fromTo(infoChildren,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: 'power2.out' }
-        );
-      }
-    });
-  }
-
-  function handleBidSubmit(e) {
-    e.preventDefault();
-    if (bidError) bidError.classList.add('hidden');
-
-    var name = bidForm.querySelector('[name="name"]');
-    var email = bidForm.querySelector('[name="email"]');
-    var amount = bidForm.querySelector('[name="amount"]');
-    if (!name || !email || !amount) return;
-
-    var nameVal = name.value.trim();
-    var emailVal = email.value.trim();
-    var amountVal = amount.value.trim();
-
-    if (!nameVal || !emailVal || !amountVal) {
-      if (bidError) {
-        bidError.textContent = t(
-          'Bitte alle Pflichtfelder ausf\u00fcllen.',
-          'Please fill in all required fields.'
-        );
-        bidError.classList.remove('hidden');
-      }
-      return;
-    }
-
-    saveBidToStorage(nameVal, emailVal, amountVal);
-
-    if (bidForm) bidForm.style.display = 'none';
-    if (bidSuccess) bidSuccess.classList.remove('hidden');
-  }
-
-  function saveBidToStorage(nameVal, emailVal, amountVal) {
-    var item = currentBidItem;
-    var bid = {
-      work: item ? getTitle(item) : '',
-      year: item ? (item.year || '') : '',
-      file: item ? (item.file || '') : '',
-      name: nameVal,
-      email: emailVal,
-      amount: amountVal,
-      timestamp: new Date().toISOString()
-    };
-
-    try {
-      var bids = JSON.parse(localStorage.getItem('bids') || '[]');
-      bids.push(bid);
-      localStorage.setItem('bids', JSON.stringify(bids));
-    } catch (err) {
-      /* Storage full or unavailable */
-    }
-  }
-
-  function buildBidFormHTML() {
-    return '' +
-      '<button class="bid-form__close" id="bidBack" aria-label="' + t('Zurück', 'Back') + '">&times;</button>' +
-      '<h2 class="detail__title">' + t('Gebot abgeben', 'Place Bid') + '</h2>' +
-      '<form class="bid-form bid-form--inline" id="bidFormInline" novalidate>' +
-        '<div class="bid-form__field"><label>' + t('Name', 'Name') + '</label><input type="text" name="name" required></div>' +
-        '<div class="bid-form__field"><label>' + t('E-Mail', 'Email') + '</label><input type="email" name="email" required></div>' +
-        '<div class="bid-form__field"><label>' + t('Ihr Gebot (EUR)', 'Your Bid (EUR)') + '</label><input type="number" name="amount" min="1" required></div>' +
-        '<div class="bid-form__field"><label>' + t('Nachricht', 'Message') + '</label><textarea name="message" rows="2"></textarea></div>' +
-        '<button type="submit" class="detail__bid-btn bid-form__submit">' + t('Gebot absenden', 'Submit Bid') + '</button>' +
-      '</form>' +
-      '<div class="bid-form__success hidden" id="bidSuccessInline"><p>' + t('Vielen Dank. Ihr Gebot wurde entgegengenommen.', 'Thank you. Your bid has been received.') + '</p></div>' +
-      '<div class="bid-form__error hidden" id="bidErrorInline"></div>';
-  }
 
   function initInlineBid() {
     detailInfo = document.getElementById('detailInfo');
     if (!detailInfo) return;
-
     var parent = detailInfo.parentElement;
     detailBid = document.getElementById('detailBid');
-
     if (!detailBid) {
       detailBid = document.createElement('div');
       detailBid.id = 'detailBid';
       detailBid.className = 'detail__info';
       detailBid.style.display = 'none';
       detailBid.style.opacity = '0';
-      detailBid.innerHTML = buildBidFormHTML();
       parent.appendChild(detailBid);
-    }
-
-    bidForm = detailBid.querySelector('form');
-    bidSuccess = detailBid.querySelector('.bid-form__success');
-    bidError = detailBid.querySelector('.bid-form__error');
-    bidBackBtn = detailBid.querySelector('#bidBack');
-
-    if (bidForm) bidForm.addEventListener('submit', handleBidSubmit);
-    if (bidBackBtn) {
-      bidBackBtn.addEventListener('click', function (e) { e.stopPropagation(); hideInlineBid(); });
     }
   }
 
