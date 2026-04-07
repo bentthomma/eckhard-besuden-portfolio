@@ -474,6 +474,22 @@ main { overflow-x: hidden; }
   .hero__scroll-line::after, .hero__media { animation: none; }
 }
 
+/* ---------- SCROLL GATE (mobile only) ---------- */
+.scroll-gate { display: none; }
+
+@media (max-width: 768px) {
+  html { scroll-snap-type: y proximity; }
+  .scroll-gate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30vh;
+    scroll-snap-align: start;
+    color: var(--text-muted);
+    opacity: 0.3;
+  }
+}
+
 /* ---------- PRINT ---------- */
 @media print {
   .nav, .crisp-header, .crisp-loader, .grain, .scroll-progress, .detail, .mobile-menu, .modal, .marquee, .hero__scroll,
