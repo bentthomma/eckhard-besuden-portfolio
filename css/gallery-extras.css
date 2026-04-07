@@ -1,0 +1,41 @@
+/* ============================================
+   GALLERY-EXTRAS.CSS — Lazy-load button states
+   ============================================ */
+
+/* Hidden until "Zu allen Werken" is clicked */
+.works--hidden {
+  visibility: hidden;
+  height: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.gallery-collapsed { text-align: center; padding: 3rem 0; }
+.gallery-collapsed__btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border: 1px solid var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.gallery-collapsed__btn:hover {
+  background: var(--text);
+  color: var(--gallery-bg);
+}
+.gallery-collapsed__btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.gallery-collapsed__count {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
