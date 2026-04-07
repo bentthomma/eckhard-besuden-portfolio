@@ -363,6 +363,18 @@ var Scroll = (function () {
       });
     });
 
+    /* Hide hero when carousel comes into view */
+    var heroEl = document.getElementById('hero');
+    var carouselEl = document.getElementById('carousel');
+    if (heroEl && carouselEl) {
+      ScrollTrigger.create({
+        trigger: carouselEl,
+        start: 'top 80%',
+        onEnter: function () { gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } }); },
+        onLeaveBack: function () { heroEl.style.visibility = ''; gsap.to(heroEl, { opacity: 1, duration: 0.5 }); }
+      });
+    }
+
     /* Philosophy image: scroll-driven via ScrollTrigger */
     var philImg = document.querySelector('.phil-reveal');
     if (philImg) {
