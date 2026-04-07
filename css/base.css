@@ -368,6 +368,7 @@ main { overflow-x: hidden; }
 .reveal-image { clip-path: inset(100% 0 0 0); transition: clip-path 1.2s cubic-bezier(0.25, 0.1, 0.25, 1); }
 .reveal-image.visible { clip-path: inset(0 0 0 0); }
 /* ---------- TEXT REVEAL (word by word) ---------- */
+.text-reveal .word-wrap { display: inline-block; vertical-align: bottom; }
 .text-reveal .char-wrap { display: inline-block; overflow: hidden; vertical-align: bottom; }
 .text-reveal .char-inner { display: inline-block; will-change: transform, opacity; }
 

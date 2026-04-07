@@ -74,24 +74,30 @@ var Scroll = (function () {
 
   function wrapChars(el) {
     var text = el.textContent;
+    var words = text.split(/(\s+)/); /* split keeping whitespace */
     el.innerHTML = '';
     var inners = [];
 
-    for (var i = 0; i < text.length; i++) {
-      var ch = text[i];
-      if (ch === ' ') {
-        el.appendChild(document.createTextNode(' '));
-        continue;
+    words.forEach(function (segment) {
+      if (/^\s+$/.test(segment)) {
+        el.appendChild(document.createTextNode(segment));
+        return;
       }
-      var wrap = document.createElement('span');
-      wrap.className = 'char-wrap';
-      var inner = document.createElement('span');
-      inner.className = 'char-inner';
-      inner.textContent = ch;
-      wrap.appendChild(inner);
-      el.appendChild(wrap);
-      inners.push(inner);
-    }
+      /* Wrap each word in an inline-block so it stays together */
+      var wordWrap = document.createElement('span');
+      wordWrap.className = 'word-wrap';
+      for (var i = 0; i < segment.length; i++) {
+        var wrap = document.createElement('span');
+        wrap.className = 'char-wrap';
+        var inner = document.createElement('span');
+        inner.className = 'char-inner';
+        inner.textContent = segment[i];
+        wrap.appendChild(inner);
+        wordWrap.appendChild(wrap);
+        inners.push(inner);
+      }
+      el.appendChild(wordWrap);
+    });
 
     return inners;
   }

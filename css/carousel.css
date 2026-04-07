@@ -114,8 +114,9 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem);
   gap: clamp(2rem, 5vw, 5.5rem);
-  align-items: center;
+  align-items: start;
   padding: clamp(1rem, 3vw, 2.5rem);
+  padding-bottom: clamp(5rem, 10vh, 8rem);
   opacity: 1;
   pointer-events: auto;
 }
@@ -293,24 +294,25 @@
 
 .carousel__all-works {
   display: inline-block;
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.6);
-  border: none;
-  border-bottom: 1px solid rgba(248, 238, 227, 0.2);
+  color: rgba(248, 238, 227, 0.92);
+  border: 1px solid rgba(248, 238, 227, 0.4);
   background: transparent;
-  padding-bottom: 2px;
+  padding: 0.75rem 2rem;
   cursor: pointer;
   text-decoration: none;
   transition:
+    background 0.3s var(--ease-standard),
     color 0.3s var(--ease-standard),
     border-color 0.3s var(--ease-standard);
 }
 
 .carousel__all-works:hover {
-  color: rgba(248, 238, 227, 0.92);
-  border-color: rgba(248, 238, 227, 0.6);
+  background: rgba(248, 238, 227, 0.92);
+  color: var(--wood-bg);
+  border-color: rgba(248, 238, 227, 0.92);
   opacity: 1;
 }
 

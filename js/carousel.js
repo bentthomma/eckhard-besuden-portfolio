@@ -636,7 +636,8 @@
         /* Populate works count under carousel */
         var countEl = document.getElementById('carouselWorksCount');
         if (countEl && data) {
-          countEl.textContent = data.length + ' ' + t('gallery_count_available', 'Werke verf\u00fcgbar', 'works available');
+          var lang = document.documentElement.lang || 'de';
+          countEl.textContent = data.length + (lang === 'en' ? ' works available' : ' Werke verf\u00fcgbar');
         }
       })
       .catch(function (err) {
