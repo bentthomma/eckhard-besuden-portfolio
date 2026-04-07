@@ -357,13 +357,27 @@ var Scroll = (function () {
       });
     });
 
+    /* Philosophy image: scroll-driven via ScrollTrigger */
+    var philImg = document.querySelector('.phil-reveal');
+    if (philImg) {
+      gsap.set(philImg, { clipPath: 'inset(15%)', scale: 1.15 });
+      ScrollTrigger.create({
+        trigger: philImg,
+        start: 'top 80%',
+        end: 'bottom 20%',
+        onUpdate: function (self) {
+          var p = self.progress;
+          gsap.set(philImg, { clipPath: 'inset(' + (15 * (1 - p)) + '%)', scale: 1.15 - (0.15 * p) });
+        }
+      });
+    }
   }
 
   /* --------------------------------------------------------
      INIT — Desktop: state machine. Mobile: native scroll.
      -------------------------------------------------------- */
 
-  var isMobile = 'ontouchstart' in window || window.innerWidth < 768;
+  var isMobile = (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) || window.innerWidth < 768;
 
   function init() {
     if (reduced) {
@@ -376,6 +390,8 @@ var Scroll = (function () {
       document.querySelectorAll('.text-reveal').forEach(function (el) {
         el.style.opacity = '1';
       });
+      var philImg = document.querySelector('.phil-reveal');
+      if (philImg) gsap.set(philImg, { clipPath: 'inset(0%)', scale: 1 });
       return;
     }
 

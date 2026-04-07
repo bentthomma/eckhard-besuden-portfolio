@@ -469,7 +469,7 @@
 
     var bidBtn = document.createElement('button');
     bidBtn.className = 'detail__bid-btn';
-    bidBtn.textContent = t('Gebot abgeben', 'Place Bid');
+    bidBtn.textContent = t('Kontakt aufnehmen', 'Get in Touch');
     bidBtn.addEventListener('click', function () { showInlineBid(item); });
     detailStatus.appendChild(bidBtn);
   }

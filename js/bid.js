@@ -36,7 +36,7 @@
       '<button type="button" class="bid-form__close" aria-label="' +
         H.translate('bid_back', 'Zur\u00fcck', 'Back') + '">&times;</button>' +
       '<h3 class="bid-form__title">' +
-        H.translate('bid_title', 'Gebot abgeben', 'Place a bid') + '</h3>' +
+        H.translate('bid_title', 'Kontakt aufnehmen', 'Get in Touch') + '</h3>' +
       '<form class="bid-form" novalidate>' +
         '<div class="bid-form__field"><label>' +
           H.translate('bid_name', 'Name', 'Name') +

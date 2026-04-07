@@ -13,8 +13,8 @@
   var CONFIG = {
     DATA_URL: 'bilder-metadaten.json',
     FEATURED_FILES: [
-      'Bild4-2017LeningraderVariante.jpg',
-      'Bild2-2020Seehasgrossultramarinblau.jpg',
+      '2017-leningradervariante.jpg',
+      '2020-seehasgrossultramarinblau2von10.jpg',
       '2018-abstraktesbild55.jpg',
       '2017-wolken.jpg',
       '2014-rehkitz.jpg',
@@ -158,7 +158,7 @@
             metaRow(t('detail_category', 'Kategorie', 'Category'), category) +
           '</div>' +
           '<div class="carousel__plaque-actions">' +
-            '<button type="button" class="bid-btn">' + t('bid_button', 'Gebot abgeben', 'Place Bid') + '</button>' +
+            '<button type="button" class="bid-btn">' + t('bid_btn', 'Kontakt aufnehmen', 'Get in Touch') + '</button>' +
           '</div>' +
           '<div class="carousel__plaque-bid" style="display:none"></div>' +
         '</div>' +
@@ -560,6 +560,8 @@
     if (allWorksBtn) {
       allWorksBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        var worksSection = document.getElementById('works');
+        if (worksSection) worksSection.style.display = '';
         if (window.Gallery && window.Gallery.expand) window.Gallery.expand();
         if (window.Scroll && window.Scroll.navigateTo) window.Scroll.navigateTo('works');
       });
@@ -630,6 +632,12 @@
         render();
         initEventListeners();
         initEntryObserver();
+
+        /* Populate works count under carousel */
+        var countEl = document.getElementById('carouselWorksCount');
+        if (countEl && data) {
+          countEl.textContent = data.length + ' ' + t('gallery_count_available', 'Werke verf\u00fcgbar', 'works available');
+        }
       })
       .catch(function (err) {
         if (track) {

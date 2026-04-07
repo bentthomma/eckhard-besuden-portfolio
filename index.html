@@ -145,7 +145,6 @@
     <div class="philosophy-layout">
       <div class="philosophy-layout__image">
         <img src="assets/bilder/schluesselwerke/Bild2-2020Seehasgrossultramarinblau.jpg" alt="Seehas ultramarinblau, 2020" class="phil-reveal">
-        <div class="philosophy-layout__image-overlay"></div>
       </div>
       <div class="philosophy-layout__content">
         <h2 class="philosophy-layout__title text-reveal" data-i18n="philosophy_title">Antideterminismus</h2>
@@ -165,12 +164,6 @@
 
   <!-- ========== CAROUSEL (Featured Works) ========== -->
   <section class="section section--carousel" id="carousel">
-    <div class="container">
-      <span class="section__label" data-i18n="home_featured_label">Auswahl</span>
-      <h2 class="section__title" data-i18n="home_featured_title">Ausgew&auml;hlte Werke</h2>
-      <p class="section__intro" data-i18n="home_featured_intro">Ein konzentrierter Blick auf zentrale Arbeiten. Die vollst&auml;ndige Auswahl liegt weiter unten.</p>
-    </div>
-
     <div class="carousel" id="homeCarousel">
       <div class="carousel__viewport" id="carouselViewport">
         <div class="carousel__track" id="carouselTrack"
@@ -189,13 +182,14 @@
     <div class="container container--cta">
       <a href="#works" class="carousel__all-works" id="carouselAllWorks"
          data-i18n="home_all_works">Zu allen Werken</a>
+      <p class="carousel__works-count" id="carouselWorksCount"></p>
     </div>
   </section>
 
   <div class="section-divider"></div>
 
   <!-- ========== WORKS ========== -->
-  <section class="section section--clean" id="works">
+  <section class="section section--clean" id="works" style="display:none">
     <div class="container">
 
       <h2 class="section__title reveal" data-i18n="works_title">Werke</h2>
@@ -204,8 +198,6 @@
       <div class="gallery-collapsed" id="galleryCollapsed">
         <button class="gallery-collapsed__btn" id="galleryExpandBtn" type="button"
                 data-i18n="gallery_show_all">Alle Werke anzeigen</button>
-        <p class="gallery-collapsed__count" id="galleryCollapsedCount"
-           data-i18n="gallery_count_available">758 Werke verf&uuml;gbar</p>
       </div>
 
       <!-- Expanded state (hidden until expand) -->
