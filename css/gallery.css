@@ -1,0 +1,225 @@
+/* ---------- Gallery page ---------- */
+.gallery-page__intro {
+  padding: clamp(8rem, 13vw, 11rem) 0 clamp(2rem, 4vw, 3rem);
+}
+
+.gallery-page__intro-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.gallery-page__intro-copy {
+  max-width: 44rem;
+}
+
+.gallery-page__lead {
+  margin: 1.2rem 0 0;
+  max-width: 58ch;
+  font-size: clamp(1.02rem, 1vw + 0.88rem, 1.16rem);
+  color: var(--text-muted);
+}
+
+.gallery-page__works {
+  padding: 0 0 var(--section-space);
+}
+
+.gallery-controls {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid var(--line);
+}
+
+.gallery-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.filter-btn {
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.filter-btn.active {
+  border-color: var(--line-strong);
+  background: rgba(255, 255, 255, 0.56);
+  color: var(--text);
+}
+
+.filter-btn:hover,
+.filter-btn:focus-visible {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.gallery-search {
+  min-width: min(18rem, 100%);
+  margin-left: auto;
+}
+
+.gallery-search__input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 0 0.7rem;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+}
+
+.gallery-search__input::placeholder {
+  color: var(--text-soft);
+}
+
+.gallery,
+.gallery__loading,
+.gallery__empty {
+  width: 100%;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.gallery__loading,
+.gallery__empty {
+  padding: 2.5rem 0;
+  text-align: center;
+  color: var(--text-soft);
+}
+
+.gallery__item {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+}
+
+.gallery__item img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  transition: transform 0.55s ease;
+}
+
+.gallery__item:hover img,
+.gallery__item:focus-visible img {
+  transform: scale(1.03);
+}
+
+.gallery__item-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.58) 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.gallery__item:hover .gallery__item-overlay,
+.gallery__item:focus-visible .gallery__item-overlay {
+  opacity: 1;
+}
+
+.gallery__item-overlay span {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-inverse);
+}
+
+.gallery-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.75rem;
+}
+
+.gallery__load-more {
+  display: block;
+  margin: 2rem auto 0;
+  min-height: 2.75rem;
+  padding: 0.75rem 2rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.gallery__load-more:hover,
+.gallery__load-more:focus-visible {
+  background: var(--text);
+  color: var(--bg);
+}
+
+.gallery-count {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+/* ---------- Gallery collapsed (lazy-load) ---------- */
+.gallery-collapsed {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.gallery-collapsed__btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  border: 1px solid var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.gallery-collapsed__btn:hover {
+  background: var(--text);
+  color: var(--gallery-bg);
+}
+
+.gallery-collapsed__btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.gallery-collapsed__count {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
