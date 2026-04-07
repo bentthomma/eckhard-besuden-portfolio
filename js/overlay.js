@@ -42,7 +42,9 @@
 
   function releaseFocus() {
     document.removeEventListener('keydown', handleTrapKeydown);
-    if (previousFocus && previousFocus.focus) previousFocus.focus();
+    if (previousFocus && previousFocus.focus && previousFocus.isConnected) {
+      previousFocus.focus();
+    }
     focusTrapEl = null;
     previousFocus = null;
   }
@@ -61,7 +63,15 @@
   }
 
   /* ---- Public API ---- */
-  window.__overlay = { push: pushOverlay, pop: popOverlay };
+  function isOpen(id) {
+    return overlayStack.indexOf(id) !== -1;
+  }
+
+  function top() {
+    return overlayStack.length > 0 ? overlayStack[overlayStack.length - 1] : null;
+  }
+
+  window.__overlay = { push: pushOverlay, pop: popOverlay, isOpen: isOpen, top: top };
 
   /* Lock scroll immediately for loader */
   document.addEventListener('DOMContentLoaded', function () {
