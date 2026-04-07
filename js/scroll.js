@@ -20,7 +20,7 @@ var Scroll = (function () {
   var DELTA_CAP = 80;
   var COOLDOWN_MS = 400;
   var NAV_THRESHOLD = 80;
-  var STAGGER_GAP = 0.02;
+  var STAGGER_GAP = 0.008;
   var BLOCK_OVERLAP = '>-0.06';
   var BACK_THRESHOLD = 0.05;
   /* -- Mutable state -- */
@@ -72,23 +72,26 @@ var Scroll = (function () {
      TEXT REVEAL TIMELINE
      -------------------------------------------------------- */
 
-  function wrapWords(el) {
+  function wrapChars(el) {
     var text = el.textContent;
-    var words = text.split(/\s+/).filter(Boolean);
     el.innerHTML = '';
     var inners = [];
 
-    words.forEach(function (word, i) {
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      if (ch === ' ') {
+        el.appendChild(document.createTextNode(' '));
+        continue;
+      }
       var wrap = document.createElement('span');
-      wrap.className = 'word-wrap';
+      wrap.className = 'char-wrap';
       var inner = document.createElement('span');
-      inner.className = 'word-inner';
-      inner.textContent = word;
+      inner.className = 'char-inner';
+      inner.textContent = ch;
       wrap.appendChild(inner);
       el.appendChild(wrap);
-      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
       inners.push(inner);
-    });
+    }
 
     return inners;
   }
@@ -100,7 +103,7 @@ var Scroll = (function () {
     var tl = gsap.timeline({ paused: true });
 
     items.forEach(function (item, idx) {
-      var spans = wrapWords(item);
+      var spans = wrapChars(item);
       gsap.set(spans, { opacity: 0.1, y: 8 });
       tl.to(spans, {
         opacity: 1, y: 0,
@@ -218,6 +221,7 @@ var Scroll = (function () {
       } else {
         sec.progress = Math.min(1, sec.progress + delta);
         sec.tl.progress(sec.progress);
+        updatePhilReveal(sec);
       }
     } else {
       if (sec.progress >= 1) {
@@ -227,6 +231,7 @@ var Scroll = (function () {
       } else {
         sec.progress = Math.max(0, sec.progress - delta);
         sec.tl.progress(sec.progress);
+        updatePhilReveal(sec);
       }
     }
   }
@@ -332,7 +337,7 @@ var Scroll = (function () {
 
     /* Word-split text-reveals, driven by scroll position via ScrollTrigger scrub */
     document.querySelectorAll('.text-reveal').forEach(function (item) {
-      var spans = wrapWords(item);
+      var spans = wrapChars(item);
       gsap.set(spans, { opacity: 0.1, y: 8 });
 
       var tl = gsap.timeline({
