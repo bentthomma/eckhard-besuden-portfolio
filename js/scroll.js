@@ -348,35 +348,20 @@ var Scroll = (function () {
     initReveals();
     initDividers();
 
-    /* Text-reveals: one trigger per section, staggered reveals within */
-    ['about', 'philosophy'].forEach(function (sectionId) {
-      var sec = document.getElementById(sectionId);
-      if (!sec) return;
-      var allItems = sec.querySelectorAll('.text-reveal');
-      var allSpans = [];
-      allItems.forEach(function (item) {
-        var spans = wrapChars(item);
-        gsap.set(spans, { opacity: 0.1, y: 8 });
-        allSpans.push(spans);
-      });
-
-      ScrollTrigger.create({
-        trigger: sec,
-        start: 'top 80%',
-        once: true,
-        onEnter: function () {
-          var delay = 0;
-          allSpans.forEach(function (spans) {
-            gsap.to(spans, {
-              opacity: 1, y: 0,
-              stagger: STAGGER_GAP,
-              duration: 0.5,
-              ease: 'power2.out',
-              delay: delay
-            });
-            /* Next block starts after this one finishes */
-            delay += (spans.length * STAGGER_GAP) + 0.5 + 0.15;
-          });
+    /* Text-reveals: scroll-driven per element */
+    document.querySelectorAll('.text-reveal').forEach(function (item) {
+      var spans = wrapChars(item);
+      gsap.set(spans, { opacity: 0.1, y: 8 });
+      gsap.to(spans, {
+        opacity: 1, y: 0,
+        stagger: STAGGER_GAP,
+        duration: 0.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 90%',
+          end: 'top 40%',
+          scrub: true
         }
       });
     });
@@ -425,45 +410,6 @@ var Scroll = (function () {
       });
     }
 
-    /* JS-based carousel snap — only snaps when user scrolls DOWN into carousel */
-    var snapCarousel = document.getElementById('carousel');
-    if (snapCarousel) {
-      var snapTimer = null;
-      var snapDisabled = false;
-      var lastScrollY = window.scrollY;
-      var scrollDir = 'down';
-
-      window.addEventListener('scroll', function () {
-        scrollDir = window.scrollY > lastScrollY ? 'down' : 'up';
-        lastScrollY = window.scrollY;
-      }, { passive: true });
-
-      var snapObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (snapDisabled || scrollDir === 'up') return;
-          if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
-            clearTimeout(snapTimer);
-            snapTimer = setTimeout(function () {
-              if (!snapDisabled && scrollDir === 'down') {
-                snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }, 400);
-          }
-        });
-      }, { threshold: [0.3, 0.5, 0.7, 0.9] });
-      snapObs.observe(snapCarousel);
-      window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
-      window.addEventListener('touchmove', function () { clearTimeout(snapTimer); }, { passive: true });
-
-      /* Disable snap for 2s after any nav link click */
-      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-        a.addEventListener('click', function () {
-          snapDisabled = true;
-          clearTimeout(snapTimer);
-          setTimeout(function () { snapDisabled = false; }, 2000);
-        });
-      });
-    }
   }
 
   /* --------------------------------------------------------
@@ -518,6 +464,51 @@ var Scroll = (function () {
   }
 
   /* --------------------------------------------------------
+     CAROUSEL SNAP (Mobile + Tablet, < 1200px)
+     Runs after init() for non-desktop viewports.
+     -------------------------------------------------------- */
+  function initCarouselSnap() {
+    if (window.innerWidth >= 1200) return;
+    var snapEl = document.getElementById('carousel');
+    if (!snapEl) return;
+
+    var snapTimer = null;
+    var snapOff = false;
+    var lastY = window.scrollY;
+    var dir = 'down';
+
+    window.addEventListener('scroll', function () {
+      dir = window.scrollY > lastY ? 'down' : 'up';
+      lastY = window.scrollY;
+    }, { passive: true });
+
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (snapOff || dir === 'up') return;
+        if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
+          clearTimeout(snapTimer);
+          snapTimer = setTimeout(function () {
+            if (!snapOff && dir === 'down') {
+              snapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 400);
+        }
+      });
+    }, { threshold: [0.3, 0.5, 0.7, 0.9] }).observe(snapEl);
+
+    window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
+    window.addEventListener('touchmove', function () { clearTimeout(snapTimer); }, { passive: true });
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        snapOff = true;
+        clearTimeout(snapTimer);
+        setTimeout(function () { snapOff = false; }, 2000);
+      });
+    });
+  }
+
+  /* --------------------------------------------------------
      PUBLIC API
      -------------------------------------------------------- */
 
@@ -561,7 +552,10 @@ var Scroll = (function () {
   });
 
   /* Self-initialize on DOMContentLoaded */
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', function () {
+    init();
+    initCarouselSnap();
+  });
 
   return { init: init, flyTo: flyTo, navigateTo: navigateTo };
 

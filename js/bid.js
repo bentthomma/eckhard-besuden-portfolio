@@ -88,10 +88,10 @@
   }
 
   function show(container, infoEl, onComplete) {
-    container.style.display = '';
     if (typeof gsap === 'undefined') {
+      if (infoEl) { infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden'; }
+      container.style.display = '';
       container.style.opacity = '1';
-      if (infoEl) infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden';
       if (onComplete) onComplete();
       return;
     }
@@ -101,6 +101,7 @@
         opacity: 0, y: -10, stagger: 0.08, duration: 0.3, ease: 'power2.in',
         onComplete: function () {
           infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden';
+          container.style.display = '';
           container.style.opacity = '1';
           gsap.fromTo(container.children,
             { opacity: 0, y: 15 },

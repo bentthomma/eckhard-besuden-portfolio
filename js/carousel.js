@@ -518,6 +518,7 @@
       var item = items[idx];
       clearAutoplay();
       bidOpen = true;
+      setTimeout(function () { bidOpen = false; }, 30000);
 
       /* Mobile/Tablet: use Gallery detail popup with bid */
       if (window.innerWidth <= 1024) {
