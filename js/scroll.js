@@ -374,7 +374,7 @@ var Scroll = (function () {
               ease: 'power2.out',
               delay: delay
             });
-            delay += 0.5;
+            delay += 1.5;
           });
         }
       });

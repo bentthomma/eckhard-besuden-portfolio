@@ -126,6 +126,8 @@
 
 /* ---------- 5. ARTWORK (PAINTING FRAME) ---------- */
 .carousel__artwork {
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,6 +160,8 @@
 
 /* ---------- 6. PLAQUE (MUSEUM INFO CARD) ---------- */
 .carousel__plaque {
+  position: relative;
+  z-index: 1;
   align-self: center;
   width: min(26rem, 100%);
   opacity: 0;

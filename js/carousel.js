@@ -282,13 +282,13 @@
       }
     });
 
-    /* Phase 0: Plaque retreats into image first */
+    /* Phase 0: Plaque retreats behind image (z-index: artwork=2, plaque=1) */
     if (oldPlaque) {
       var outProps = isSingleCol
-        ? { opacity: 0, y: '-40%', duration: 0.4, ease: 'power2.in' }
-        : { opacity: 0, x: '-40%', duration: 0.4, ease: 'power2.in' };
+        ? { y: '-120%', duration: 0.5, ease: 'power2.in' }
+        : { x: '-60%', duration: 0.5, ease: 'power2.in' };
       tl.to(oldPlaque, outProps, 0);
-      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.4);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); oldPlaque.style.opacity = '0'; }, null, 0.5);
     }
 
     /* Phase 1: Lift-Off (1000ms) — starts AFTER plaque is gone */
@@ -336,13 +336,13 @@
     tl.call(function () { shadowState(newImg, 'none'); }, null, '-=0.3');
     /* Plaque slides in after landing */
     if (newPlaque) {
-      tl.call(function () { newPlaque.classList.add('is-visible'); });
       var inFrom = isSingleCol
-        ? { opacity: 0, y: '-50%' }
-        : { opacity: 0, x: '-50%' };
+        ? { opacity: 0, y: '-80%' }
+        : { opacity: 0, x: '-40%' };
       var inTo = isSingleCol
-        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power2.out' }
-        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power2.out' };
+        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power3.out' }
+        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power3.out' };
+      tl.call(function () { newPlaque.classList.add('is-visible'); });
       tl.fromTo(newPlaque, inFrom, inTo);
     }
   }
@@ -392,10 +392,10 @@
     });
     if (plaque) {
       var entrySingleCol = window.innerWidth <= 1024;
-      var eFrom = entrySingleCol ? { opacity: 0, y: '-50%' } : { opacity: 0, x: '-50%' };
+      var eFrom = entrySingleCol ? { opacity: 0, y: '-80%' } : { opacity: 0, x: '-40%' };
       var eTo = entrySingleCol
-        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power2.out' }
-        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power2.out' };
+        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power3.out' }
+        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power3.out' };
       tl.fromTo(plaque, eFrom, eTo, '-=0.3');
     }
   }
