@@ -18,7 +18,7 @@ var Scroll = (function () {
   var FLY_DURATION = 1.2;
   var FLY_EASE = 'power3.inOut';
   var DELTA_CAP = 80;
-  var COOLDOWN_MS = 400;
+  var COOLDOWN_MS = 800;
   var NAV_THRESHOLD = 80;
   var STAGGER_GAP = 0.008;
   var BLOCK_OVERLAP = '>-0.06';
@@ -130,6 +130,7 @@ var Scroll = (function () {
     var targetSec = findSection(targetId);
     if (flying || !targetSec) return;
     flying = true;
+    touchAccum = 0;
 
     var y = targetSec.el.offsetTop;
 
@@ -464,7 +465,8 @@ var Scroll = (function () {
         break;
       case 'carousel':
         touchAccum += Math.abs(deltaY);
-        if (touchAccum > 15) {
+        if (touchAccum > 40) {
+          touchAccum = 0;
           if (down) flyTo('works');
           else flyTo('philosophy');
         }
