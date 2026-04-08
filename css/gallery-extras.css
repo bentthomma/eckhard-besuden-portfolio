@@ -2,6 +2,9 @@
    GALLERY-EXTRAS.CSS — Lazy-load button states
    ============================================ */
 
+/* Gallery expanded state hidden until loaded */
+.gallery-expanded--hidden { display: none; }
+
 /* Hidden until "Zu allen Werken" is clicked */
 .works--hidden {
   visibility: hidden;

@@ -876,7 +876,7 @@
       .then(function () {
         galleryState = 'expanded';
         if (collapsedEl) collapsedEl.style.display = 'none';
-        if (expandedEl) expandedEl.style.display = '';
+        if (expandedEl) expandedEl.classList.remove('gallery-expanded--hidden');
         if (!gallery) gallery = document.getElementById('gallery');
 
         initRevealObserver();
