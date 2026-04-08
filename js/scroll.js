@@ -62,6 +62,7 @@ var Scroll = (function () {
       var sec = { id: def.id, el: el, type: def.type };
       if (def.type === 'reveal') {
         sec.progress = 0;
+        sec.dwellDone = false;
         sec.tl = buildRevealTimeline(el);
       }
       sections.push(sec);
@@ -205,7 +206,7 @@ var Scroll = (function () {
         break;
 
       case 'free':
-        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 50) {
+        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 200) {
           e.preventDefault();
           flyTo('carousel');
         }
@@ -245,15 +246,21 @@ var Scroll = (function () {
 
     if (down) {
       if (sec.progress >= 1) {
+        if (!sec.dwellDone) {
+          sec.dwellDone = true;
+          return;
+        }
         flyTo(nextId);
       } else {
         sec.progress = Math.min(1, sec.progress + delta);
+        sec.dwellDone = false;
         sec.tl.progress(sec.progress);
         updatePhilReveal(sec);
         scrollSectionContent(sec);
       }
     } else {
       if (sec.progress >= 1) {
+        sec.dwellDone = false;
         flyTo(prevId);
       } else if (sec.progress < BACK_THRESHOLD) {
         flyTo(prevId);
@@ -481,7 +488,7 @@ var Scroll = (function () {
         }
         break;
       case 'free':
-        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 50) {
+        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 200) {
           e.preventDefault();
           flyTo('carousel');
         }

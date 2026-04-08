@@ -36,6 +36,14 @@
         if (!href || href === '#') return;
         e.preventDefault();
         var id = href.replace('#', '');
+
+        if (id === 'works') {
+          var worksEl = document.getElementById('works');
+          if (worksEl) worksEl.classList.remove('works--hidden');
+          document.querySelectorAll('.works-gate-hidden').forEach(function (el) { el.classList.remove('works-gate-hidden'); });
+          if (window.Gallery && window.Gallery.expand) window.Gallery.expand();
+        }
+
         if (id && typeof Scroll !== 'undefined' && Scroll.navigateTo) Scroll.navigateTo(id);
       });
     });
