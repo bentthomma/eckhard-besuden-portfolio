@@ -192,6 +192,8 @@
   letter-spacing: 0.03em;
   color: rgba(248, 238, 227, 0.98);
   text-wrap: balance;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .carousel__plaque-meta {
@@ -312,9 +314,14 @@
     width: min(32rem, 90%);
     text-align: center;
   }
+  .carousel__plaque-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 1rem;
+  }
   .carousel__plaque-row {
     grid-template-columns: 1fr;
-    gap: 0.1rem;
+    gap: 0;
     text-align: center;
   }
 }

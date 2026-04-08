@@ -242,8 +242,11 @@
     var enterSide = direction === 'next' ? 'right' : 'left';
     var rotSign = direction === 'next' ? -1 : 1;
 
-    /* Hide old plaque immediately */
-    if (oldPlaque) oldPlaque.classList.remove('is-visible');
+    /* Plaque animation direction: x on desktop, y on tablet/mobile */
+    var isSingleCol = window.innerWidth <= 1024;
+    var plaqueOutProps = isSingleCol ? { opacity: 0, y: 20 } : { opacity: 0, x: -30 };
+    var plaqueInFrom = isSingleCol ? { opacity: 0, y: 30 } : { opacity: 0, x: 40 };
+    var plaqueInTo = isSingleCol ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 };
 
     /* ---- Reduced-motion shortcut ---- */
     if (reducedMotion) {
@@ -283,13 +286,17 @@
       }
     });
 
-    /* Phase 1: Lift-Off (1000ms) */
+    /* Phase 1: Lift-Off (1000ms) + Plaque fade out */
     tl.to(oldImg, {
       scale: 1.05,
       rotation: rotSign * 0.25,
       duration: 1,
       ease: 'power1.out'
     });
+    if (oldPlaque) {
+      tl.to(oldPlaque, Object.assign({}, plaqueOutProps, { duration: 0.5, ease: 'power2.in' }), 0);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.5);
+    }
     tl.call(function () { shadowState(oldImg, 'lifted'); }, null, 0);
 
     /* Phase 2: Fly-Off (1300ms) */
@@ -326,9 +333,12 @@
       ease: 'power2.inOut'
     });
     tl.call(function () { shadowState(newImg, 'none'); }, null, '-=0.3');
-    tl.call(function () {
-      if (newPlaque) newPlaque.classList.add('is-visible');
-    });
+    /* Plaque slides in after landing */
+    if (newPlaque) {
+      tl.call(function () { newPlaque.classList.add('is-visible'); });
+      tl.fromTo(newPlaque, plaqueInFrom,
+        Object.assign({}, plaqueInTo, { duration: 0.6, ease: 'power2.out' }));
+    }
   }
 
   /* --------------------------------------------------------

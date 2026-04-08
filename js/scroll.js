@@ -356,8 +356,8 @@ var Scroll = (function () {
       var tl = gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top 85%',
-          end: 'top 30%',
+          start: 'top 95%',
+          end: 'top 40%',
           scrub: 0.5
         }
       });
@@ -475,7 +475,7 @@ var Scroll = (function () {
     }
     /* On mobile/reduced: simple scroll instead of state-machine flyTo */
     if (isMobile || reduced) {
-      gsap.to(window, { scrollTo: { y: targetSec.el.offsetTop, autoKill: false }, duration: 1, ease: 'power3.inOut' });
+      targetSec.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       flyTo(targetId);
     }
