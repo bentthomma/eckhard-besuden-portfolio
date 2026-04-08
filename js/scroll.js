@@ -438,7 +438,7 @@ var Scroll = (function () {
             snapTimer = setTimeout(function () {
               if (!snapDisabled) {
                 var rect = snapCarousel.getBoundingClientRect();
-                var offset = window.scrollY + rect.top - 10;
+                var offset = window.scrollY + rect.top + 40;
                 window.scrollTo({ top: offset, behavior: 'smooth' });
               }
             }, 300);
