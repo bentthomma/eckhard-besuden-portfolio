@@ -509,10 +509,10 @@
       document.body.appendChild(clone);
 
       /* Morph clone to gallery position */
-      var flipDuration = window.innerWidth < 768 ? 0.9 : 0.5;
+      var flipDuration = window.innerWidth < 768 ? 0.9 : 0.8;
 
       /* Fade detail background — match clone duration so stage stays dark */
-      gsap.to(detail, { opacity: 0, duration: flipDuration * 0.8, ease: 'power2.in' });
+      gsap.to(detail, { opacity: 0, duration: flipDuration, ease: 'power2.in' });
       gsap.to(clone, {
         left: targetRect.left,
         top: targetRect.top,

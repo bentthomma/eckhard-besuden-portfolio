@@ -111,7 +111,7 @@
 
 .carousel__slide.is-active {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem);
+  grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem);
   gap: clamp(2rem, 5vw, 5.5rem);
   align-items: start;
   padding: clamp(1rem, 3vw, 2.5rem);
@@ -136,6 +136,11 @@
 
 .carousel__frame {
   position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  transition: box-shadow 0.8s ease;
+}
+.carousel__frame.shadow--flying {
+  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
 }
 
 .carousel__frame img {
@@ -152,12 +157,13 @@
   position: relative;
   z-index: 1;
   align-self: center;
-  width: min(26rem, 100%);
+  width: min(30rem, 100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .carousel__plaque.is-visible {
+  z-index: 3;
   pointer-events: auto;
 }
 

@@ -188,8 +188,14 @@
     return window.innerWidth - rect.left + 100;
   }
 
-  function shadowState() {
-    /* Shadows removed — clean look without filter artifacts */
+  function shadowState(imgEl, state) {
+    if (!imgEl) return;
+    var frame = imgEl.closest('.carousel__frame');
+    if (!frame) return;
+    frame.classList.remove('shadow--flying');
+    if (state === 'flying' || state === 'lifted') {
+      frame.classList.add('shadow--flying');
+    }
   }
 
   /* --------------------------------------------------------
@@ -474,11 +480,11 @@
       var deltaX = e.changedTouches[0].clientX - touchStartX;
       var deltaY = e.changedTouches[0].clientY - touchStartY;
       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-        /* deltaX > 0 = swipe right = go BACK; deltaX < 0 = swipe left = go FORWARD */
+        /* Swipe left = image goes left (prev), swipe right = image goes right (next) */
         if (deltaX > 0) {
-          goTo(currentIndex - 1, 'prev');
-        } else {
           goTo(currentIndex + 1, 'next');
+        } else {
+          goTo(currentIndex - 1, 'prev');
         }
       } else {
         startAutoplay();
@@ -572,6 +578,18 @@
 
     /* Resize */
     window.addEventListener('resize', measureViewport);
+
+    /* Autoplay only when carousel is in viewport */
+    if ('IntersectionObserver' in window) {
+      var visObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) { if (hasEntered) startAutoplay(); }
+          else { clearAutoplay(); }
+        });
+      }, { threshold: 0.1 });
+      var carouselSection = document.getElementById('carousel');
+      if (carouselSection) visObs.observe(carouselSection);
+    }
   }
 
   /* --------------------------------------------------------

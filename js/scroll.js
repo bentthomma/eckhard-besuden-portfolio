@@ -20,7 +20,7 @@ var Scroll = (function () {
   var DELTA_CAP = 80;
   var COOLDOWN_MS = 400;
   var NAV_THRESHOLD = 80;
-  var STAGGER_GAP = 0.008;
+  var STAGGER_GAP = 0.004;
   var BLOCK_OVERLAP = '>-0.06';
   var BACK_THRESHOLD = 0.05;
   /* -- Mutable state -- */
@@ -375,7 +375,7 @@ var Scroll = (function () {
               delay: delay
             });
             /* Next block starts after this one finishes */
-            delay += (spans.length * STAGGER_GAP) + 0.5 + 0.3;
+            delay += (spans.length * STAGGER_GAP) + 0.5 + 0.15;
           });
         }
       });
@@ -388,8 +388,8 @@ var Scroll = (function () {
     if (carouselEl) {
       ScrollTrigger.create({
         trigger: carouselEl,
-        start: 'top 50%',
-        end: 'bottom 30%',
+        start: 'top 95%',
+        end: 'bottom 10%',
         onEnter: function () {
           if (heroEl) gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } });
           if (navEl) gsap.to(navEl, { opacity: 0, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });

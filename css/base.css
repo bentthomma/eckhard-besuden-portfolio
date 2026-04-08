@@ -298,6 +298,11 @@ main { overflow-x: hidden; }
 .bid-form__success { text-align: center; padding: 2rem 0; }
 .bid-form__success p { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 300; }
 .bid-form__error { text-align: center; padding: 0.5rem 0; color: rgba(180,0,0,0.8); font-size: 0.75rem; }
+.bid-form__title { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-size: 1.4rem; letter-spacing: 0.04em; margin-bottom: 1.5rem; }
+.bid-form__close { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 1.4rem; opacity: 0.5; }
+.bid-form__submit { display: block; width: 100%; padding: 0.75rem 2rem; margin-top: 1rem; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid currentColor; background: transparent; cursor: pointer; transition: background 0.3s ease, color 0.3s ease; }
+.bid-form__submit:hover { background: var(--text); color: var(--gallery-bg); }
+.detail__info { min-height: 12rem; }
 
 /* ---------- FLIP CLONE (gallery → detail transition) ---------- */
 .flip-clone { position: fixed; z-index: 6500; pointer-events: none; object-fit: cover; border-radius: 0; transition: none; }
@@ -493,7 +498,7 @@ main { overflow-x: hidden; }
 
 /* ---------- MOBILE SCROLL-SNAP ---------- */
 @media (max-width: 768px) {
-  html, body { scroll-snap-type: y mandatory; }
+  main { scroll-snap-type: y mandatory; overflow-x: clip; }
 }
 
 /* ---------- SCROLL GATE ---------- */
