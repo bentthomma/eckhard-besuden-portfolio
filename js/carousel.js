@@ -569,13 +569,18 @@
       });
     });
 
-    /* Image click → open detail overlay */
+    /* Image click → open detail overlay (same as gallery) */
     viewport.addEventListener('click', function (e) {
       var img = e.target.closest('.carousel__frame img');
-      if (img && window.Gallery && window.Gallery.openDetail) {
-        var slide = img.closest('.carousel__slide');
-        var idx = slide ? parseInt(slide.getAttribute('data-index'), 10) : 0;
-        window.Gallery.openDetail(idx);
+      if (!img) return;
+      var slide = img.closest('.carousel__slide');
+      if (!slide) return;
+      var idx = parseInt(slide.getAttribute('data-index'), 10);
+      if (isNaN(idx) || idx >= items.length) return;
+      clearAutoplay();
+      bidOpen = true;
+      if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
+        window.Gallery.openDetail(items, idx, img);
       }
     });
 
