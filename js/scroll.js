@@ -131,7 +131,6 @@ var Scroll = (function () {
     var targetSec = findSection(targetId);
     if (flying || !targetSec) return;
     flying = true;
-    touchAccum = 0;
 
     var y = targetSec.el.offsetTop;
 
@@ -412,68 +411,6 @@ var Scroll = (function () {
 
   var isMobile = (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) || window.innerWidth < 768;
 
-  /* --------------------------------------------------------
-     TOUCH HANDLER — Mobile state machine input
-     Converts touch swipes into deltaY for the state machine.
-     -------------------------------------------------------- */
-  var touchStartY = 0;
-  var touchAccum = 0;
-  var touchActive = false;
-
-  function onTouchStart(e) {
-    if (!e.touches || !e.touches.length) return;
-    touchStartY = e.touches[0].clientY;
-    touchAccum = 0;
-    touchActive = true;
-  }
-
-  function onTouchMove(e) {
-    if (!touchActive || !e.touches || !e.touches.length) return;
-    if (flying || Date.now() < cooldownUntil) {
-      e.preventDefault();
-      return;
-    }
-    var currentY = e.touches[0].clientY;
-    var deltaY = touchStartY - currentY; /* positive = scroll down */
-    touchStartY = currentY;
-
-    /* Only block native scroll for carousel on mobile */
-    if (state === 'carousel') {
-      e.preventDefault();
-    }
-
-    if (Math.abs(deltaY) < 2) return;
-
-    var down = deltaY > 0;
-
-    switch (state) {
-      case 'hero':
-      case 'about':
-      case 'philosophy':
-        /* Native scroll — ScrollTrigger handles reveals */
-        break;
-      case 'carousel':
-        touchAccum += Math.abs(deltaY);
-        if (touchAccum > 40) {
-          touchAccum = 0;
-          if (down) flyTo('works');
-          else flyTo('philosophy');
-        }
-        break;
-      case 'free':
-        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 200) {
-          e.preventDefault();
-          flyTo('carousel');
-        }
-        break;
-    }
-  }
-
-  function onTouchEnd() {
-    touchActive = false;
-    touchAccum = 0;
-  }
-
   function init() {
     if (reduced) {
       initSections();
@@ -490,14 +427,11 @@ var Scroll = (function () {
     }
 
     if (isMobile) {
-      /* Mobile: native scroll + ScrollTrigger for about/philosophy,
-         touch state-machine only for hero/carousel snapping */
+      /* Mobile: pure native scroll + CSS scroll-snap on carousel.
+         No JS touch handlers — browser handles everything. */
       initMobile();
-      window.addEventListener('touchstart', onTouchStart, { passive: true });
-      window.addEventListener('touchmove', onTouchMove, { passive: false });
-      window.addEventListener('touchend', onTouchEnd, { passive: true });
 
-      /* Track state via ScrollTrigger so state-machine knows current section */
+      /* Track state via ScrollTrigger for nav-hide */
       ['about', 'philosophy', 'carousel'].forEach(function (id) {
         var el = document.getElementById(id);
         if (!el) return;

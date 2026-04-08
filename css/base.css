@@ -475,6 +475,11 @@ main { overflow-x: hidden; }
   .hero__scroll-line::after, .hero__media { animation: none; }
 }
 
+/* ---------- MOBILE SCROLL-SNAP ---------- */
+@media (max-width: 768px) {
+  html { scroll-snap-type: y proximity; }
+}
+
 /* ---------- SCROLL GATE ---------- */
 .scroll-gate { display: none; }
 
