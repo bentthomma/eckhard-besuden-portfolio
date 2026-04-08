@@ -151,13 +151,6 @@ var Scroll = (function () {
           state = targetSec.type === 'free' ? 'free' : targetSec.id;
         }
 
-        /* Reset y-translation on all sections (mobile content scroll) */
-        sections.forEach(function (s) {
-          if (!s.el) return;
-          var inner = s.el.querySelector('.container') || s.el.querySelector('.philosophy-layout') || s.el.firstElementChild;
-          if (inner) gsap.set(inner, { clearProps: 'y' });
-        });
-
         syncNavState();
         flying = false;
         cooldownUntil = Date.now() + COOLDOWN_MS;
@@ -225,19 +218,6 @@ var Scroll = (function () {
     gsap.set(img, { clipPath: 'inset(' + inset + '%)', scale: scale });
   }
 
-  function scrollSectionContent(sec) {
-    if (!isMobile || !sec.el) return;
-    /* Transform the inner container, not the section itself, to avoid layout shift */
-    var inner = sec.el.querySelector('.container') || sec.el.querySelector('.philosophy-layout') || sec.el.firstElementChild;
-    if (!inner) return;
-    var overflow = sec.el.scrollHeight - window.innerHeight;
-    if (overflow > 0) {
-      gsap.set(inner, { y: -(overflow * sec.progress) });
-    } else {
-      gsap.set(inner, { clearProps: 'y' });
-    }
-  }
-
   function handleRevealState(id, prevId, nextId, down, rawDelta) {
     var sec = findSection(id);
     if (!sec || !sec.tl) return;
@@ -256,7 +236,6 @@ var Scroll = (function () {
         sec.dwellDone = false;
         sec.tl.progress(sec.progress);
         updatePhilReveal(sec);
-        scrollSectionContent(sec);
       }
     } else {
       if (sec.progress >= 1) {
@@ -268,7 +247,6 @@ var Scroll = (function () {
         sec.progress = Math.max(0, sec.progress - delta);
         sec.tl.progress(sec.progress);
         updatePhilReveal(sec);
-        scrollSectionContent(sec);
       }
     }
   }
@@ -460,7 +438,8 @@ var Scroll = (function () {
     var deltaY = touchStartY - currentY; /* positive = scroll down */
     touchStartY = currentY;
 
-    if (state !== 'free') {
+    /* Only block native scroll for hero and carousel on mobile */
+    if (state === 'hero' || state === 'carousel') {
       e.preventDefault();
     }
 
@@ -474,10 +453,8 @@ var Scroll = (function () {
         if (touchAccum > 15 && down) flyTo('about');
         break;
       case 'about':
-        handleRevealState('about', 'hero', 'philosophy', down, deltaY * 8);
-        break;
       case 'philosophy':
-        handleRevealState('philosophy', 'about', 'carousel', down, deltaY * 8);
+        /* Native scroll — ScrollTrigger handles reveals */
         break;
       case 'carousel':
         touchAccum += Math.abs(deltaY);
@@ -516,7 +493,30 @@ var Scroll = (function () {
       return;
     }
 
-    /* ALL devices use the state machine */
+    if (isMobile) {
+      /* Mobile: native scroll + ScrollTrigger for about/philosophy,
+         touch state-machine only for hero/carousel snapping */
+      initMobile();
+      window.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+      /* Track state via ScrollTrigger so state-machine knows current section */
+      ['about', 'philosophy', 'carousel'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top center',
+          end: 'bottom center',
+          onEnter: function () { state = id; syncNavState(); },
+          onEnterBack: function () { state = id; syncNavState(); }
+        });
+      });
+      return;
+    }
+
+    /* Desktop: full state machine */
     window.scrollTo(0, 0);
     initSections();
     initNav();
@@ -524,13 +524,6 @@ var Scroll = (function () {
     initReveals();
     initDividers();
     window.addEventListener('wheel', onWheel, { passive: false });
-
-    /* Touch support for mobile */
-    if (isMobile) {
-      window.addEventListener('touchstart', onTouchStart, { passive: true });
-      window.addEventListener('touchmove', onTouchMove, { passive: false });
-      window.addEventListener('touchend', onTouchEnd, { passive: true });
-    }
   }
 
   /* --------------------------------------------------------

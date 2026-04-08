@@ -199,7 +199,7 @@
         gsap.set(el, { filter: 'drop-shadow(0 34px 100px rgba(0,0,0,0.42))' });
         break;
       default:
-        gsap.set(el, { filter: 'none' });
+        gsap.to(el, { filter: 'drop-shadow(0 0 0 rgba(0,0,0,0))', duration: 0.4, ease: 'power2.out' });
         break;
     }
   }
