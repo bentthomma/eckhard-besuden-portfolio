@@ -202,7 +202,7 @@ var Scroll = (function () {
         break;
 
       case 'free':
-        if (!down && window.scrollY <= findSection('works').el.offsetTop + 5) {
+        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 50) {
           e.preventDefault();
           flyTo('carousel');
         }
@@ -454,7 +454,7 @@ var Scroll = (function () {
     switch (state) {
       case 'hero':
         touchAccum += Math.abs(deltaY);
-        if (touchAccum > 30 && down) flyTo('about');
+        if (touchAccum > 15 && down) flyTo('about');
         break;
       case 'about':
         handleRevealState('about', 'hero', 'philosophy', down, deltaY * 2);
@@ -464,13 +464,13 @@ var Scroll = (function () {
         break;
       case 'carousel':
         touchAccum += Math.abs(deltaY);
-        if (touchAccum > 30) {
+        if (touchAccum > 15) {
           if (down) flyTo('works');
           else flyTo('philosophy');
         }
         break;
       case 'free':
-        if (!down && window.scrollY <= findSection('works').el.offsetTop + 5) {
+        if (!down && window.scrollY <= findSection('carousel').el.offsetTop + findSection('carousel').el.offsetHeight + 50) {
           e.preventDefault();
           flyTo('carousel');
         }
