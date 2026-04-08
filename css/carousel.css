@@ -325,18 +325,79 @@
     padding: clamp(3rem, 6vh, 5rem) 0 clamp(2rem, 4vh, 3rem);
   }
   .carousel__slide.is-active {
-    padding: 1rem;
-    padding-bottom: 2rem;
+    padding: 0.75rem;
+    padding-bottom: 1.5rem;
+    gap: 1rem;
   }
   .carousel__frame img {
-    max-width: 85vw;
-    max-height: 40vh;
+    max-width: 90vw;
+    max-height: 35vh;
+  }
+  .carousel__plaque {
+    width: 100%;
+  }
+  .carousel__plaque-top {
+    text-align: center;
+  }
+  .carousel__plaque-artist {
+    font-size: 0.6rem;
+    margin-bottom: 0.2rem;
   }
   .carousel__plaque-title {
-    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+    margin-bottom: 0.6rem;
+  }
+  .carousel__plaque-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.3rem 1rem;
+  }
+  .carousel__plaque-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    text-align: center;
+  }
+  .carousel__plaque-label {
+    font-size: 0.6rem;
+  }
+  .carousel__plaque-value {
+    font-size: 0.85rem;
+  }
+  .carousel__plaque-actions {
+    margin-top: 0.6rem;
+    text-align: center;
   }
   .bid-btn {
-    width: 100%;
-    text-align: center;
+    font-size: 0.7rem;
+    padding: 0.6rem 1.2rem;
+    min-height: 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel__frame img {
+    max-width: 92vw;
+    max-height: 30vh;
+  }
+  .carousel__plaque-meta {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.2rem 0.5rem;
+  }
+  .carousel__plaque-title {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+  }
+}
+
+/* Large screens */
+@media (min-width: 1600px) {
+  .carousel__frame img {
+    max-width: min(50vw, 48rem);
+    max-height: 70vh;
+  }
+  .carousel__plaque {
+    width: min(30rem, 100%);
+  }
+  .carousel__plaque-title {
+    font-size: 3.6rem;
   }
 }

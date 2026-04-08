@@ -343,7 +343,6 @@ var Scroll = (function () {
      -------------------------------------------------------- */
 
   function initMobile() {
-    window.scrollTo(0, 0);
     initSections(); /* Needed for navigateTo() from nav links */
     initNav();
     initProgressBar();
