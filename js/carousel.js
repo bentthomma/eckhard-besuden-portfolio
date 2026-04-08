@@ -242,11 +242,14 @@
     var enterSide = direction === 'next' ? 'right' : 'left';
     var rotSign = direction === 'next' ? -1 : 1;
 
-    /* Plaque animation direction: x on desktop, y on tablet/mobile */
+    /* Plaque clip-path animation: emerges from image direction */
     var isSingleCol = window.innerWidth <= 1024;
-    var plaqueOutProps = isSingleCol ? { opacity: 0, y: 20 } : { opacity: 0, x: -30 };
-    var plaqueInFrom = isSingleCol ? { opacity: 0, y: 30 } : { opacity: 0, x: 40 };
-    var plaqueInTo = isSingleCol ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 };
+    /* Desktop: plaque is right of image → clip from left (reveal left-to-right) */
+    /* Mobile/Tablet: plaque is below image → clip from top (reveal top-to-bottom) */
+    var clipOut = isSingleCol ? 'inset(0 0 0 0)' : 'inset(0 0 0 0)';
+    var clipOutTo = isSingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
+    var clipInFrom = isSingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
+    var clipInTo = 'inset(0 0 0 0)';
 
     /* ---- Reduced-motion shortcut ---- */
     if (reducedMotion) {
@@ -294,8 +297,8 @@
       ease: 'power1.out'
     });
     if (oldPlaque) {
-      tl.to(oldPlaque, Object.assign({}, plaqueOutProps, { duration: 0.5, ease: 'power2.in' }), 0);
-      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.5);
+      tl.to(oldPlaque, { clipPath: clipOutTo, duration: 0.5, ease: 'power2.in' }, 0);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'clipPath' }); }, null, 0.5);
     }
     tl.call(function () { shadowState(oldImg, 'lifted'); }, null, 0);
 
@@ -336,8 +339,8 @@
     /* Plaque slides in after landing */
     if (newPlaque) {
       tl.call(function () { newPlaque.classList.add('is-visible'); });
-      tl.fromTo(newPlaque, plaqueInFrom,
-        Object.assign({}, plaqueInTo, { duration: 0.6, ease: 'power2.out' }));
+      tl.fromTo(newPlaque, { clipPath: clipInFrom },
+        { clipPath: clipInTo, duration: 0.7, ease: 'power2.out' });
     }
   }
 
@@ -379,12 +382,16 @@
     /* Land */
     tl.to(img, { scale: 1, rotation: 0, duration: 0.8, ease: 'power2.inOut' });
     tl.call(function () { shadowState(img, 'none'); }, null, '-=0.3');
-    /* Show plaque + pause button */
+    /* Show plaque with clip-path reveal */
     tl.call(function () {
       if (plaque) plaque.classList.add('is-visible');
-      if (pauseBtn) pauseBtn.classList.add('is-visible');
       startAutoplay();
     });
+    if (plaque) {
+      var entrySingleCol = window.innerWidth <= 1024;
+      var entryClipFrom = entrySingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
+      tl.fromTo(plaque, { clipPath: entryClipFrom }, { clipPath: 'inset(0 0 0 0)', duration: 0.7, ease: 'power2.out' }, '-=0.3');
+    }
   }
 
   /* --------------------------------------------------------

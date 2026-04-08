@@ -356,17 +356,16 @@ var Scroll = (function () {
       var tl = gsap.timeline({
         scrollTrigger: {
           trigger: item,
-          start: 'top 95%',
-          end: 'top 40%',
-          scrub: 0.5
+          start: 'top 90%',
+          toggleActions: 'play none none none'
         }
       });
 
       tl.to(spans, {
         opacity: 1, y: 0,
         stagger: STAGGER_GAP,
-        duration: 1,
-        ease: 'none'
+        duration: 0.6,
+        ease: 'power2.out'
       });
     });
 
