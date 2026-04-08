@@ -18,7 +18,7 @@ var Scroll = (function () {
   var FLY_DURATION = 1.2;
   var FLY_EASE = 'power3.inOut';
   var DELTA_CAP = 80;
-  var COOLDOWN_MS = 800;
+  var COOLDOWN_MS = 1200;
   var NAV_THRESHOLD = 80;
   var STAGGER_GAP = 0.008;
   var BLOCK_OVERLAP = '>-0.06';
@@ -438,6 +438,10 @@ var Scroll = (function () {
 
   function onTouchMove(e) {
     if (!touchActive || !e.touches || !e.touches.length) return;
+    if (flying || Date.now() < cooldownUntil) {
+      e.preventDefault();
+      return;
+    }
     var currentY = e.touches[0].clientY;
     var deltaY = touchStartY - currentY; /* positive = scroll down */
     touchStartY = currentY;
@@ -446,8 +450,6 @@ var Scroll = (function () {
       e.preventDefault();
     }
 
-    /* Feed delta into the same state machine as wheel */
-    if (flying || Date.now() < cooldownUntil) return;
     if (Math.abs(deltaY) < 2) return;
 
     var down = deltaY > 0;
