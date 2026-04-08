@@ -127,7 +127,7 @@
     document.querySelectorAll('.nav__lang-btn').forEach(function (b) { navItems.push(b); });
     var hamburger = document.querySelector('.nav__hamburger');
     if (hamburger) navItems.push(hamburger);
-    if (navItems.length) gsap.set(navItems, { opacity: 0, y: -12 });
+    if (navItems.length) gsap.set(navItems, { y: -12 });
 
     /* Loader image → hero handoff */
     tl.add(function () {
