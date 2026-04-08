@@ -433,10 +433,10 @@ var Scroll = (function () {
       var snapObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
           if (snapDisabled) return;
-          if (entry.isIntersecting && entry.intersectionRatio > 0.4 && entry.intersectionRatio < 0.85) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5 && entry.intersectionRatio < 0.95) {
             clearTimeout(snapTimer);
             snapTimer = setTimeout(function () {
-              if (!snapDisabled) snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              if (!snapDisabled) snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 300);
           }
         });

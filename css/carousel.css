@@ -242,10 +242,17 @@
 }
 
 .carousel__plaque-bid {
-  padding-top: 1.4rem;
-  margin-top: 1.4rem;
-  border-top: 1px solid rgba(248, 238, 227, 0.12);
+  padding-top: 0;
+  margin-top: 0;
 }
+.carousel__plaque-bid .bid-form__field label { color: rgba(248, 238, 227, 0.7); }
+.carousel__plaque-bid .bid-form__field input,
+.carousel__plaque-bid .bid-form__field textarea { color: rgba(248, 238, 227, 0.95); border-bottom-color: rgba(248, 238, 227, 0.3); }
+.carousel__plaque-bid .bid-form__field input:focus,
+.carousel__plaque-bid .bid-form__field textarea:focus { border-bottom-color: rgba(248, 238, 227, 0.7); }
+.carousel__plaque-bid .bid-form__submit { border-color: rgba(248, 238, 227, 0.5); color: rgba(248, 238, 227, 0.95); }
+.carousel__plaque-bid .bid-form__submit:hover { background: rgba(248, 238, 227, 0.92); color: var(--wood-bg); }
+.carousel__plaque-bid .bid-form__title { color: rgba(248, 238, 227, 0.95); }
 
 /* ---------- 8. FLOATING CONTROLS ---------- */
 .carousel__all-works {

@@ -560,14 +560,15 @@
     gsap.killTweensOf(detail);
     gsap.killTweensOf(detailImage);
 
-    /* Force invisible before removing class to prevent flash */
+    /* Force invisible, then clean up after 2 frames to prevent flash */
     detail.style.opacity = '0';
     detail.style.pointerEvents = 'none';
-    requestAnimationFrame(function () {
+    detail.style.visibility = 'hidden';
+    setTimeout(function () {
       detail.classList.remove('open');
       detail.style.cssText = '';
       detailImage.style.cssText = '';
-    });
+    }, 50);
     if (window.__overlay) window.__overlay.pop('detail');
 
     detailIndex = -1;

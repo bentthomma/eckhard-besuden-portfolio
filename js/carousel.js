@@ -37,6 +37,7 @@
   var isAnimating = false;
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var entryObserver = null;
+  var bidOpen = false;
 
   /* --------------------------------------------------------
      DATA LOADING
@@ -516,9 +517,10 @@
 
       var item = items[idx];
       clearAutoplay();
+      bidOpen = true;
 
       /* Mobile/Tablet: use Gallery detail popup with bid */
-      if (window.innerWidth < 1024) {
+      if (window.innerWidth <= 1024) {
         var img = slide.querySelector('.carousel__frame img');
         if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
           window.Gallery.openDetail(items, idx, img, { showBid: true });
@@ -532,13 +534,17 @@
       var actionsEl = slide.querySelector('.carousel__plaque-actions');
       if (!bidContainer) return;
 
+      var plaqueTop = slide.querySelector('.carousel__plaque-top');
       var controller = BidSystem.create(bidContainer, item);
       if (actionsEl) actionsEl.style.display = 'none';
+      if (plaqueTop) plaqueTop.style.display = 'none';
       BidSystem.show(bidContainer, infoEls, function () {
         if (controller && controller.closeBtn) {
           controller.closeBtn.addEventListener('click', function () {
             BidSystem.hide(bidContainer, infoEls, function () {
               if (actionsEl) actionsEl.style.display = '';
+              if (plaqueTop) plaqueTop.style.display = '';
+              bidOpen = false;
               startAutoplay();
             });
           });
@@ -589,7 +595,7 @@
     if ('IntersectionObserver' in window) {
       var visObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) { if (hasEntered) startAutoplay(); }
+          if (entry.isIntersecting) { if (hasEntered && !bidOpen) startAutoplay(); }
           else { clearAutoplay(); }
         });
       }, { threshold: 0.1 });
