@@ -11,6 +11,9 @@
   margin: 0 !important;
   overflow: hidden;
 }
+.works-gate-hidden {
+  display: none !important;
+}
 
 .gallery-collapsed { text-align: center; padding: 3rem 0; }
 .gallery-collapsed__btn {

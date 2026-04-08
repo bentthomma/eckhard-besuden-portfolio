@@ -564,6 +564,7 @@
         e.preventDefault();
         var worksSection = document.getElementById('works');
         if (worksSection) worksSection.classList.remove('works--hidden');
+        document.querySelectorAll('.works-gate-hidden').forEach(function (el) { el.classList.remove('works-gate-hidden'); });
         if (window.Gallery && window.Gallery.expand) window.Gallery.expand();
         if (window.Scroll && window.Scroll.navigateTo) window.Scroll.navigateTo('works');
       });
