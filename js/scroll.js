@@ -370,11 +370,12 @@ var Scroll = (function () {
             gsap.to(spans, {
               opacity: 1, y: 0,
               stagger: STAGGER_GAP,
-              duration: 0.6,
+              duration: 0.5,
               ease: 'power2.out',
               delay: delay
             });
-            delay += 1.5;
+            /* Next block starts after this one finishes */
+            delay += (spans.length * STAGGER_GAP) + 0.5 + 0.3;
           });
         }
       });
@@ -387,12 +388,22 @@ var Scroll = (function () {
     if (carouselEl) {
       ScrollTrigger.create({
         trigger: carouselEl,
-        start: 'top 80%',
+        start: 'top 50%',
+        end: 'bottom 30%',
         onEnter: function () {
           if (heroEl) gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } });
           if (navEl) gsap.to(navEl, { opacity: 0, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });
         },
+        onLeave: function () {
+          /* Past carousel — show nav again */
+          if (navEl) { navEl.style.pointerEvents = ''; gsap.to(navEl, { opacity: 1, duration: 0.4 }); }
+        },
+        onEnterBack: function () {
+          /* Back in carousel from below — hide nav */
+          if (navEl) gsap.to(navEl, { opacity: 0, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });
+        },
         onLeaveBack: function () {
+          /* Above carousel — show everything */
           if (heroEl) { heroEl.style.visibility = ''; gsap.to(heroEl, { opacity: 1, duration: 0.5 }); }
           if (navEl) { navEl.style.pointerEvents = ''; gsap.to(navEl, { opacity: 1, duration: 0.4 }); }
         }

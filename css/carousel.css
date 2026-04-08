@@ -145,17 +145,6 @@
   display: block;
   cursor: pointer;
   transform-origin: center center;
-  transition: filter 0.5s ease;
-}
-
-.carousel__frame img.shadow--lifted {
-  box-shadow: none;
-  filter: var(--shadow-lifted);
-}
-
-.carousel__frame img.shadow--flying {
-  box-shadow: none;
-  filter: var(--shadow-flying);
 }
 
 /* ---------- 6. PLAQUE (MUSEUM INFO CARD) ---------- */

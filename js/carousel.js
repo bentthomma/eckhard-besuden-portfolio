@@ -188,19 +188,8 @@
     return window.innerWidth - rect.left + 100;
   }
 
-  function shadowState(el, newState) {
-    if (!el) return;
-    switch (newState) {
-      case 'lifted':
-        el.style.filter = 'drop-shadow(0 28px 80px rgba(0,0,0,0.32))';
-        break;
-      case 'flying':
-        el.style.filter = 'drop-shadow(0 34px 100px rgba(0,0,0,0.42))';
-        break;
-      default:
-        el.style.filter = 'none';
-        break;
-    }
+  function shadowState() {
+    /* Shadows removed — clean look without filter artifacts */
   }
 
   /* --------------------------------------------------------
@@ -260,18 +249,20 @@
       return;
     }
 
-    /* Show new slide off-screen */
+    /* Prepare new slide (hidden until fly-in phase) */
     newSlide.style.display = '';
     newSlide.classList.add('is-active');
+    gsap.set(newSlide, { opacity: 0 });
     var enterX = offscreenX(newImg, enterSide);
-    gsap.set(newImg, { x: enterX, scale: 1.08, rotation: -rotSign * 0.6, opacity: 0 });
-    shadowState(newImg, 'flying');
+    gsap.set(newImg, { x: enterX, scale: 1.08, rotation: -rotSign * 0.6 });
 
     var tl = gsap.timeline({
       onComplete: function () {
         oldSlide.classList.remove('is-active');
         oldSlide.style.display = 'none';
         gsap.set(oldImg, { clearProps: 'all' });
+        gsap.set(oldSlide, { clearProps: 'opacity' });
+        gsap.set(newSlide, { clearProps: 'opacity' });
 
         currentIndex = newIndex;
         oldSlide.setAttribute('aria-hidden', 'true');
@@ -316,6 +307,7 @@
     tl.to({}, { duration: 0.3 });
 
     /* Phase 4: Fly-In (1600ms) */
+    tl.set(newSlide, { opacity: 1 });
     tl.to(newImg, { opacity: 1, duration: 0.1 });
     tl.to(newImg, {
       x: 0,

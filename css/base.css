@@ -493,7 +493,7 @@ main { overflow-x: hidden; }
 
 /* ---------- MOBILE SCROLL-SNAP ---------- */
 @media (max-width: 768px) {
-  html { scroll-snap-type: y mandatory; }
+  html, body { scroll-snap-type: y mandatory; }
 }
 
 /* ---------- SCROLL GATE ---------- */
