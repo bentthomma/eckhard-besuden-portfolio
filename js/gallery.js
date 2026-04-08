@@ -560,11 +560,17 @@
     gsap.killTweensOf(detail);
     gsap.killTweensOf(detailImage);
 
+    /* Ensure invisible before class removal */
+    detail.style.opacity = '0';
+    detail.style.pointerEvents = 'none';
     detail.classList.remove('open');
-    detail.style.opacity = '';
-    detail.style.pointerEvents = '';
-    detail.style.background = '';
     detailImage.style.cssText = '';
+    /* Clear inline styles after a tick so CSS base state (opacity:0) takes over */
+    setTimeout(function () {
+      detail.style.opacity = '';
+      detail.style.pointerEvents = '';
+      detail.style.background = '';
+    }, 100);
     if (window.__overlay) window.__overlay.pop('detail');
 
     detailIndex = -1;
@@ -912,7 +918,7 @@
         flipOpenDetail(index, sourceImg);
         if (options && options.showBid && filteredImages[index]) {
           /* Show bid form immediately — skip detail info stagger */
-          setTimeout(function () { showInlineBid(filteredImages[index]); }, 100);
+          setTimeout(function () { showInlineBid(filteredImages[index]); }, 1200);
         }
       }
     }

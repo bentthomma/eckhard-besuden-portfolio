@@ -489,7 +489,8 @@ var Scroll = (function () {
           clearTimeout(snapTimer);
           snapTimer = setTimeout(function () {
             if (!snapOff && dir === 'down') {
-              snapEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              var carouselInner = document.getElementById('homeCarousel') || snapEl;
+              carouselInner.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }, 400);
         }

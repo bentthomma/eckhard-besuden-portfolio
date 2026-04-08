@@ -310,7 +310,7 @@ main { overflow-x: hidden; }
 
 /* ---------- DETAIL PANEL ---------- */
 /* Focus View tier — dark premium stage for single artwork */
-.detail { position: fixed; inset: 0; z-index: 6000; background: rgba(43,41,37,0); pointer-events: none; transition: background 1s ease, opacity 0.8s ease; display: flex; align-items: center; justify-content: center; overflow-y: auto; opacity: 0; }
+.detail { position: fixed; inset: 0; z-index: 6000; background: rgba(43,41,37,0); pointer-events: none; transition: background 1s ease; display: flex; align-items: center; justify-content: center; overflow-y: auto; opacity: 0; }
 .detail.open { pointer-events: all; background: rgba(43,41,37,0.97); opacity: 1; }
 .detail__info { color: #fff; opacity: 0; transform: translateX(20px); transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s; padding-left: clamp(1.5rem, 3vw, 2.5rem); border-left: 1px solid rgba(255,255,255,0.1); }
 .detail.open .detail__info { opacity: 1; transform: translateX(0); }
@@ -323,7 +323,7 @@ main { overflow-x: hidden; }
 .detail__prev { left: 0; }
 .detail__next { right: 0; }
 
-.detail__layout { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(2rem, 4vw, 4rem); max-width: 1100px; width: 90%; z-index: 1; align-items: center; padding: 4rem 0; }
+.detail__layout { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: clamp(2rem, 4vw, 4rem); max-width: 1100px; width: 90%; z-index: 1; align-items: start; padding: 4rem 0; }
 .detail__image-wrap { overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; cursor: zoom-in; }
 .detail__image { max-width: 100%; max-height: 80vh; object-fit: contain; transition: opacity 0.3s ease; }
 
@@ -400,6 +400,9 @@ main { overflow-x: hidden; }
   /* Tablet sizing: bigger text, constrained images */
   .section__title { font-size: clamp(2.6rem, 6vw, 3.5rem); }
   .body-text { font-size: 1.3rem; line-height: 1.9; }
+  .philosophy-layout__title { font-size: clamp(2.6rem, 6vw, 3.5rem); }
+  .philosophy-layout__text p { font-size: 1.3rem; line-height: 1.9; }
+  .philosophy-layout__quote p { font-size: clamp(1.3rem, 2.5vw, 1.6rem); }
   .editorial-grid__media img { max-height: 45vh; }
   .detail__title { font-size: clamp(1.5rem, 3vw, 2rem); }
   .detail__label { font-size: 0.75rem; }

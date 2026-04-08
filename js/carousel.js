@@ -544,7 +544,10 @@
           controller.closeBtn.addEventListener('click', function () {
             BidSystem.hide(bidContainer, infoEls, function () {
               if (actionsEl) actionsEl.style.display = '';
-              if (plaqueTop) plaqueTop.style.display = '';
+              if (plaqueTop) {
+                plaqueTop.style.display = '';
+                gsap.fromTo(plaqueTop, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+              }
               bidOpen = false;
               startAutoplay();
             });
