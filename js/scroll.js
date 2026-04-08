@@ -460,10 +460,10 @@ var Scroll = (function () {
         if (touchAccum > 15 && down) flyTo('about');
         break;
       case 'about':
-        handleRevealState('about', 'hero', 'philosophy', down, deltaY * 2);
+        handleRevealState('about', 'hero', 'philosophy', down, deltaY * 8);
         break;
       case 'philosophy':
-        handleRevealState('philosophy', 'about', 'carousel', down, deltaY * 2);
+        handleRevealState('philosophy', 'about', 'carousel', down, deltaY * 8);
         break;
       case 'carousel':
         touchAccum += Math.abs(deltaY);
