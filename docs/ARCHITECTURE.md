@@ -8,32 +8,25 @@ One `index.html` with sections: Intro → Hero → About → Philosophy → Caro
 
 GSAP 3.x with ScrollTrigger and ScrollToPlugin (local vendor files, no CDN).
 
-## Scroll State Machine (Desktop)
+## Scroll Behavior
 
+**Desktop:** GSAP state machine with wheel-driven section snapping.
 States: `hero | about | philosophy | carousel | free`
-
-Desktop navigation stays visible in every committed state except `carousel`, where it is intentionally hidden to let the carousel read as an immersive stage.
 
 - hero → about → philosophy: wheel-driven text-reveal (progress 0→1)
 - philosophy → carousel: snap transition
-- carousel: snap section (no scroll, navigate via autoplay/swipe/keyboard)
+- carousel: snap section (navigate via autoplay/swipe/keyboard)
 - carousel → works: snap transition
 - works/footer: free scroll
 
-Mobile: normal document scroll, ScrollTrigger-driven reveals.
+**Mobile/Tablet:** Native browser scroll with ScrollTrigger-driven reveals. JS-based carousel snap via IntersectionObserver (devices < 1200px).
 
 ## CSS Architecture
 
-10 modular files imported via `style.css`:
-- `tokens.css` — design tokens (colors, fonts, z-index, easings)
-- `global.css` — reset, utilities, grain, scroll-progress
-- `nav-hero.css` — navigation, hero, loader, marquee
-- `sections.css` — about, philosophy layouts
-- `carousel.css` — museum wall carousel
-- `gallery.css` — image grid, filters, search
-- `overlays.css` — detail panel, modals, bid forms
-- `responsive.css` — breakpoints, reduced-motion
-- `print.css` — print styles
+3 files imported via `style.css`:
+- `base.css` — complete stable styles (reset, layout, nav, hero, sections, gallery, detail, modals, responsive, print)
+- `carousel.css` — carousel section (museum wall, slides, plaque, animations, responsive)
+- `gallery-extras.css` — gallery lazy-load button states, works-hidden utility
 
 ## JavaScript Modules
 
@@ -46,13 +39,16 @@ All vanilla IIFEs, no bundler. Load order:
 
 ### Key Modules
 
-- `helpers.js` → `window.Helpers` — shared utilities (getLang, getTitle, etc.)
+- `helpers.js` → `window.Helpers` — shared artwork data utilities
 - `i18n.js` → `window.i18n` — DE/EN translations
 - `overlay.js` → `window.__overlay` — scroll-lock + focus trap
-- `bid.js` → `window.BidSystem` — consolidated bid form (used by carousel + gallery)
-- `scroll.js` → `window.Scroll` — state machine + text-reveal
+- `bid.js` → `window.BidSystem` — consolidated contact form
+- `scroll.js` → `window.Scroll` — state machine + text-reveal + carousel snap
+- `loader.js` — film-strip intro animation
 - `carousel.js` → `window.HomeCarousel` — 5-phase painting animation
 - `gallery.js` → `window.Gallery` — lazy-loaded grid with detail panel
+- `nav.js` — navigation + legal modals
+- `interactions.js` — magnetic hover, loupe, fullscreen, email, back-to-top
 
 ## Data
 
@@ -61,4 +57,4 @@ All images in `assets/bilder/{category}/`.
 
 ## Offline
 
-Zero external runtime dependencies. All assets local.
+Zero external runtime dependencies. All assets local (fonts, images, GSAP, JSON).

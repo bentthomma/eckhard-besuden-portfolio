@@ -25,13 +25,13 @@
 
 ## Dependencies
 
-- `helpers.js` → no dependencies
-- `i18n.js` → no dependencies  
-- `overlay.js` → gsap
-- `bid.js` → gsap, Helpers
-- `scroll.js` → gsap, ScrollTrigger, ScrollToPlugin
-- `loader.js` → gsap, overlay.js
-- `carousel.js` → gsap, Helpers, BidSystem, overlay.js
-- `gallery.js` → gsap, Helpers, BidSystem, overlay.js
-- `nav.js` → overlay.js, Scroll
-- `interactions.js` → gsap
+- `helpers.js` — no dependencies
+- `i18n.js` — no dependencies
+- `overlay.js` — gsap
+- `bid.js` — gsap, Helpers
+- `scroll.js` — gsap, ScrollTrigger, ScrollToPlugin
+- `loader.js` — gsap, overlay.js
+- `carousel.js` — gsap, Helpers, BidSystem, overlay.js
+- `gallery.js` — gsap, Helpers, BidSystem, overlay.js
+- `nav.js` — overlay.js, Scroll
+- `interactions.js` — gsap
