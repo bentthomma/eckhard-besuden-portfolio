@@ -152,7 +152,7 @@ var Scroll = (function () {
 
         /* Reset y-translation on all sections (mobile content scroll) */
         sections.forEach(function (s) {
-          if (s.el) gsap.set(s.el, { y: 0 });
+          if (s.el) gsap.set(s.el, { clearProps: 'y' });
         });
 
         syncNavState();
@@ -227,6 +227,8 @@ var Scroll = (function () {
     var overflow = sec.el.scrollHeight - window.innerHeight;
     if (overflow > 0) {
       gsap.set(sec.el, { y: -(overflow * sec.progress) });
+    } else {
+      gsap.set(sec.el, { clearProps: 'y' });
     }
   }
 
