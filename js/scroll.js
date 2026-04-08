@@ -363,15 +363,22 @@ var Scroll = (function () {
       });
     });
 
-    /* Hide hero when carousel comes into view */
+    /* Hide hero + nav when carousel comes into view */
     var heroEl = document.getElementById('hero');
+    var navEl = document.getElementById('nav');
     var carouselEl = document.getElementById('carousel');
-    if (heroEl && carouselEl) {
+    if (carouselEl) {
       ScrollTrigger.create({
         trigger: carouselEl,
         start: 'top 80%',
-        onEnter: function () { gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } }); },
-        onLeaveBack: function () { heroEl.style.visibility = ''; gsap.to(heroEl, { opacity: 1, duration: 0.5 }); }
+        onEnter: function () {
+          if (heroEl) gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } });
+          if (navEl) gsap.to(navEl, { opacity: 0, y: -18, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });
+        },
+        onLeaveBack: function () {
+          if (heroEl) { heroEl.style.visibility = ''; gsap.to(heroEl, { opacity: 1, duration: 0.5 }); }
+          if (navEl) { navEl.style.pointerEvents = ''; gsap.to(navEl, { opacity: 1, y: 0, duration: 0.4 }); }
+        }
       });
     }
 

@@ -478,12 +478,18 @@ main { overflow-x: hidden; }
 .scroll-gate { display: none; }
 
 @media (max-width: 768px) {
-  html { scroll-snap-type: y proximity; }
+  html { scroll-snap-type: y mandatory; }
+
+  .section--carousel {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
   .scroll-gate {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 30vh;
+    min-height: 10vh;
     scroll-snap-align: start;
     color: var(--text-muted);
     opacity: 0.3;
