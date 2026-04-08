@@ -404,14 +404,76 @@ var Scroll = (function () {
 
   var isMobile = (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) || window.innerWidth < 768;
 
+  /* --------------------------------------------------------
+     TOUCH HANDLER — Mobile state machine input
+     Converts touch swipes into deltaY for the state machine.
+     -------------------------------------------------------- */
+  var touchStartY = 0;
+  var touchAccum = 0;
+  var touchActive = false;
+
+  function onTouchStart(e) {
+    if (!e.touches || !e.touches.length) return;
+    touchStartY = e.touches[0].clientY;
+    touchAccum = 0;
+    touchActive = true;
+  }
+
+  function onTouchMove(e) {
+    if (!touchActive || !e.touches || !e.touches.length) return;
+    var currentY = e.touches[0].clientY;
+    var deltaY = touchStartY - currentY; /* positive = scroll down */
+    touchStartY = currentY;
+
+    if (state !== 'free') {
+      e.preventDefault();
+    }
+
+    /* Feed delta into the same state machine as wheel */
+    if (flying || Date.now() < cooldownUntil) return;
+    if (Math.abs(deltaY) < 2) return;
+
+    var down = deltaY > 0;
+
+    switch (state) {
+      case 'hero':
+        touchAccum += Math.abs(deltaY);
+        if (touchAccum > 30 && down) flyTo('about');
+        break;
+      case 'about':
+        handleRevealState('about', 'hero', 'philosophy', down, deltaY * 2);
+        break;
+      case 'philosophy':
+        handleRevealState('philosophy', 'about', 'carousel', down, deltaY * 2);
+        break;
+      case 'carousel':
+        touchAccum += Math.abs(deltaY);
+        if (touchAccum > 30) {
+          if (down) flyTo('works');
+          else flyTo('philosophy');
+        }
+        break;
+      case 'free':
+        if (!down && window.scrollY <= findSection('works').el.offsetTop + 5) {
+          e.preventDefault();
+          flyTo('carousel');
+        }
+        break;
+    }
+  }
+
+  function onTouchEnd() {
+    touchActive = false;
+    touchAccum = 0;
+  }
+
   function init() {
     if (reduced) {
-      initSections(); /* Needed for navigateTo() from nav links */
+      initSections();
       initReveals();
       initDividers();
       initNav();
       initProgressBar();
-      /* Make all text-reveal content visible immediately */
       document.querySelectorAll('.text-reveal').forEach(function (el) {
         el.style.opacity = '1';
       });
@@ -420,12 +482,7 @@ var Scroll = (function () {
       return;
     }
 
-    if (isMobile) {
-      initMobile();
-      return;
-    }
-
-    /* Desktop: full state machine */
+    /* ALL devices use the state machine */
     window.scrollTo(0, 0);
     initSections();
     initNav();
@@ -433,6 +490,13 @@ var Scroll = (function () {
     initReveals();
     initDividers();
     window.addEventListener('wheel', onWheel, { passive: false });
+
+    /* Touch support for mobile */
+    if (isMobile) {
+      window.addEventListener('touchstart', onTouchStart, { passive: true });
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd, { passive: true });
+    }
   }
 
   /* --------------------------------------------------------
