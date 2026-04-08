@@ -148,6 +148,12 @@ var Scroll = (function () {
         if (flying) {
           state = targetSec.type === 'free' ? 'free' : targetSec.id;
         }
+
+        /* Reset y-translation on all sections (mobile content scroll) */
+        sections.forEach(function (s) {
+          if (s.el) gsap.set(s.el, { y: 0 });
+        });
+
         syncNavState();
         flying = false;
         cooldownUntil = Date.now() + COOLDOWN_MS;
@@ -215,6 +221,14 @@ var Scroll = (function () {
     gsap.set(img, { clipPath: 'inset(' + inset + '%)', scale: scale });
   }
 
+  function scrollSectionContent(sec) {
+    if (!isMobile || !sec.el) return;
+    var overflow = sec.el.scrollHeight - window.innerHeight;
+    if (overflow > 0) {
+      gsap.set(sec.el, { y: -(overflow * sec.progress) });
+    }
+  }
+
   function handleRevealState(id, prevId, nextId, down, rawDelta) {
     var sec = findSection(id);
     if (!sec || !sec.tl) return;
@@ -228,6 +242,7 @@ var Scroll = (function () {
         sec.progress = Math.min(1, sec.progress + delta);
         sec.tl.progress(sec.progress);
         updatePhilReveal(sec);
+        scrollSectionContent(sec);
       }
     } else {
       if (sec.progress >= 1) {
@@ -238,6 +253,7 @@ var Scroll = (function () {
         sec.progress = Math.max(0, sec.progress - delta);
         sec.tl.progress(sec.progress);
         updatePhilReveal(sec);
+        scrollSectionContent(sec);
       }
     }
   }
@@ -251,7 +267,7 @@ var Scroll = (function () {
     if (!navEl) return;
 
     var isScrolled = window.scrollY > NAV_THRESHOLD;
-    var isCarouselHidden = !isMobile && !reduced && state === 'carousel';
+    var isCarouselHidden = !reduced && state === 'carousel';
 
     if (isScrolled !== navWasScrolled) {
       navEl.classList.toggle('nav--scrolled', isScrolled);
