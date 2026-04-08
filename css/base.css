@@ -303,7 +303,7 @@ main { overflow-x: hidden; }
 .bid-form__close { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 1.4rem; color: rgba(255,255,255,0.5); }
 .bid-form__submit { display: block; width: 100%; padding: 0.75rem 2rem; margin-top: 0.8rem; font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.9); background: transparent; cursor: pointer; transition: background 0.3s ease, color 0.3s ease; }
 .bid-form__submit:hover { background: rgba(255,255,255,0.9); color: var(--focus-bg); }
-.detail__info { min-height: 14rem; }
+.detail__info { min-height: 14rem; position: relative; }
 
 /* ---------- FLIP CLONE (gallery → detail transition) ---------- */
 .flip-clone { position: fixed; z-index: 6500; pointer-events: none; object-fit: cover; border-radius: 0; transition: none; }
@@ -447,6 +447,7 @@ main { overflow-x: hidden; }
 
   .detail { align-items: flex-start; }
   .detail__layout { width: 100%; padding: 2.5rem 1.25rem 3.5rem; gap: 1rem; }
+  .detail__info { min-height: 0; }
   .detail__close { top: 0.5rem; right: 0.75rem; font-size: 1.5rem; }
   .detail__counter { top: 0.5rem; left: 0.75rem; font-size: 0.6rem; }
   .detail__image { max-height: 35vh; }

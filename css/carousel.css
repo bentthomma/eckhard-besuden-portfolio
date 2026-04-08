@@ -158,7 +158,6 @@
 }
 
 .carousel__plaque.is-visible {
-  z-index: 3;
   pointer-events: auto;
 }
 

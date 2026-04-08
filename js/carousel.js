@@ -196,7 +196,7 @@
     } else if (s === 'lifted') {
       el.style.filter = 'drop-shadow(0 16px 40px rgba(0,0,0,0.3))';
     } else {
-      el.style.filter = '';
+      el.style.filter = 'drop-shadow(0 6px 20px rgba(0,0,0,0.2))';
     }
   }
 

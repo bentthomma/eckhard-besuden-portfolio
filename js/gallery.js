@@ -544,8 +544,8 @@
     if (detailInfo) {
       detailInfo.style.display = '';
       detailInfo.style.visibility = '';
-      detailInfo.style.height = '';
-      detailInfo.style.overflow = '';
+      detailInfo.style.position = '';
+      detailInfo.style.pointerEvents = '';
       detailInfo.style.opacity = '1';
       if (typeof gsap !== 'undefined') {
         Array.prototype.forEach.call(detailInfo.children, function (child) {
