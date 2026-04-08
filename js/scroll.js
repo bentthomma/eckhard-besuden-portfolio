@@ -425,22 +425,33 @@ var Scroll = (function () {
       });
     }
 
-    /* JS-based carousel snap (CSS snap doesn't work with nested DOM) */
+    /* JS-based carousel snap */
     var snapCarousel = document.getElementById('carousel');
     if (snapCarousel) {
       var snapTimer = null;
+      var snapDisabled = false;
       var snapObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
+          if (snapDisabled) return;
+          if (entry.isIntersecting && entry.intersectionRatio > 0.4 && entry.intersectionRatio < 0.85) {
             clearTimeout(snapTimer);
             snapTimer = setTimeout(function () {
-              snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 200);
+              if (!snapDisabled) snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
           }
         });
-      }, { threshold: [0.3, 0.5, 0.7, 0.9] });
+      }, { threshold: [0.4, 0.6, 0.85] });
       snapObs.observe(snapCarousel);
       window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
+
+      /* Disable snap for 2s after any nav link click */
+      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          snapDisabled = true;
+          clearTimeout(snapTimer);
+          setTimeout(function () { snapDisabled = false; }, 2000);
+        });
+      });
     }
   }
 

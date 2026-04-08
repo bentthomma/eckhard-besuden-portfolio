@@ -188,13 +188,14 @@
     return window.innerWidth - rect.left + 100;
   }
 
-  function shadowState(imgEl, state) {
-    if (!imgEl) return;
-    var frame = imgEl.closest('.carousel__frame');
-    if (!frame) return;
-    frame.classList.remove('shadow--flying');
-    if (state === 'flying' || state === 'lifted') {
-      frame.classList.add('shadow--flying');
+  function shadowState(el, s) {
+    if (!el) return;
+    if (s === 'flying') {
+      el.style.filter = 'drop-shadow(0 30px 60px rgba(0,0,0,0.4))';
+    } else if (s === 'lifted') {
+      el.style.filter = 'drop-shadow(0 16px 40px rgba(0,0,0,0.3))';
+    } else {
+      el.style.filter = '';
     }
   }
 
@@ -504,7 +505,7 @@
       if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentIndex - 1, 'prev'); }
     });
 
-    /* Bid button click → open Gallery detail panel with bid form */
+    /* Bid button click */
     viewport.addEventListener('click', function (e) {
       var bidBtn = e.target.closest('.bid-btn');
       if (!bidBtn) return;
@@ -513,11 +514,36 @@
       var idx = parseInt(slide.getAttribute('data-index'), 10);
       if (isNaN(idx) || idx >= items.length) return;
 
-      var img = slide.querySelector('.carousel__frame img');
+      var item = items[idx];
       clearAutoplay();
-      if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
-        window.Gallery.openDetail(items, idx, img, { showBid: true });
+
+      /* Mobile/Tablet: use Gallery detail popup with bid */
+      if (window.innerWidth < 1024) {
+        var img = slide.querySelector('.carousel__frame img');
+        if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
+          window.Gallery.openDetail(items, idx, img, { showBid: true });
+        }
+        return;
       }
+
+      /* Desktop: inline bid in plaque (as originally designed) */
+      var bidContainer = slide.querySelector('.carousel__plaque-bid');
+      var infoEls = slide.querySelector('.carousel__plaque-meta');
+      var actionsEl = slide.querySelector('.carousel__plaque-actions');
+      if (!bidContainer) return;
+
+      var controller = BidSystem.create(bidContainer, item);
+      if (actionsEl) actionsEl.style.display = 'none';
+      BidSystem.show(bidContainer, infoEls, function () {
+        if (controller && controller.closeBtn) {
+          controller.closeBtn.addEventListener('click', function () {
+            BidSystem.hide(bidContainer, infoEls, function () {
+              if (actionsEl) actionsEl.style.display = '';
+              startAutoplay();
+            });
+          });
+        }
+      });
     });
 
     /* Image click → open detail overlay */

@@ -557,7 +557,9 @@
     gsap.killTweensOf(detail);
     gsap.killTweensOf(detailImage);
 
-    /* Delay class removal by one frame to prevent flash */
+    /* Force invisible before removing class to prevent flash */
+    detail.style.opacity = '0';
+    detail.style.pointerEvents = 'none';
     requestAnimationFrame(function () {
       detail.classList.remove('open');
       detail.style.cssText = '';
@@ -909,7 +911,8 @@
         filteredImages = externalItems;
         flipOpenDetail(index, sourceImg);
         if (options && options.showBid && filteredImages[index]) {
-          setTimeout(function () { showInlineBid(filteredImages[index]); }, 600);
+          /* Show bid form immediately — skip detail info stagger */
+          setTimeout(function () { showInlineBid(filteredImages[index]); }, 100);
         }
       }
     }
