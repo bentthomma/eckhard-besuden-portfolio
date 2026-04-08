@@ -436,7 +436,11 @@ var Scroll = (function () {
           if (entry.isIntersecting && entry.intersectionRatio > 0.5 && entry.intersectionRatio < 0.95) {
             clearTimeout(snapTimer);
             snapTimer = setTimeout(function () {
-              if (!snapDisabled) snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              if (!snapDisabled) {
+                var rect = snapCarousel.getBoundingClientRect();
+                var offset = window.scrollY + rect.top - 10;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+              }
             }, 300);
           }
         });
