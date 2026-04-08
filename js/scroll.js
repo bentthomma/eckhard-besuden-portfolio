@@ -425,28 +425,35 @@ var Scroll = (function () {
       });
     }
 
-    /* JS-based carousel snap */
+    /* JS-based carousel snap — only snaps when user scrolls DOWN into carousel */
     var snapCarousel = document.getElementById('carousel');
     if (snapCarousel) {
       var snapTimer = null;
       var snapDisabled = false;
+      var lastScrollY = window.scrollY;
+      var scrollDir = 'down';
+
+      window.addEventListener('scroll', function () {
+        scrollDir = window.scrollY > lastScrollY ? 'down' : 'up';
+        lastScrollY = window.scrollY;
+      }, { passive: true });
+
       var snapObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (snapDisabled) return;
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5 && entry.intersectionRatio < 0.95) {
+          if (snapDisabled || scrollDir === 'up') return;
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
             clearTimeout(snapTimer);
             snapTimer = setTimeout(function () {
-              if (!snapDisabled) {
-                var rect = snapCarousel.getBoundingClientRect();
-                var offset = window.scrollY + rect.top + 40;
-                window.scrollTo({ top: offset, behavior: 'smooth' });
+              if (!snapDisabled && scrollDir === 'down') {
+                snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
-            }, 300);
+            }, 400);
           }
         });
-      }, { threshold: [0.4, 0.6, 0.85] });
+      }, { threshold: [0.3, 0.5, 0.7, 0.9] });
       snapObs.observe(snapCarousel);
       window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
+      window.addEventListener('touchmove', function () { clearTimeout(snapTimer); }, { passive: true });
 
       /* Disable snap for 2s after any nav link click */
       document.querySelectorAll('a[href^="#"]').forEach(function (a) {
