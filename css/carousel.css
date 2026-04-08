@@ -321,8 +321,9 @@
 
 @media (max-width: 768px) {
   .section--carousel {
-    min-height: 0;
-    padding: clamp(3rem, 6vh, 5rem) 0 clamp(2rem, 4vh, 3rem);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: clamp(4rem, 8vh, 6rem) 0 clamp(2rem, 4vh, 3rem);
   }
   .carousel__slide.is-active {
     padding: 0.75rem;
