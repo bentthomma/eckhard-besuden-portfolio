@@ -543,11 +543,13 @@
         if (controller && controller.closeBtn) {
           controller.closeBtn.addEventListener('click', function () {
             BidSystem.hide(bidContainer, infoEls, function () {
-              if (actionsEl) actionsEl.style.display = '';
               if (plaqueTop) {
-                gsap.set(plaqueTop, { opacity: 0 });
-                plaqueTop.style.display = '';
-                gsap.to(plaqueTop, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+                gsap.set(plaqueTop, { opacity: 0, display: 'block' });
+                gsap.to(plaqueTop, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+              }
+              if (actionsEl) {
+                gsap.set(actionsEl, { opacity: 0, display: 'block' });
+                gsap.to(actionsEl, { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 });
               }
               bidOpen = false;
               startAutoplay();
