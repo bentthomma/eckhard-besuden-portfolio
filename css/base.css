@@ -398,11 +398,11 @@ main { overflow-x: hidden; }
   .philosophy-layout__image { height: 40vh; }
 
   /* Tablet sizing: bigger text, constrained images */
-  .section__title { font-size: clamp(2.6rem, 6vw, 3.5rem); }
-  .body-text { font-size: 1.3rem; line-height: 1.9; }
-  .philosophy-layout__title { font-size: clamp(2.6rem, 6vw, 3.5rem); }
-  .philosophy-layout__text p { font-size: 1.3rem; line-height: 1.9; }
-  .philosophy-layout__quote p { font-size: clamp(1.3rem, 2.5vw, 1.6rem); }
+  .section__title { font-size: clamp(2.4rem, 5vw, 3.2rem); }
+  .body-text { font-size: 1.2rem; line-height: 1.85; }
+  .philosophy-layout__title { font-size: clamp(2.4rem, 5vw, 3.2rem); }
+  .philosophy-layout__text p { font-size: 1.2rem; line-height: 1.85; }
+  .philosophy-layout__quote p { font-size: clamp(1.2rem, 2.5vw, 1.5rem); }
   .editorial-grid__media img { max-height: 45vh; }
   .detail__title { font-size: clamp(1.5rem, 3vw, 2rem); }
   .detail__label { font-size: 0.75rem; }
@@ -423,6 +423,12 @@ main { overflow-x: hidden; }
 @media (max-width: 768px) {
   .nav__links { display: none; }
   .nav__hamburger { display: flex; }
+  .section__title { font-size: clamp(1.8rem, 5vw, 2.4rem); }
+  .body-text { font-size: 1rem; line-height: 1.7; }
+  .philosophy-layout__title { font-size: clamp(1.8rem, 5vw, 2.4rem); }
+  .philosophy-layout__text p { font-size: 1rem; line-height: 1.7; }
+  .philosophy-layout__quote p { font-size: clamp(1.1rem, 3vw, 1.3rem); }
+  .body-text--highlight { font-size: clamp(1.1rem, 3vw, 1.3rem); }
   .editorial-grid__media img { aspect-ratio: 4/3; }
   .gallery { grid-template-columns: repeat(2, 1fr); }
   .hero__contact-left, .hero__contact-right { position: absolute; bottom: 1.5rem; }

@@ -544,12 +544,22 @@
           controller.closeBtn.addEventListener('click', function () {
             BidSystem.hide(bidContainer, infoEls, function () {
               if (plaqueTop) {
-                gsap.set(plaqueTop, { opacity: 0, display: 'block' });
-                gsap.to(plaqueTop, { opacity: 1, duration: 0.5, ease: 'power2.out' });
+                plaqueTop.style.opacity = '0';
+                plaqueTop.style.display = '';
+                requestAnimationFrame(function () {
+                  gsap.to(plaqueTop, { opacity: 1, duration: 0.5, ease: 'power2.out',
+                    onComplete: function () { plaqueTop.style.opacity = ''; }
+                  });
+                });
               }
               if (actionsEl) {
-                gsap.set(actionsEl, { opacity: 0, display: 'block' });
-                gsap.to(actionsEl, { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2 });
+                actionsEl.style.opacity = '0';
+                actionsEl.style.display = '';
+                requestAnimationFrame(function () {
+                  gsap.to(actionsEl, { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2,
+                    onComplete: function () { actionsEl.style.opacity = ''; }
+                  });
+                });
               }
               bidOpen = false;
               startAutoplay();
