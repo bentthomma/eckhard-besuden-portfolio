@@ -13,6 +13,7 @@
       // Navigation
       nav_about: 'Über mich',
       nav_philosophy: 'Philosophie',
+      nav_featured: 'Galerie',
       nav_works: 'Werke',
       lang_de: 'DE',
       lang_en: 'EN',
@@ -162,6 +163,7 @@
       // Navigation
       nav_about: 'About',
       nav_philosophy: 'Philosophy',
+      nav_featured: 'Gallery',
       nav_works: 'Works',
       lang_de: 'DE',
       lang_en: 'EN',

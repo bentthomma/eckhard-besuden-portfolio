@@ -18,7 +18,7 @@ var Scroll = (function () {
   var FLY_DURATION = 1.2;
   var FLY_EASE = 'power3.inOut';
   var DELTA_CAP = 80;
-  var COOLDOWN_MS = 1200;
+  var COOLDOWN_MS = 400;
   var NAV_THRESHOLD = 80;
   var STAGGER_GAP = 0.008;
   var BLOCK_OVERLAP = '>-0.06';
@@ -152,7 +152,9 @@ var Scroll = (function () {
 
         /* Reset y-translation on all sections (mobile content scroll) */
         sections.forEach(function (s) {
-          if (s.el) gsap.set(s.el, { clearProps: 'y' });
+          if (!s.el) return;
+          var inner = s.el.querySelector('.container') || s.el.querySelector('.philosophy-layout') || s.el.firstElementChild;
+          if (inner) gsap.set(inner, { clearProps: 'y' });
         });
 
         syncNavState();
@@ -224,11 +226,14 @@ var Scroll = (function () {
 
   function scrollSectionContent(sec) {
     if (!isMobile || !sec.el) return;
+    /* Transform the inner container, not the section itself, to avoid layout shift */
+    var inner = sec.el.querySelector('.container') || sec.el.querySelector('.philosophy-layout') || sec.el.firstElementChild;
+    if (!inner) return;
     var overflow = sec.el.scrollHeight - window.innerHeight;
     if (overflow > 0) {
-      gsap.set(sec.el, { y: -(overflow * sec.progress) });
+      gsap.set(inner, { y: -(overflow * sec.progress) });
     } else {
-      gsap.set(sec.el, { clearProps: 'y' });
+      gsap.set(inner, { clearProps: 'y' });
     }
   }
 
