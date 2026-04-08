@@ -189,17 +189,17 @@
     return window.innerWidth - rect.left + 100;
   }
 
-  function shadowState(el, state) {
+  function shadowState(el, newState) {
     if (!el) return;
-    switch (state) {
+    switch (newState) {
       case 'lifted':
-        gsap.set(el, { filter: 'drop-shadow(0 28px 80px rgba(0,0,0,0.32))' });
+        el.style.filter = 'drop-shadow(0 28px 80px rgba(0,0,0,0.32))';
         break;
       case 'flying':
-        gsap.set(el, { filter: 'drop-shadow(0 34px 100px rgba(0,0,0,0.42))' });
+        el.style.filter = 'drop-shadow(0 34px 100px rgba(0,0,0,0.42))';
         break;
       default:
-        gsap.to(el, { filter: 'drop-shadow(0 0 0 rgba(0,0,0,0))', duration: 0.4, ease: 'power2.out' });
+        el.style.filter = 'none';
         break;
     }
   }

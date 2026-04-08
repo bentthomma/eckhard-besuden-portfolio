@@ -382,11 +382,11 @@ var Scroll = (function () {
         start: 'top 80%',
         onEnter: function () {
           if (heroEl) gsap.to(heroEl, { opacity: 0, duration: 0.5, onComplete: function () { heroEl.style.visibility = 'hidden'; } });
-          if (navEl) gsap.to(navEl, { opacity: 0, y: -18, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });
+          if (navEl) gsap.to(navEl, { opacity: 0, duration: 0.4, onComplete: function () { navEl.style.pointerEvents = 'none'; } });
         },
         onLeaveBack: function () {
           if (heroEl) { heroEl.style.visibility = ''; gsap.to(heroEl, { opacity: 1, duration: 0.5 }); }
-          if (navEl) { navEl.style.pointerEvents = ''; gsap.to(navEl, { opacity: 1, y: 0, duration: 0.4 }); }
+          if (navEl) { navEl.style.pointerEvents = ''; gsap.to(navEl, { opacity: 1, duration: 0.4 }); }
         }
       });
     }
@@ -438,8 +438,8 @@ var Scroll = (function () {
     var deltaY = touchStartY - currentY; /* positive = scroll down */
     touchStartY = currentY;
 
-    /* Only block native scroll for hero and carousel on mobile */
-    if (state === 'hero' || state === 'carousel') {
+    /* Only block native scroll for carousel on mobile */
+    if (state === 'carousel') {
       e.preventDefault();
     }
 
@@ -449,9 +449,6 @@ var Scroll = (function () {
 
     switch (state) {
       case 'hero':
-        touchAccum += Math.abs(deltaY);
-        if (touchAccum > 15 && down) flyTo('about');
-        break;
       case 'about':
       case 'philosophy':
         /* Native scroll — ScrollTrigger handles reveals */

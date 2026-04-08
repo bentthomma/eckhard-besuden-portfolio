@@ -144,6 +144,7 @@
   display: block;
   cursor: pointer;
   transform-origin: center center;
+  transition: filter 0.5s ease;
 }
 
 .carousel__frame img.shadow--lifted {
@@ -292,4 +293,50 @@
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   color: rgba(248, 238, 227, 0.45);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px) {
+  .carousel__slide.is-active {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    justify-items: center;
+    padding: clamp(1rem, 2vw, 2rem);
+    padding-bottom: clamp(3rem, 6vh, 5rem);
+  }
+  .carousel__frame img {
+    max-width: min(70vw, 36rem);
+    max-height: 45vh;
+  }
+  .carousel__plaque {
+    width: min(32rem, 90%);
+    text-align: center;
+  }
+  .carousel__plaque-row {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .section--carousel {
+    min-height: 0;
+    padding: clamp(3rem, 6vh, 5rem) 0 clamp(2rem, 4vh, 3rem);
+  }
+  .carousel__slide.is-active {
+    padding: 1rem;
+    padding-bottom: 2rem;
+  }
+  .carousel__frame img {
+    max-width: 85vw;
+    max-height: 40vh;
+  }
+  .carousel__plaque-title {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+  }
+  .bid-btn {
+    width: 100%;
+    text-align: center;
+  }
 }
