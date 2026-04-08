@@ -557,9 +557,12 @@
     gsap.killTweensOf(detail);
     gsap.killTweensOf(detailImage);
 
-    detail.classList.remove('open');
-    detail.style.cssText = '';
-    detailImage.style.cssText = '';
+    /* Delay class removal by one frame to prevent flash */
+    requestAnimationFrame(function () {
+      detail.classList.remove('open');
+      detail.style.cssText = '';
+      detailImage.style.cssText = '';
+    });
     if (window.__overlay) window.__overlay.pop('detail');
 
     detailIndex = -1;
@@ -900,11 +903,14 @@
   window.Gallery = {
     expand: function () { expand(); },
     isExpanded: function () { return galleryState === 'expanded'; },
-    openDetail: function (externalItems, index, sourceImg) {
+    openDetail: function (externalItems, index, sourceImg, options) {
       if (galleryState !== 'expanded') expand();
       if (externalItems && typeof index === 'number') {
         filteredImages = externalItems;
         flipOpenDetail(index, sourceImg);
+        if (options && options.showBid && filteredImages[index]) {
+          setTimeout(function () { showInlineBid(filteredImages[index]); }, 600);
+        }
       }
     }
   };

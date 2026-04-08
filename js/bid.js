@@ -91,7 +91,7 @@
     container.style.display = '';
     if (typeof gsap === 'undefined') {
       container.style.opacity = '1';
-      if (infoEl) infoEl.style.display = 'none';
+      if (infoEl) infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden';
       if (onComplete) onComplete();
       return;
     }
@@ -100,7 +100,7 @@
       gsap.to(infoEl.children, {
         opacity: 0, y: -10, stagger: 0.08, duration: 0.3, ease: 'power2.in',
         onComplete: function () {
-          infoEl.style.display = 'none';
+          infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden';
           container.style.opacity = '1';
           gsap.fromTo(container.children,
             { opacity: 0, y: 15 },
@@ -121,7 +121,7 @@
     if (typeof gsap === 'undefined') {
       container.style.display = 'none';
       container.style.opacity = '0';
-      if (infoEl) { infoEl.style.display = ''; infoEl.style.opacity = '1'; }
+      if (infoEl) { infoEl.style.visibility = ''; infoEl.style.height = ''; infoEl.style.overflow = ''; infoEl.style.opacity = '1'; }
       if (onComplete) onComplete();
       return;
     }
@@ -139,7 +139,7 @@
         if (error) error.classList.add('hidden');
 
         if (infoEl) {
-          infoEl.style.display = '';
+          infoEl.style.visibility = ''; infoEl.style.height = ''; infoEl.style.overflow = '';
           gsap.fromTo(infoEl.children,
             { opacity: 0, y: 15 },
             { opacity: 1, y: 0, stagger: 0.1, duration: 0.4, ease: 'power2.out',

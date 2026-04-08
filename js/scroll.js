@@ -424,6 +424,24 @@ var Scroll = (function () {
         }
       });
     }
+
+    /* JS-based carousel snap (CSS snap doesn't work with nested DOM) */
+    var snapCarousel = document.getElementById('carousel');
+    if (snapCarousel) {
+      var snapTimer = null;
+      var snapObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
+            clearTimeout(snapTimer);
+            snapTimer = setTimeout(function () {
+              snapCarousel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+          }
+        });
+      }, { threshold: [0.3, 0.5, 0.7, 0.9] });
+      snapObs.observe(snapCarousel);
+      window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
+    }
   }
 
   /* --------------------------------------------------------

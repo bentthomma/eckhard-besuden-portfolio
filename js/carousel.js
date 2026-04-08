@@ -504,7 +504,7 @@
       if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentIndex - 1, 'prev'); }
     });
 
-    /* Bid button click */
+    /* Bid button click → open Gallery detail panel with bid form */
     viewport.addEventListener('click', function (e) {
       var bidBtn = e.target.closest('.bid-btn');
       if (!bidBtn) return;
@@ -513,31 +513,11 @@
       var idx = parseInt(slide.getAttribute('data-index'), 10);
       if (isNaN(idx) || idx >= items.length) return;
 
-      var item = items[idx];
-      var bidContainer = slide.querySelector('.carousel__plaque-bid');
-      var infoEls = slide.querySelector('.carousel__plaque-meta');
-      var actionsEl = slide.querySelector('.carousel__plaque-actions');
-
-      if (!bidContainer) return;
-
-      if (window.innerWidth < 768) {
-        openMobileBidModal(item);
-        return;
-      }
-
+      var img = slide.querySelector('.carousel__frame img');
       clearAutoplay();
-      var controller = BidSystem.create(bidContainer, item);
-      if (actionsEl) actionsEl.style.display = 'none';
-      BidSystem.show(bidContainer, infoEls, function () {
-        if (controller && controller.closeBtn) {
-          controller.closeBtn.addEventListener('click', function () {
-            BidSystem.hide(bidContainer, infoEls, function () {
-              if (actionsEl) actionsEl.style.display = '';
-              startAutoplay();
-            });
-          });
-        }
-      });
+      if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
+        window.Gallery.openDetail(items, idx, img, { showBid: true });
+      }
     });
 
     /* Image click → open detail overlay */

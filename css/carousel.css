@@ -136,11 +136,11 @@
 
 .carousel__frame {
   position: relative;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  transition: box-shadow 0.8s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  transition: box-shadow 0.3s ease;
 }
 .carousel__frame.shadow--flying {
-  box-shadow: 0 40px 80px rgba(0,0,0,0.45);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
 }
 
 .carousel__frame img {
@@ -330,8 +330,6 @@
     min-height: 100vh;
     min-height: 100dvh;
     padding: clamp(4rem, 8vh, 6rem) 0 clamp(2rem, 4vh, 3rem);
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
   }
   .carousel__slide.is-active {
     padding: 0.75rem;
