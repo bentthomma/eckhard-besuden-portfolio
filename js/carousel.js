@@ -242,14 +242,8 @@
     var enterSide = direction === 'next' ? 'right' : 'left';
     var rotSign = direction === 'next' ? -1 : 1;
 
-    /* Plaque clip-path animation: emerges from image direction */
+    /* Plaque animation: emerges from image direction via transform */
     var isSingleCol = window.innerWidth <= 1024;
-    /* Desktop: plaque is right of image → clip from left (reveal left-to-right) */
-    /* Mobile/Tablet: plaque is below image → clip from top (reveal top-to-bottom) */
-    var clipOut = isSingleCol ? 'inset(0 0 0 0)' : 'inset(0 0 0 0)';
-    var clipOutTo = isSingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
-    var clipInFrom = isSingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
-    var clipInTo = 'inset(0 0 0 0)';
 
     /* ---- Reduced-motion shortcut ---- */
     if (reducedMotion) {
@@ -297,8 +291,11 @@
       ease: 'power1.out'
     });
     if (oldPlaque) {
-      tl.to(oldPlaque, { clipPath: clipOutTo, duration: 0.5, ease: 'power2.in' }, 0);
-      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'clipPath' }); }, null, 0.5);
+      var outProps = isSingleCol
+        ? { opacity: 0, y: '-30%', duration: 0.4, ease: 'power2.in' }
+        : { opacity: 0, x: '-30%', duration: 0.4, ease: 'power2.in' };
+      tl.to(oldPlaque, outProps, 0);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.4);
     }
     tl.call(function () { shadowState(oldImg, 'lifted'); }, null, 0);
 
@@ -339,8 +336,13 @@
     /* Plaque slides in after landing */
     if (newPlaque) {
       tl.call(function () { newPlaque.classList.add('is-visible'); });
-      tl.fromTo(newPlaque, { clipPath: clipInFrom },
-        { clipPath: clipInTo, duration: 0.7, ease: 'power2.out' });
+      var inFrom = isSingleCol
+        ? { opacity: 0, y: '-50%' }
+        : { opacity: 0, x: '-50%' };
+      var inTo = isSingleCol
+        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power2.out' }
+        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power2.out' };
+      tl.fromTo(newPlaque, inFrom, inTo);
     }
   }
 
@@ -389,8 +391,11 @@
     });
     if (plaque) {
       var entrySingleCol = window.innerWidth <= 1024;
-      var entryClipFrom = entrySingleCol ? 'inset(100% 0 0 0)' : 'inset(0 100% 0 0)';
-      tl.fromTo(plaque, { clipPath: entryClipFrom }, { clipPath: 'inset(0 0 0 0)', duration: 0.7, ease: 'power2.out' }, '-=0.3');
+      var eFrom = entrySingleCol ? { opacity: 0, y: '-50%' } : { opacity: 0, x: '-50%' };
+      var eTo = entrySingleCol
+        ? { opacity: 1, y: '0%', duration: 0.7, ease: 'power2.out' }
+        : { opacity: 1, x: '0%', duration: 0.7, ease: 'power2.out' };
+      tl.fromTo(plaque, eFrom, eTo, '-=0.3');
     }
   }
 

@@ -348,24 +348,23 @@ var Scroll = (function () {
     initReveals();
     initDividers();
 
-    /* Word-split text-reveals, driven by scroll position via ScrollTrigger scrub */
+    /* Text-reveals: each element has its own ScrollTrigger, plays once */
     document.querySelectorAll('.text-reveal').forEach(function (item) {
       var spans = wrapChars(item);
       gsap.set(spans, { opacity: 0.1, y: 8 });
 
-      var tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 90%',
-          toggleActions: 'play none none none'
+      ScrollTrigger.create({
+        trigger: item,
+        start: 'top 90%',
+        once: true,
+        onEnter: function () {
+          gsap.to(spans, {
+            opacity: 1, y: 0,
+            stagger: STAGGER_GAP,
+            duration: 0.6,
+            ease: 'power2.out'
+          });
         }
-      });
-
-      tl.to(spans, {
-        opacity: 1, y: 0,
-        stagger: STAGGER_GAP,
-        duration: 0.6,
-        ease: 'power2.out'
       });
     });
 

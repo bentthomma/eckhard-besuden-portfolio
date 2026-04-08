@@ -88,7 +88,7 @@
 }
 
 .carousel__viewport {
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   display: flex;
   justify-content: center;
@@ -323,6 +323,10 @@
     grid-template-columns: 1fr;
     gap: 0;
     text-align: center;
+  }
+  .bid-btn {
+    font-size: 0.85rem;
+    padding: 0.8rem 1.6rem;
   }
 }
 
