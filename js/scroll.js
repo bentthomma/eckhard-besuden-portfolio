@@ -348,21 +348,33 @@ var Scroll = (function () {
     initReveals();
     initDividers();
 
-    /* Text-reveals: each element has its own ScrollTrigger, plays once */
-    document.querySelectorAll('.text-reveal').forEach(function (item) {
-      var spans = wrapChars(item);
-      gsap.set(spans, { opacity: 0.1, y: 8 });
+    /* Text-reveals: one trigger per section, staggered reveals within */
+    ['about', 'philosophy'].forEach(function (sectionId) {
+      var sec = document.getElementById(sectionId);
+      if (!sec) return;
+      var allItems = sec.querySelectorAll('.text-reveal');
+      var allSpans = [];
+      allItems.forEach(function (item) {
+        var spans = wrapChars(item);
+        gsap.set(spans, { opacity: 0.1, y: 8 });
+        allSpans.push(spans);
+      });
 
       ScrollTrigger.create({
-        trigger: item,
-        start: 'top 90%',
+        trigger: sec,
+        start: 'top 80%',
         once: true,
         onEnter: function () {
-          gsap.to(spans, {
-            opacity: 1, y: 0,
-            stagger: STAGGER_GAP,
-            duration: 0.6,
-            ease: 'power2.out'
+          var delay = 0;
+          allSpans.forEach(function (spans) {
+            gsap.to(spans, {
+              opacity: 1, y: 0,
+              stagger: STAGGER_GAP,
+              duration: 0.6,
+              ease: 'power2.out',
+              delay: delay
+            });
+            delay += 0.5;
           });
         }
       });

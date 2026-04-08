@@ -8,7 +8,6 @@
   min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-  overflow: clip;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -162,16 +161,10 @@
   align-self: center;
   width: min(26rem, 100%);
   opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.45s var(--ease-standard),
-    transform 0.45s var(--ease-standard);
   pointer-events: none;
 }
 
 .carousel__plaque.is-visible {
-  opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
 }
 
@@ -232,23 +225,26 @@
   justify-content: center;
   min-height: 3rem;
   padding: 0.85rem 1.45rem;
-  border: 1px solid rgba(248, 238, 227, 0.4);
-  background: transparent;
+  border: 1px solid rgba(248, 238, 227, 0.5);
+  background: rgba(248, 238, 227, 0.04);
   color: rgba(248, 238, 227, 0.92);
   font-size: 0.82rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
+  box-shadow: 0 0 12px rgba(248, 238, 227, 0.08), inset 0 0 12px rgba(248, 238, 227, 0.03);
   transition:
     background 0.3s var(--ease-standard),
     color 0.3s var(--ease-standard),
-    border-color 0.3s var(--ease-standard);
+    border-color 0.3s var(--ease-standard),
+    box-shadow 0.3s var(--ease-standard);
 }
 
 .bid-btn:hover {
   background: rgba(248, 238, 227, 0.92);
   color: var(--wood-bg);
   border-color: rgba(248, 238, 227, 0.92);
+  box-shadow: 0 0 24px rgba(248, 238, 227, 0.2), inset 0 0 0 rgba(248, 238, 227, 0);
 }
 
 .carousel__plaque-bid {

@@ -408,13 +408,9 @@ main { overflow-x: hidden; }
   .detail__next { left: auto; right: 0; }
 }
 
-/* Hamburger visible at 900px (tablets) */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
   .nav__links { display: none; }
   .nav__hamburger { display: flex; }
-}
-
-@media (max-width: 768px) {
   .editorial-grid__media img { aspect-ratio: 4/3; }
   .gallery { grid-template-columns: repeat(2, 1fr); }
   .hero__contact-left, .hero__contact-right { position: absolute; bottom: 1.5rem; }

@@ -35,7 +35,6 @@
   var autoplayTimer = null;
   var hasEntered = false;
   var isAnimating = false;
-  var isPaused = false;
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var entryObserver = null;
 
@@ -208,10 +207,10 @@
      AUTOPLAY
      -------------------------------------------------------- */
   function startAutoplay() {
-    if (isPaused || reducedMotion || items.length <= 1) return;
+    if (reducedMotion || items.length <= 1) return;
     clearAutoplay();
     autoplayTimer = setInterval(function () {
-      if (!isAnimating && !isPaused) goTo(currentIndex + 1, 'next');
+      if (!isAnimating) goTo(currentIndex + 1, 'next');
     }, CONFIG.AUTOPLAY_DELAY);
   }
 
@@ -238,9 +237,9 @@
     var oldPlaque = oldSlide.querySelector('.carousel__plaque');
     var newPlaque = newSlide.querySelector('.carousel__plaque');
 
-    var exitSide = direction === 'next' ? 'left' : 'right';
-    var enterSide = direction === 'next' ? 'right' : 'left';
-    var rotSign = direction === 'next' ? -1 : 1;
+    var exitSide = direction === 'next' ? 'right' : 'left';
+    var enterSide = direction === 'next' ? 'left' : 'right';
+    var rotSign = direction === 'next' ? 1 : -1;
 
     /* Plaque animation: emerges from image direction via transform */
     var isSingleCol = window.innerWidth <= 1024;
@@ -283,21 +282,23 @@
       }
     });
 
-    /* Phase 1: Lift-Off (1000ms) + Plaque fade out */
+    /* Phase 0: Plaque retreats into image first */
+    if (oldPlaque) {
+      var outProps = isSingleCol
+        ? { opacity: 0, y: '-40%', duration: 0.4, ease: 'power2.in' }
+        : { opacity: 0, x: '-40%', duration: 0.4, ease: 'power2.in' };
+      tl.to(oldPlaque, outProps, 0);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.4);
+    }
+
+    /* Phase 1: Lift-Off (1000ms) — starts AFTER plaque is gone */
     tl.to(oldImg, {
       scale: 1.05,
       rotation: rotSign * 0.25,
       duration: 1,
       ease: 'power1.out'
-    });
-    if (oldPlaque) {
-      var outProps = isSingleCol
-        ? { opacity: 0, y: '-30%', duration: 0.4, ease: 'power2.in' }
-        : { opacity: 0, x: '-30%', duration: 0.4, ease: 'power2.in' };
-      tl.to(oldPlaque, outProps, 0);
-      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.4);
-    }
-    tl.call(function () { shadowState(oldImg, 'lifted'); }, null, 0);
+    }, 0.4);
+    tl.call(function () { shadowState(oldImg, 'lifted'); }, null, 0.4);
 
     /* Phase 2: Fly-Off (1300ms) */
     var exitX = offscreenX(oldImg, exitSide);
@@ -551,22 +552,7 @@
       }
     });
 
-    /* Pause button */
-    var pauseBtn = document.getElementById('carouselPause');
-    if (pauseBtn) {
-      pauseBtn.addEventListener('click', function () {
-        isPaused = !isPaused;
-        if (isPaused) {
-          clearAutoplay();
-          pauseBtn.classList.add('is-playing');
-          pauseBtn.setAttribute('aria-label', t('carousel_play', 'Weiterlaufen lassen', 'Resume autoplay'));
-        } else {
-          startAutoplay();
-          pauseBtn.classList.remove('is-playing');
-          pauseBtn.setAttribute('aria-label', t('carousel_pause', 'Autoplay pausieren', 'Pause autoplay'));
-        }
-      });
-    }
+
 
     /* Visibility change */
     document.addEventListener('visibilitychange', function () {
