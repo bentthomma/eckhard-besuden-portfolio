@@ -63,7 +63,6 @@
       footer_imprint: 'Impressum',
 
       // Accessibility / Screen Reader
-      a11y_skip: 'Zum Inhalt springen',
       a11y_menu_open: 'Menü öffnen',
       a11y_menu_close: 'Menü schließen',
       a11y_gallery: 'Bildergalerie',
@@ -177,7 +176,6 @@
       footer_imprint: 'Legal Notice',
 
       // Accessibility / Screen Reader
-      a11y_skip: 'Skip to content',
       a11y_menu_open: 'Open menu',
       a11y_menu_close: 'Close menu',
       a11y_gallery: 'Image gallery',

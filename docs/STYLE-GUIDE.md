@@ -34,9 +34,9 @@ Quiet gallery space. Warm neutrals inspired by museum exhibition standards (Tate
 
 ## Z-index scale
 
-`--z-grain` (50) through `--z-skip-link` (10000):
+`--z-grain` (50) through `--z-loader` (9999):
 
-grain 50, back-to-top 900, mobile-menu 999, nav 1000, hamburger 1001, progress 1002, modal 5000, detail 6000, flip-clone 6500, bid-modal 7000, fullscreen 8000, loader 9999, skip-link 10000.
+grain 50, back-to-top 900, mobile-menu 999, nav 1000, hamburger 1001, progress 1002, modal 5000, detail 6000, flip-clone 6500, bid-modal 7000, fullscreen 8000, loader 9999.
 
 ## Typography
 

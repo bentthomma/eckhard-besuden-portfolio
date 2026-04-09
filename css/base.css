@@ -86,7 +86,6 @@
   --z-bid-modal: 7000;
   --z-fullscreen: 8000;
   --z-loader: 9999;
-  --z-skip-link: 10000;
 }
 
 /* ---------- RESET ---------- */
@@ -110,10 +109,6 @@ address { font-style: normal; }
 /* ---------- HIDE SCROLLBAR ---------- */
 ::-webkit-scrollbar { display: none; }
 html { scrollbar-width: none; }
-
-/* ---------- SKIP LINK ---------- */
-.skip-link { position: fixed; top: -6rem; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 0.5rem 1.5rem; z-index: var(--z-skip-link); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; transition: top 0.3s ease; }
-.skip-link:focus { top: 0.75rem; opacity: 1; }
 
 /* ---------- LOADER ---------- */
 .crisp-header { background-color: #F3F0EA; justify-content: center; align-items: center; display: flex; position: fixed; inset: 0; z-index: var(--z-loader); overflow: hidden; }
