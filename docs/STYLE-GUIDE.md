@@ -1,88 +1,49 @@
 # Style Guide
 
-This document describes the live styling system. If the code and this guide ever diverge, fix the code first and then update this file.
-
 ## Design direction
 
-The site should feel like a quiet gallery space:
+Quiet gallery space. Warm neutrals inspired by museum exhibition standards (Tate white-cube logic, Getty neutral viewing environment). Never pure white, never aggressive brightness.
 
-- warm neutral backgrounds instead of pure white
-- restrained dark text instead of pure black
-- editorial serif display type with sober sans-serif body copy
-- motion that supports focus, not spectacle
+## Color tokens (`:root` in base.css)
 
-## Core tokens
+| Token          | Value                      | Use                              |
+|---------------|----------------------------|----------------------------------|
+| `--gallery-bg` | `#F3F0EA`                  | General page background          |
+| `--stage-bg`   | `#E8DDC9`                  | Museum wall behind paintings     |
+| `--focus-bg`   | `#2B2925`                  | Dark stage for single works      |
+| `--text`       | `#1F1E1B`                  | Primary text (warm near-black)   |
+| `--text-muted` | `#635F5D`                  | Secondary text (4.5:1 on gallery-bg) |
+| `--silver`     | `#BFBAB8`                  | Borders, separators              |
+| `--charcoal`   | `#403E3D`                  | Hover/active states              |
+| `--ink`        | `#0D0D0D`                  | Strong emphasis                  |
+| `--wood-bg`    | `#2d160f`                  | Carousel museum wall             |
 
-Defined in `css/tokens.css`.
+**Cream series** (carousel warm text): `--cream` through `--cream-04` at opacity stops 100/95/92/75/70/65/50/30/4.
 
-### Color
+**White series** (dark backgrounds): `--white-90` through `--white-10` at opacity stops 90/70/60/55/40/25/12/10.
 
-- `--gallery-bg`
-  Main page background.
-- `--gallery-bg-soft`
-  Soft top wash behind long-form sections.
-- `--stage-bg`
-  Warmer support tone for editorial sections.
-- `--focus-bg`
-  Dark overlay background for artwork inspection.
-- `--wood-bg`
-  Homepage carousel stage background.
-- `--text`
-  Primary copy color.
-- `--text-muted`
-  Secondary copy color.
-- `--text-soft`
-  Labels, metadata, and low-priority UI text.
+## Motion tokens
 
-### Layout
+| Token              | Value   |
+|-------------------|---------|
+| `--duration-fast`  | 0.15s   |
+| `--duration-base`  | 0.3s    |
+| `--duration-slow`  | 0.5s    |
+| `--duration-reveal` | 0.8s   |
+| `--ease-standard`  | `cubic-bezier(0.25, 0.1, 0.25, 1)` |
 
-- `--container-pad`
-  Global horizontal page padding.
-- `--section-space`
-  Default vertical section spacing.
-- `--section-space-tight`
-  Reduced spacing for denser sections.
-- `--nav-height`
-  Scroll padding anchor offset.
+## Z-index scale
+
+`--z-grain` (50) through `--z-skip-link` (10000):
+
+grain 50, back-to-top 900, mobile-menu 999, nav 1000, hamburger 1001, progress 1002, modal 5000, detail 6000, flip-clone 6500, bid-modal 7000, fullscreen 8000, loader 9999, skip-link 10000.
 
 ## Typography
 
-- Display headings: `Cormorant Garamond`
-- Body and UI copy: `Inter`
-
-Rules:
-
-- Keep serif display sizes large and airy.
-- Do not use low opacity to hide readable body copy.
-- Labels may be subtle, but not faint.
-- Mobile text floors matter more than micro-elegance.
+- **Display**: Cormorant Garamond, weights 300 and 400
+- **Body**: Inter, weights 300 and 400
+- Fonts self-hosted in `assets/fonts/` (woff2 + ttf)
 
 ## Spacing
 
-Prefer consistent section rhythm over per-component patching.
-
-- Large sections should read as intentional blocks.
-- Dense controls should use smaller internal spacing without collapsing outer breathing room.
-- Avoid one-off `top: 93%` style placement logic. If a control needs that much coercion, the layout model is wrong.
-
-## Motion
-
-- Reveals are decorative only.
-- Scroll remains native on every device.
-- The intro may be cinematic, but it must not trap users for long.
-- Overlay motion should be smooth and quiet, not springy or playful.
-
-## Responsive rules
-
-- Desktop and mobile should share the same hierarchy, not different improvisations.
-- Mobile controls must remain readable with thumb-safe spacing.
-- Large screens should not create dead voids that make sections feel unfinished.
-
-## Review rules
-
-When touching styles:
-
-1. Edit the owning layer, not `responsive.css` first.
-2. Add a responsive override only if the base layout is already sound.
-3. Remove stale selectors instead of layering new overrides on top.
-4. Re-check homepage, gallery, detail overlay, and mobile menu before finishing.
+Fluid scaling via `clamp()` throughout. No fixed spacing scale.

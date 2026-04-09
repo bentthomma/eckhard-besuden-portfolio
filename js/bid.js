@@ -88,7 +88,7 @@
   }
 
   function show(container, infoEl, onComplete) {
-    if (typeof gsap === 'undefined') {
+    if (typeof gsap === 'undefined' || window.__reduced) {
       if (infoEl) { infoEl.style.visibility = 'hidden'; infoEl.style.height = '0'; infoEl.style.overflow = 'hidden'; }
       container.style.display = '';
       container.style.opacity = '1';
@@ -119,10 +119,10 @@
   }
 
   function hide(container, infoEl, onComplete) {
-    if (typeof gsap === 'undefined') {
+    if (typeof gsap === 'undefined' || window.__reduced) {
       container.style.display = 'none';
       container.style.opacity = '0';
-      if (infoEl) { infoEl.style.visibility = ''; infoEl.style.position = ''; infoEl.style.pointerEvents = ''; infoEl.style.opacity = '1'; }
+      if (infoEl) { infoEl.style.visibility = ''; infoEl.style.position = ''; infoEl.style.pointerEvents = ''; infoEl.style.height = ''; infoEl.style.overflow = ''; infoEl.style.opacity = '1'; }
       if (onComplete) onComplete();
       return;
     }
@@ -186,7 +186,7 @@
       return;
     }
 
-    if (emailVal.indexOf('@') === -1 || emailVal.indexOf('.') === -1) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
       if (error) {
         error.textContent = Helpers.translate('bid_error_required',
           'Bitte eine g\u00fcltige E-Mail angeben.',
@@ -207,7 +207,11 @@
       timestamp: new Date().toISOString()
     };
 
-    saveBid(bid);
+    if (!saveBid(bid)) {
+      error.textContent = Helpers.translate('bid_error_save', 'Speichern fehlgeschlagen.', 'Could not save.');
+      error.classList.remove('hidden');
+      return;
+    }
     if (form) form.style.display = 'none';
     if (success) success.classList.remove('hidden');
   }

@@ -12,19 +12,34 @@
   /* Shared reduced-motion flag — other modules read window.__reduced */
   window.__reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', function (e) {
+      window.__reduced = e.matches;
+    });
+  }
+
   /* ---- Overlay Stack ---- */
   var overlayStack = [];
 
   function pushOverlay(id, el) {
-    overlayStack.push(id);
+    overlayStack.push({ id: id, el: el });
     document.body.style.overflow = 'hidden';
     if (el) trapFocus(el);
   }
 
   function popOverlay(id) {
-    overlayStack = overlayStack.filter(function (s) { return s !== id; });
-    if (overlayStack.length === 0) document.body.style.overflow = '';
-    releaseFocus();
+    overlayStack = overlayStack.filter(function (s) { return s.id !== id; });
+    if (overlayStack.length === 0) {
+      document.body.style.overflow = '';
+      releaseFocus();
+    } else {
+      /* Re-trap focus on the remaining top overlay */
+      var topItem = overlayStack[overlayStack.length - 1];
+      if (topItem.el) {
+        releaseFocus();
+        trapFocus(topItem.el);
+      }
+    }
   }
 
   /* ---- Focus Trap ---- */
@@ -64,11 +79,14 @@
 
   /* ---- Public API ---- */
   function isOpen(id) {
-    return overlayStack.indexOf(id) !== -1;
+    for (var i = 0; i < overlayStack.length; i++) {
+      if (overlayStack[i].id === id) return true;
+    }
+    return false;
   }
 
   function top() {
-    return overlayStack.length > 0 ? overlayStack[overlayStack.length - 1] : null;
+    return overlayStack.length > 0 ? overlayStack[overlayStack.length - 1].id : null;
   }
 
   window.__overlay = { push: pushOverlay, pop: popOverlay, isOpen: isOpen, top: top };

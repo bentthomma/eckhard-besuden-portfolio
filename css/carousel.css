@@ -13,7 +13,7 @@
   justify-content: flex-start;
   align-items: center;
   padding: clamp(5rem, 10vh, 8rem) 0 clamp(3rem, 6vh, 5rem);
-  color: rgba(248, 238, 227, 0.92);
+  color: var(--cream-92);
   background: var(--wood-bg);
 }
 
@@ -21,6 +21,7 @@
   content: '';
   position: absolute;
   inset: 0;
+  /* Fallback for browsers without image-set; ensure gallery-bg.png exists in assets/ */
   background:
     linear-gradient(180deg, rgba(15, 7, 4, 0.3), rgba(15, 7, 4, 0.06) 26%, rgba(15, 7, 4, 0.28) 100%),
     url('../assets/gallery-bg.png') center 54% / cover no-repeat;
@@ -50,7 +51,7 @@
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
   margin-bottom: 0.75rem;
 }
 
@@ -114,8 +115,9 @@
   grid-template-columns: minmax(0, 1fr) minmax(22rem, 30rem);
   gap: clamp(2rem, 5vw, 5.5rem);
   align-items: start;
+  align-content: start;
   padding: clamp(1rem, 3vw, 2.5rem);
-  padding-bottom: clamp(5rem, 10vh, 8rem);
+  padding-top: clamp(2rem, 5vh, 4rem);
   opacity: 1;
   pointer-events: auto;
 }
@@ -161,12 +163,16 @@
   pointer-events: auto;
 }
 
+.carousel__plaque.is-bid-open {
+  align-self: start;
+}
+
 .carousel__plaque-artist {
   margin: 0 0 0.4rem;
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.92);
+  color: var(--cream-92);
 }
 
 .carousel__plaque-title {
@@ -198,13 +204,13 @@
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.6);
+  color: rgba(248, 238, 227, 0.75);
 }
 
 .carousel__plaque-value {
   margin: 0;
   font-size: 1.02rem;
-  color: rgba(248, 238, 227, 0.92);
+  color: var(--cream-92);
 }
 
 /* ---------- 7. PLAQUE ACTIONS & BID ---------- */
@@ -218,9 +224,9 @@
   justify-content: center;
   min-height: 3rem;
   padding: 0.85rem 1.45rem;
-  border: 1px solid rgba(248, 238, 227, 0.5);
-  background: rgba(248, 238, 227, 0.04);
-  color: rgba(248, 238, 227, 0.92);
+  border: 1px solid var(--cream-50);
+  background: var(--cream-04);
+  color: var(--cream-92);
   font-size: 0.82rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -234,9 +240,9 @@
 }
 
 .bid-btn:hover {
-  background: rgba(248, 238, 227, 0.92);
+  background: var(--cream-92);
   color: var(--wood-bg);
-  border-color: rgba(248, 238, 227, 0.92);
+  border-color: var(--cream-92);
   box-shadow: 0 0 24px rgba(248, 238, 227, 0.2), inset 0 0 0 rgba(248, 238, 227, 0);
 }
 
@@ -246,12 +252,12 @@
 }
 .carousel__plaque-bid .bid-form__field label { color: rgba(248, 238, 227, 0.7); }
 .carousel__plaque-bid .bid-form__field input,
-.carousel__plaque-bid .bid-form__field textarea { color: rgba(248, 238, 227, 0.95); border-bottom-color: rgba(248, 238, 227, 0.3); }
+.carousel__plaque-bid .bid-form__field textarea { color: var(--cream-95); border-bottom-color: rgba(248, 238, 227, 0.3); }
 .carousel__plaque-bid .bid-form__field input:focus,
 .carousel__plaque-bid .bid-form__field textarea:focus { border-bottom-color: rgba(248, 238, 227, 0.7); }
-.carousel__plaque-bid .bid-form__submit { border-color: rgba(248, 238, 227, 0.5); color: rgba(248, 238, 227, 0.95); }
-.carousel__plaque-bid .bid-form__submit:hover { background: rgba(248, 238, 227, 0.92); color: var(--wood-bg); }
-.carousel__plaque-bid .bid-form__title { color: rgba(248, 238, 227, 0.95); }
+.carousel__plaque-bid .bid-form__submit { border-color: var(--cream-50); color: var(--cream-95); }
+.carousel__plaque-bid .bid-form__submit:hover { background: var(--cream-92); color: var(--wood-bg); }
+.carousel__plaque-bid .bid-form__title { color: var(--cream-95); }
 
 /* ---------- 8. FLOATING CONTROLS ---------- */
 .carousel__all-works {
@@ -259,7 +265,7 @@
   font-size: 0.92rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(248, 238, 227, 0.92);
+  color: var(--cream-92);
   border: 1px solid rgba(248, 238, 227, 0.4);
   background: transparent;
   padding: 0.75rem 2rem;
@@ -272,9 +278,9 @@
 }
 
 .carousel__all-works:hover {
-  background: rgba(248, 238, 227, 0.92);
+  background: var(--cream-92);
   color: var(--wood-bg);
-  border-color: rgba(248, 238, 227, 0.92);
+  border-color: var(--cream-92);
   opacity: 1;
 }
 
@@ -297,18 +303,42 @@
 @media (max-width: 1024px) {
   .carousel__slide.is-active {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-rows: auto auto;
+    gap: 0.6rem;
     justify-items: center;
-    padding: clamp(1rem, 2vw, 2rem);
-    padding-bottom: clamp(3rem, 6vh, 5rem);
+    align-items: start;
+    padding: 0.75rem;
+    padding-top: clamp(3rem, 5vh, 4.5rem);
+    padding-bottom: 1.5rem;
   }
   .carousel__frame img {
     max-width: min(70vw, 36rem);
-    max-height: 45vh;
+    max-height: 35vh;
   }
   .carousel__plaque {
-    width: min(32rem, 90%);
+    width: min(36rem, 95%);
     text-align: center;
+  }
+  .carousel__plaque-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+  .carousel__plaque-artist {
+    font-size: 0.78rem;
+  }
+  .carousel__plaque-label {
+    font-size: 0.78rem;
+  }
+  .carousel__plaque-value {
+    font-size: 1.05rem;
+  }
+  .section--carousel .section__title {
+    font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  }
+  .section--carousel .section__intro {
+    font-size: 1rem;
+  }
+  .section--carousel .section__label {
+    font-size: 0.75rem;
   }
   .carousel__plaque-meta {
     display: grid;
@@ -320,9 +350,8 @@
     gap: 0;
     text-align: center;
   }
-  .bid-btn {
-    font-size: 0.85rem;
-    padding: 0.8rem 1.6rem;
+  .carousel__plaque-actions {
+    display: none;
   }
 }
 
@@ -333,13 +362,16 @@
     padding: clamp(4rem, 8vh, 6rem) 0 clamp(2rem, 4vh, 3rem);
   }
   .carousel__slide.is-active {
+    grid-template-rows: auto auto;
+    align-items: start;
     padding: 0.75rem;
+    padding-top: clamp(1.5rem, 4vh, 3rem);
     padding-bottom: 1.5rem;
-    gap: 1rem;
+    gap: 0.6rem;
   }
   .carousel__frame img {
     max-width: 90vw;
-    max-height: 35vh;
+    max-height: 42vh;
   }
   .carousel__plaque {
     width: 100%;
@@ -348,11 +380,11 @@
     text-align: center;
   }
   .carousel__plaque-artist {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     margin-bottom: 0.2rem;
   }
   .carousel__plaque-title {
-    font-size: clamp(1.2rem, 4.5vw, 1.8rem);
+    font-size: clamp(1.3rem, 4.5vw, 1.9rem);
     margin-bottom: 0.6rem;
   }
   .carousel__plaque-meta {
@@ -366,10 +398,10 @@
     text-align: center;
   }
   .carousel__plaque-label {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
   }
   .carousel__plaque-value {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
   }
   .carousel__plaque-actions {
     margin-top: 0.6rem;
@@ -392,7 +424,16 @@
     gap: 0.2rem 0.5rem;
   }
   .carousel__plaque-title {
-    font-size: clamp(1rem, 4vw, 1.4rem);
+    font-size: clamp(1.1rem, 4.2vw, 1.5rem);
+  }
+  .carousel__plaque-artist {
+    font-size: 0.6rem;
+  }
+  .carousel__plaque-label {
+    font-size: 0.6rem;
+  }
+  .carousel__plaque-value {
+    font-size: 0.85rem;
   }
 }
 

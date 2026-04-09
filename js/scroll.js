@@ -20,9 +20,10 @@ var Scroll = (function () {
   var DELTA_CAP = 80;
   var COOLDOWN_MS = 400;
   var NAV_THRESHOLD = 80;
-  var STAGGER_GAP = 0.004;
-  var BLOCK_OVERLAP = '>-0.06';
+  var STAGGER_GAP = (window.TextReveal && window.TextReveal.STAGGER_GAP) || 0.004;
   var BACK_THRESHOLD = 0.05;
+  var SNAP_DELAY = 400;
+  var SNAP_OFF_DURATION = 2000;
   /* -- Mutable state -- */
   var state = 'hero';
   var flying = false;
@@ -60,7 +61,7 @@ var Scroll = (function () {
       var el = document.getElementById(def.id);
       if (!el) return;
       var sec = { id: def.id, el: el, type: def.type };
-      if (def.type === 'reveal') {
+      if (def.type === 'reveal' && !reduced) {
         sec.progress = 0;
         sec.dwellDone = false;
         sec.tl = buildRevealTimeline(el);
@@ -70,58 +71,10 @@ var Scroll = (function () {
   }
 
   /* --------------------------------------------------------
-     TEXT REVEAL TIMELINE
+     TEXT REVEAL — delegated to text-reveal.js
      -------------------------------------------------------- */
-
-  function wrapChars(el) {
-    var text = el.textContent;
-    var words = text.split(/(\s+)/); /* split keeping whitespace */
-    el.innerHTML = '';
-    var inners = [];
-
-    words.forEach(function (segment) {
-      if (/^\s+$/.test(segment)) {
-        el.appendChild(document.createTextNode(segment));
-        return;
-      }
-      /* Wrap each word in an inline-block so it stays together */
-      var wordWrap = document.createElement('span');
-      wordWrap.className = 'word-wrap';
-      for (var i = 0; i < segment.length; i++) {
-        var wrap = document.createElement('span');
-        wrap.className = 'char-wrap';
-        var inner = document.createElement('span');
-        inner.className = 'char-inner';
-        inner.textContent = segment[i];
-        wrap.appendChild(inner);
-        wordWrap.appendChild(wrap);
-        inners.push(inner);
-      }
-      el.appendChild(wordWrap);
-    });
-
-    return inners;
-  }
-
-  function buildRevealTimeline(sectionEl) {
-    var items = sectionEl.querySelectorAll('.text-reveal');
-    if (!items.length) return null;
-
-    var tl = gsap.timeline({ paused: true });
-
-    items.forEach(function (item, idx) {
-      var spans = wrapChars(item);
-      gsap.set(spans, { opacity: 0.1, y: 8 });
-      tl.to(spans, {
-        opacity: 1, y: 0,
-        stagger: STAGGER_GAP,
-        duration: 0.4,
-        ease: 'power2.out'
-      }, idx === 0 ? 0 : BLOCK_OVERLAP);
-    });
-
-    return tl;
-  }
+  var wrapChars = window.TextReveal ? window.TextReveal.wrapChars : function () { return []; };
+  var buildRevealTimeline = window.TextReveal ? window.TextReveal.buildTimeline : function () { return null; };
 
   /* --------------------------------------------------------
      FLYTO — Animated scroll between sections
@@ -286,55 +239,12 @@ var Scroll = (function () {
      SCROLL PROGRESS BAR
      -------------------------------------------------------- */
 
-  function initProgressBar() {
-    var bar = document.getElementById('scrollProgress');
-    if (!bar) return;
-    gsap.ticker.add(function () {
-      var max = document.body.scrollHeight - window.innerHeight;
-      var ratio = max > 0 ? window.scrollY / max : 0;
-      bar.style.transform = 'scaleX(' + ratio + ')';
-    });
-  }
-
   /* --------------------------------------------------------
-     SCROLL-TRIGGERED REVEALS
+     SCROLL UI — delegated to scroll-ui.js
      -------------------------------------------------------- */
-
-  function initReveals() {
-    if (reduced) {
-      document.querySelectorAll('.reveal, .reveal-image').forEach(function (el) {
-        el.classList.add('visible');
-      });
-      return;
-    }
-
-    document.querySelectorAll('.reveal').forEach(function (el) {
-      ScrollTrigger.create({
-        trigger: el, start: 'top 85%', once: true,
-        onEnter: function () { el.classList.add('visible'); }
-      });
-    });
-
-    document.querySelectorAll('.reveal-image').forEach(function (el) {
-      ScrollTrigger.create({
-        trigger: el, start: 'top 80%', once: true,
-        onEnter: function () { el.classList.add('visible'); }
-      });
-    });
-  }
-
-  /* --------------------------------------------------------
-     SECTION DIVIDERS
-     -------------------------------------------------------- */
-
-  function initDividers() {
-    document.querySelectorAll('.section-divider').forEach(function (d) {
-      ScrollTrigger.create({
-        trigger: d, start: 'top 92%', once: true,
-        onEnter: function () { d.classList.add('visible'); }
-      });
-    });
-  }
+  var initProgressBar = window.ScrollUI ? window.ScrollUI.initProgressBar : function () {};
+  var initReveals = window.ScrollUI ? window.ScrollUI.initReveals : function () {};
+  var initDividers = window.ScrollUI ? window.ScrollUI.initDividers : function () {};
 
   /* --------------------------------------------------------
      MOBILE: Normal scroll + IntersectionObserver reveals
@@ -416,6 +326,10 @@ var Scroll = (function () {
      INIT — Desktop: state machine. Mobile: native scroll.
      -------------------------------------------------------- */
 
+  /* Note: isMobile is sampled once at init. Changing device orientation or
+     resizing across the mobile/desktop threshold requires a page reload.
+     This is acceptable because the scroll state machine cannot be safely
+     torn down and rebuilt at runtime. */
   var isMobile = (window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches) || window.innerWidth < 768;
 
   function init() {
@@ -434,8 +348,8 @@ var Scroll = (function () {
     }
 
     if (isMobile) {
-      /* Mobile: pure native scroll + CSS scroll-snap on carousel.
-         No JS touch handlers — browser handles everything. */
+      /* Mobile: pure native scroll + JS-based IntersectionObserver snap on carousel.
+         No CSS scroll-snap — browser handles vertical scroll natively. */
       initMobile();
 
       /* Track state via ScrollTrigger for nav-hide */
@@ -468,6 +382,7 @@ var Scroll = (function () {
      Runs after init() for non-desktop viewports.
      -------------------------------------------------------- */
   function initCarouselSnap() {
+    if (reduced) return;
     if (window.innerWidth >= 1200) return;
     var snapEl = document.getElementById('carousel');
     if (!snapEl) return;
@@ -485,29 +400,49 @@ var Scroll = (function () {
     new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (snapOff || dir === 'up') return;
+        /* Only snap when scrolling INTO the carousel (top half entering viewport),
+           not when already past it and scrolling further down */
+        var secRect = snapEl.getBoundingClientRect();
+        var pastSnap = secRect.bottom <= window.innerHeight + 50;
+        if (pastSnap) return;
+
         if (entry.isIntersecting && entry.intersectionRatio > 0.3 && entry.intersectionRatio < 0.9) {
           clearTimeout(snapTimer);
           snapTimer = setTimeout(function () {
-            if (!snapOff && dir === 'down') {
-              var secRect = snapEl.getBoundingClientRect();
-              var targetY = window.scrollY + secRect.top + secRect.height - window.innerHeight;
-              window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
-            }
-          }, 400);
+            if (snapOff || dir !== 'down') return;
+            /* Re-check: user might have scrolled past during the delay */
+            var r = snapEl.getBoundingClientRect();
+            if (r.bottom <= window.innerHeight + 50) return;
+            var targetY = window.scrollY + r.top + r.height - window.innerHeight;
+            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+          }, SNAP_DELAY);
         }
       });
     }, { threshold: [0.3, 0.5, 0.7, 0.9] }).observe(snapEl);
 
+    /* Touch cancels pending snap */
     window.addEventListener('touchstart', function () { clearTimeout(snapTimer); }, { passive: true });
     window.addEventListener('touchmove', function () { clearTimeout(snapTimer); }, { passive: true });
 
+    /* Nav links and Gallery expand disable snap temporarily */
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function () {
         snapOff = true;
         clearTimeout(snapTimer);
-        setTimeout(function () { snapOff = false; }, 2000);
+        setTimeout(function () { snapOff = false; }, SNAP_OFF_DURATION);
       });
     });
+
+    /* Disable snap when Gallery is expanded (user is browsing works) */
+    var worksObserver = new MutationObserver(function () {
+      var worksEl = document.getElementById('works');
+      if (worksEl && !worksEl.classList.contains('works--hidden')) {
+        snapOff = true;
+        clearTimeout(snapTimer);
+      }
+    });
+    var worksEl = document.getElementById('works');
+    if (worksEl) worksObserver.observe(worksEl, { attributes: true, attributeFilter: ['class'] });
   }
 
   /* --------------------------------------------------------
@@ -529,7 +464,14 @@ var Scroll = (function () {
     }
     /* On mobile/reduced: simple scroll instead of state-machine flyTo */
     if (isMobile || reduced) {
-      targetSec.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      /* Carousel: scroll to snap point (section bottom aligned with viewport bottom) */
+      if (targetId === 'carousel') {
+        var cRect = targetSec.el.getBoundingClientRect();
+        var targetY = window.scrollY + cRect.top + cRect.height - window.innerHeight;
+        window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+      } else {
+        targetSec.el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     } else {
       flyTo(targetId);
     }
@@ -542,8 +484,14 @@ var Scroll = (function () {
         if (sec.tl && sec.tl.isActive && sec.tl.isActive()) {
           sec.tl.progress(1);
         }
+        var wasComplete = sec.progress >= 1;
         sec.tl = buildRevealTimeline(sec.el);
-        sec.progress = 0;
+        if (wasComplete) {
+          sec.progress = 1;
+          sec.tl.progress(1);
+        } else {
+          sec.progress = 0;
+        }
       }
     });
   }

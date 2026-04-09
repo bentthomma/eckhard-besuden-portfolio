@@ -22,7 +22,8 @@
       '2008-artbaseltableauii2von10.jpg'
     ],
     MAX_SLIDES: 8,
-    AUTOPLAY_DELAY: 10000
+    AUTOPLAY_DELAY: 10000,
+    BID_TIMEOUT: 30000
   };
 
   /* --------------------------------------------------------
@@ -35,14 +36,20 @@
   var autoplayTimer = null;
   var hasEntered = false;
   var isAnimating = false;
+  var isInViewport = false;
+  var activeTimeline = null;
   var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var entryObserver = null;
   var bidOpen = false;
+  var totalDataCount = 0;
 
   /* --------------------------------------------------------
      DATA LOADING
      -------------------------------------------------------- */
   function fetchData() {
+    if (window.Helpers && window.Helpers.fetchArtworkData) {
+      return window.Helpers.fetchArtworkData(CONFIG.DATA_URL);
+    }
     return fetch(CONFIG.DATA_URL).then(function (res) {
       if (!res.ok) throw new Error('Failed to load ' + CONFIG.DATA_URL);
       return res.json();
@@ -111,6 +118,13 @@
 
   function resolvePath(p) {
     return window.Helpers ? window.Helpers.resolvePath(p) : (p || '');
+  }
+
+  function updateWorksCount() {
+    var countEl = document.getElementById('carouselWorksCount');
+    if (!countEl || !totalDataCount) return;
+    var lang = document.documentElement.lang || 'de';
+    countEl.textContent = totalDataCount + (lang === 'en' ? ' works available' : ' Werke verfügbar');
   }
 
   /* --------------------------------------------------------
@@ -189,14 +203,15 @@
     return window.innerWidth - rect.left + 100;
   }
 
-  function shadowState(el, s) {
+  function shadowState(el, s, dur) {
     if (!el) return;
+    var d = dur || 0.6;
     if (s === 'flying') {
-      el.style.filter = 'drop-shadow(0 30px 60px rgba(0,0,0,0.4))';
+      gsap.to(el, { filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.45))', duration: d, ease: 'power2.out' });
     } else if (s === 'lifted') {
-      el.style.filter = 'drop-shadow(0 16px 40px rgba(0,0,0,0.3))';
+      gsap.to(el, { filter: 'drop-shadow(0 16px 40px rgba(0,0,0,0.35))', duration: d, ease: 'power2.inOut' });
     } else {
-      el.style.filter = 'drop-shadow(0 6px 20px rgba(0,0,0,0.2))';
+      gsap.to(el, { filter: 'drop-shadow(0 8px 24px rgba(0,0,0,0.25))', duration: d, ease: 'power2.inOut' });
     }
   }
 
@@ -204,7 +219,7 @@
      AUTOPLAY
      -------------------------------------------------------- */
   function startAutoplay() {
-    if (reducedMotion || items.length <= 1) return;
+    if (reducedMotion || items.length <= 1 || !isInViewport || bidOpen) return;
     clearAutoplay();
     autoplayTimer = setInterval(function () {
       if (!isAnimating) goTo(currentIndex + 1, 'next');
@@ -219,7 +234,7 @@
      goTo — 5-PHASE TRANSITION
      -------------------------------------------------------- */
   function goTo(index, direction) {
-    if (isAnimating || items.length <= 1) return;
+    if (isAnimating || items.length <= 1 || !isInViewport) return;
     var newIndex = ((index % items.length) + items.length) % items.length;
     if (newIndex === currentIndex) return;
     direction = direction || (newIndex > currentIndex ? 'next' : 'prev');
@@ -277,9 +292,11 @@
         newSlide.setAttribute('aria-hidden', 'false');
 
         isAnimating = false;
+        activeTimeline = null;
         startAutoplay();
       }
     });
+    activeTimeline = tl;
 
     /* Phase 0: Plaque retreats behind image (z-index: artwork=2, plaque=1) */
     if (oldPlaque) {
@@ -287,7 +304,7 @@
         ? { y: '-120%', duration: 0.5, ease: 'power2.in' }
         : { x: '-60%', duration: 0.5, ease: 'power2.in' };
       tl.to(oldPlaque, outProps, 0);
-      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); oldPlaque.style.opacity = '0'; }, null, 0.5);
+      tl.call(function () { oldPlaque.classList.remove('is-visible'); gsap.set(oldPlaque, { clearProps: 'all' }); }, null, 0.5);
     }
 
     /* Phase 1: Lift-Off (1000ms) — starts AFTER plaque is gone */
@@ -353,17 +370,16 @@
   function enter() {
     if (hasEntered || !slides.length) return;
     hasEntered = true;
+    isInViewport = true;
 
     var slide = slides[0];
     var img = slide.querySelector('.carousel__frame img');
     var plaque = slide.querySelector('.carousel__plaque');
-    var pauseBtn = document.getElementById('carouselPause');
 
     if (reducedMotion || typeof gsap === 'undefined') {
       slide.classList.add('is-active');
       slide.style.display = '';
       if (plaque) plaque.classList.add('is-visible');
-      if (pauseBtn) pauseBtn.classList.add('is-visible');
       startAutoplay();
       return;
     }
@@ -411,48 +427,17 @@
         maxH = Math.max(maxH, slides[i].scrollHeight);
       }
     }
+    /* Use available section space so align-content:center can work */
+    var section = viewport.closest('.section--carousel');
+    if (section) {
+      var sectionH = section.clientHeight;
+      var viewportTop = viewport.getBoundingClientRect().top - section.getBoundingClientRect().top;
+      var cta = section.querySelector('.container--cta');
+      var ctaH = cta ? cta.offsetHeight + 40 : 80;
+      var available = sectionH - viewportTop - ctaH;
+      if (available > maxH) maxH = available;
+    }
     if (maxH > 0) viewport.style.minHeight = maxH + 'px';
-  }
-
-  /* --------------------------------------------------------
-     MOBILE BID MODAL
-     -------------------------------------------------------- */
-  function openMobileBidModal(item) {
-    var existing = document.querySelector('.bid-popup');
-    if (existing) existing.remove();
-
-    var popup = document.createElement('div');
-    popup.className = 'bid-popup';
-    var backdrop = document.createElement('div');
-    backdrop.className = 'bid-popup__backdrop';
-    var card = document.createElement('div');
-    card.className = 'bid-popup__card';
-    popup.appendChild(backdrop);
-    popup.appendChild(card);
-    document.body.appendChild(popup);
-
-    var controller = BidSystem.create(card, item);
-
-    function closeModal() {
-      if (typeof gsap !== 'undefined') {
-        gsap.to(card, { opacity: 0, y: 20, duration: 0.25, ease: 'power2.in',
-          onComplete: function () { popup.remove(); startAutoplay(); }
-        });
-      } else {
-        popup.remove(); startAutoplay();
-      }
-    }
-
-    backdrop.addEventListener('click', closeModal);
-    if (controller && controller.closeBtn) {
-      controller.closeBtn.addEventListener('click', closeModal);
-    }
-
-    if (typeof gsap !== 'undefined') {
-      gsap.fromTo(card, { opacity: 0, y: 30, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'power3.out' });
-    }
-    clearAutoplay();
   }
 
   /* --------------------------------------------------------
@@ -497,7 +482,12 @@
     document.addEventListener('keydown', function (e) {
       if (!hasEntered || isAnimating) return;
       /* Skip if an overlay is open */
-      if (window.Gallery && window.Gallery.isOpen && window.Gallery.isOpen()) return;
+      var detailEl = document.getElementById('detail');
+      if (detailEl && detailEl.classList.contains('open')) return;
+      /* Skip if focus is in a form field */
+      var active = document.activeElement;
+      var tag = active ? active.tagName : '';
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
       /* Only respond when carousel is in viewport */
       var rect = viewport.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) return;
@@ -518,7 +508,7 @@
       var item = items[idx];
       clearAutoplay();
       bidOpen = true;
-      setTimeout(function () { bidOpen = false; }, 30000);
+      setTimeout(function () { bidOpen = false; }, CONFIG.BID_TIMEOUT);
 
       /* Mobile/Tablet: use Gallery detail popup with bid */
       if (window.innerWidth <= 1024) {
@@ -529,44 +519,91 @@
         return;
       }
 
-      /* Desktop: inline bid in plaque (as originally designed) */
+      /* Desktop: inline bid in plaque — single gsap.timeline for clean sequencing */
       var bidContainer = slide.querySelector('.carousel__plaque-bid');
       var infoEls = slide.querySelector('.carousel__plaque-meta');
       var actionsEl = slide.querySelector('.carousel__plaque-actions');
       if (!bidContainer) return;
 
       var plaqueTop = slide.querySelector('.carousel__plaque-top');
+      var plaqueEl = slide.querySelector('.carousel__plaque');
       var controller = BidSystem.create(bidContainer, item);
-      if (actionsEl) actionsEl.style.display = 'none';
-      if (plaqueTop) plaqueTop.style.display = 'none';
-      BidSystem.show(bidContainer, infoEls, function () {
-        if (controller && controller.closeBtn) {
-          controller.closeBtn.addEventListener('click', function () {
-            BidSystem.hide(bidContainer, infoEls, function () {
-              if (plaqueTop) {
-                plaqueTop.style.opacity = '0';
-                plaqueTop.style.display = '';
-                requestAnimationFrame(function () {
-                  gsap.to(plaqueTop, { opacity: 1, duration: 0.5, ease: 'power2.out',
-                    onComplete: function () { plaqueTop.style.opacity = ''; }
-                  });
-                });
-              }
-              if (actionsEl) {
-                actionsEl.style.opacity = '0';
-                actionsEl.style.display = '';
-                requestAnimationFrame(function () {
-                  gsap.to(actionsEl, { opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.2,
-                    onComplete: function () { actionsEl.style.opacity = ''; }
-                  });
-                });
-              }
-              bidOpen = false;
-              startAutoplay();
-            });
-          });
-        }
+
+      /* Collect all visible plaque elements to fade out */
+      var outTargets = [];
+      if (plaqueTop) Array.prototype.push.apply(outTargets, Array.prototype.slice.call(plaqueTop.children));
+      if (infoEls) Array.prototype.push.apply(outTargets, Array.prototype.slice.call(infoEls.children));
+      if (actionsEl) outTargets.push(actionsEl);
+
+      var openTl = gsap.timeline();
+
+      /* Phase 1: fade out all plaque content together */
+      openTl.to(outTargets, {
+        opacity: 0, y: -10, stagger: 0.03, duration: 0.25, ease: 'power2.in'
       });
+
+      /* Phase 2: swap — hide old content, switch alignment, show bid container */
+      openTl.call(function () {
+        if (plaqueTop) plaqueTop.style.display = 'none';
+        if (infoEls) infoEls.style.display = 'none';
+        if (actionsEl) actionsEl.style.display = 'none';
+        if (plaqueEl) plaqueEl.classList.add('is-bid-open');
+        bidContainer.style.display = '';
+        bidContainer.style.opacity = '1';
+      });
+
+      /* Phase 3: fade in bid form */
+      openTl.fromTo(bidContainer.children,
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, stagger: 0.08, duration: 0.4, ease: 'power2.out' }
+      );
+
+      /* Close handler */
+      if (controller && controller.closeBtn) {
+        controller.closeBtn.addEventListener('click', function () {
+          var closeTl = gsap.timeline();
+
+          /* Phase 1: fade out bid form */
+          closeTl.to(bidContainer.children, {
+            opacity: 0, y: -10, stagger: 0.03, duration: 0.25, ease: 'power2.in'
+          });
+
+          /* Phase 2: swap — hide bid, restore alignment, bring plaque content back into flow */
+          closeTl.call(function () {
+            bidContainer.style.display = 'none';
+            bidContainer.style.opacity = '0';
+            var form = bidContainer.querySelector('form');
+            if (form) { form.reset(); form.style.display = ''; }
+            var success = bidContainer.querySelector('.bid-form__success');
+            if (success) success.classList.add('hidden');
+            var error = bidContainer.querySelector('.bid-form__error');
+            if (error) error.classList.add('hidden');
+
+            if (plaqueEl) plaqueEl.classList.remove('is-bid-open');
+            if (plaqueTop) plaqueTop.style.display = '';
+            if (infoEls) { infoEls.style.display = ''; infoEls.style.visibility = ''; infoEls.style.position = ''; infoEls.style.pointerEvents = ''; }
+            if (actionsEl) actionsEl.style.display = '';
+          });
+
+          /* Phase 3: fade in plaque content — plaqueTop first, then meta, then actions */
+          var inTargets = [];
+          if (plaqueTop) Array.prototype.push.apply(inTargets, Array.prototype.slice.call(plaqueTop.children));
+          if (infoEls) Array.prototype.push.apply(inTargets, Array.prototype.slice.call(infoEls.children));
+          if (actionsEl) inTargets.push(actionsEl);
+
+          closeTl.fromTo(inTargets,
+            { opacity: 0, y: 15 },
+            { opacity: 1, y: 0, stagger: 0.06, duration: 0.4, ease: 'power2.out' }
+          );
+
+          /* Phase 4: cleanup */
+          closeTl.call(function () {
+            inTargets.forEach(function (el) { gsap.set(el, { clearProps: 'opacity,y' }); });
+            bidOpen = false;
+            startAutoplay();
+          });
+        });
+      }
     });
 
     /* Image click → open detail overlay (same as gallery) */
@@ -582,6 +619,14 @@
       if (window.Gallery && typeof window.Gallery.openDetail === 'function') {
         window.Gallery.openDetail(items, idx, img);
       }
+      /* Reset bidOpen when detail closes so autoplay can resume (max 60s) */
+      var resetAttempts = 0;
+      var resetBid = function () {
+        var d = document.getElementById('detail');
+        if (!d || !d.classList.contains('open') || ++resetAttempts > 120) { bidOpen = false; startAutoplay(); }
+        else { setTimeout(resetBid, 500); }
+      };
+      setTimeout(resetBid, 1000);
     });
 
 
@@ -592,9 +637,40 @@
       else startAutoplay();
     });
 
-    /* Language change → re-render slide text */
+    /* Language change → update text in-place (preserve currentIndex) */
     document.addEventListener('langchange', function () {
-      render();
+      items.forEach(function (item, index) {
+        var slide = slides[index];
+        if (!slide) return;
+        var titleEl = slide.querySelector('.carousel__plaque-title');
+        if (titleEl) titleEl.textContent = Helpers.getTitle(item) || '\u2014';
+        var artistEl = slide.querySelector('.carousel__plaque-artist');
+        if (artistEl) artistEl.textContent = 'Eckhard Besuden';
+        var metaRows = slide.querySelectorAll('.carousel__plaque-row');
+        var labels = [
+          t('detail_year', 'Jahr', 'Year'),
+          t('detail_technique', 'Technik', 'Technique'),
+          t('detail_dimensions', 'Ma\u00dfe', 'Dimensions'),
+          t('detail_category', 'Kategorie', 'Category')
+        ];
+        var values = [
+          item.year ? String(item.year) : '\u2014',
+          Helpers.getTechnique(item) || '\u2014',
+          Helpers.getDimensions(item) || '\u2014',
+          Helpers.getCategory(item) || '\u2014'
+        ];
+        metaRows.forEach(function (row, i) {
+          var labelEl = row.querySelector('.carousel__plaque-label');
+          var valueEl = row.querySelector('.carousel__plaque-value');
+          if (labelEl && labels[i] !== undefined) labelEl.textContent = labels[i];
+          if (valueEl && values[i] !== undefined) valueEl.textContent = values[i];
+        });
+        var bidBtn = slide.querySelector('.bid-btn');
+        if (bidBtn) bidBtn.textContent = t('bid_btn', 'Kontakt aufnehmen', 'Get in Touch');
+        var img = slide.querySelector('.carousel__frame img');
+        if (img) img.alt = Helpers.getTitle(item) || '';
+      });
+      updateWorksCount();
     });
 
     /* "Zu allen Werken" link */
@@ -611,18 +687,35 @@
     }
 
     /* Resize */
-    window.addEventListener('resize', measureViewport);
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      if (resizeTimer) return;
+      resizeTimer = setTimeout(function () { resizeTimer = null; measureViewport(); }, 150);
+    });
 
-    /* Autoplay only when carousel is in viewport */
+    /* Carousel only runs when in viewport — saves performance, prevents overlap bugs */
     if ('IntersectionObserver' in window) {
       var visObs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) { if (hasEntered && !bidOpen) startAutoplay(); }
-          else { clearAutoplay(); }
+          if (entry.isIntersecting) {
+            isInViewport = true;
+            if (hasEntered && !bidOpen) startAutoplay();
+          } else {
+            isInViewport = false;
+            clearAutoplay();
+            /* Kill in-flight transition to prevent overlap */
+            if (activeTimeline) {
+              activeTimeline.progress(1);
+              activeTimeline = null;
+            }
+          }
         });
       }, { threshold: 0.1 });
       var carouselSection = document.getElementById('carousel');
       if (carouselSection) visObs.observe(carouselSection);
+    } else {
+      /* Fallback: assume always visible if no IntersectionObserver */
+      isInViewport = true;
     }
   }
 
@@ -689,11 +782,8 @@
         initEntryObserver();
 
         /* Populate works count under carousel */
-        var countEl = document.getElementById('carouselWorksCount');
-        if (countEl && data) {
-          var lang = document.documentElement.lang || 'de';
-          countEl.textContent = data.length + (lang === 'en' ? ' works available' : ' Werke verf\u00fcgbar');
-        }
+        totalDataCount = data ? data.length : 0;
+        updateWorksCount();
       })
       .catch(function (err) {
         if (track) {

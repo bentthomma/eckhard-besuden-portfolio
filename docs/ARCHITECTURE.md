@@ -1,59 +1,61 @@
 # Architecture
 
-## Single-Page Application
+## Single-page layout
 
-One `index.html` with sections: Intro → Hero → About → Philosophy → Carousel → Gallery → Footer
+One HTML file (`index.html`) with five content sections identified by ID:
 
-## Animation Engine
+| Section      | ID            | Purpose                              |
+|-------------|---------------|--------------------------------------|
+| Hero        | `#hero`       | Full-viewport splash with portrait   |
+| About       | `#about`      | Biography text + photo               |
+| Philosophy  | `#philosophy` | Antideterminism statement            |
+| Carousel    | `#carousel`   | Curated featured works               |
+| Works       | `#works`      | Full gallery grid (lazy-loaded)      |
 
-GSAP 3.x with ScrollTrigger and ScrollToPlugin (local vendor files, no CDN).
+Footer, detail panel, fullscreen overlay, and legal modals sit outside `<main>`.
 
-## Scroll Behavior
+## Scroll behavior
 
-**Desktop:** GSAP state machine with wheel-driven section snapping.
-States: `hero | about | philosophy | carousel | free`
+**Desktop** -- `scroll.js` implements a state machine with five states:
+`hero | about | philosophy | carousel | free`. GSAP `ScrollToPlugin` flies between sections on wheel/touch input. The `about` and `philosophy` states drive character-by-character text reveal timelines (implemented in `text-reveal.js`) before advancing. Progress bar, scroll reveals, and divider animations live in `scroll-ui.js`. Once past the carousel the page enters `free` state with native scrolling.
 
-- hero → about → philosophy: wheel-driven text-reveal (progress 0→1)
-- philosophy → carousel: snap transition
-- carousel: snap section (navigate via autoplay/swipe/keyboard)
-- carousel → works: snap transition
-- works/footer: free scroll
+**Mobile** -- Native scroll throughout. The carousel uses JS-based IntersectionObserver snapping (no CSS scroll-snap).
 
-**Mobile/Tablet:** Native browser scroll with ScrollTrigger-driven reveals. JS-based carousel snap via IntersectionObserver (devices < 1200px).
+## Animation engine
 
-## CSS Architecture
+GSAP 3.x with two plugins:
+- **ScrollTrigger** -- reveal animations, nav state changes, progress bar
+- **ScrollToPlugin** -- programmatic section-to-section fly transitions
 
-3 files imported via `style.css`:
-- `base.css` — complete stable styles (reset, layout, nav, hero, sections, gallery, detail, modals, responsive, print)
-- `carousel.css` — carousel section (museum wall, slides, plaque, animations, responsive)
-- `gallery-extras.css` — gallery lazy-load button states, works-hidden utility
+All three files are vendored in `js/vendor/` (no CDN dependency).
 
-## JavaScript Modules
+## Module communication
 
-All vanilla IIFEs, no bundler. Load order:
+Scripts attach to `window.*` globals rather than using ES modules:
 
-1. **Vendor:** gsap.min.js, ScrollTrigger.min.js, ScrollToPlugin.min.js
-2. **Foundation:** helpers.js, i18n.js, overlay.js
-3. **Systems:** bid.js, scroll.js, loader.js
-4. **Features:** carousel.js, gallery.js, nav.js, interactions.js
+| Global             | Source         | Role                                |
+|-------------------|----------------|-------------------------------------|
+| `window.Helpers`  | helpers.js     | Translation, title/technique getters |
+| `window.i18n`     | i18n.js        | Language state, `t()` lookup, `setLanguage()` |
+| `window.__overlay`| overlay.js     | Scroll-lock stack for modals/panels |
+| `window.__reduced`| overlay.js     | `prefers-reduced-motion` flag       |
+| `window.HomeCarousel` | carousel.js | Carousel public API                 |
+| `window.Gallery`  | gallery.js     | Gallery grid, filter, search API    |
+| `window.Detail`   | detail.js      | Artwork detail panel + FLIP API     |
+| `window.BidSystem`| bid.js         | Bid modal opener                    |
+| `window.Scroll`   | scroll.js      | `flyTo()`, `navigateTo()` for nav   |
 
-### Key Modules
+## CSS architecture
 
-- `helpers.js` → `window.Helpers` — shared artwork data utilities
-- `i18n.js` → `window.i18n` — DE/EN translations
-- `overlay.js` → `window.__overlay` — scroll-lock + focus trap
-- `bid.js` → `window.BidSystem` — consolidated contact form
-- `scroll.js` → `window.Scroll` — state machine + text-reveal + carousel snap
-- `loader.js` — film-strip intro animation
-- `carousel.js` → `window.HomeCarousel` — 5-phase painting animation
-- `gallery.js` → `window.Gallery` — lazy-loaded grid with detail panel
-- `nav.js` — navigation + legal modals
-- `interactions.js` — magnetic hover, loupe, fullscreen, email, back-to-top
+`style.css` is an import hub that loads three stylesheets in order:
+1. **base.css** -- tokens, reset, typography, all component styles (consolidated)
+2. **carousel.css** -- carousel-specific layout and animation
+3. **gallery-extras.css** -- lazy-load expand button states
 
 ## Data
 
-`bilder-metadaten.json` — 758 artwork entries with paths, categories, titles.
-All images in `assets/bilder/{category}/`.
+`bilder-metadaten.json` -- 758 artwork entries with paths, categories, titles (DE/EN).
+All images in `assets/bilder/{category}/`. Fetched at runtime by `gallery.js` and `carousel.js`.
 
 ## Offline
 

@@ -60,6 +60,17 @@
     return true;
   }
 
+  var dataPromise = null;
+  function fetchArtworkData(url) {
+    if (!dataPromise) {
+      dataPromise = fetch(url || 'bilder-metadaten.json').then(function (res) {
+        if (!res.ok) throw new Error('Failed to load artwork data');
+        return res.json();
+      });
+    }
+    return dataPromise;
+  }
+
   window.Helpers = {
     getLang: getLang,
     translate: translate,
@@ -69,6 +80,7 @@
     getDimensions: getDimensions,
     getShortLabel: getShortLabel,
     resolvePath: resolvePath,
-    isAvailable: isAvailable
+    isAvailable: isAvailable,
+    fetchArtworkData: fetchArtworkData
   };
 })();
